@@ -6,11 +6,15 @@ channels:
 dependencies:
   - brotli=1.0.9=hcfcfb64_9
   - brotli-bin=1.0.9=hcfcfb64_9
+  - brotlipy=0.7.0=py311h2bbff1b_1002
   - bzip2=1.0.8=h8ffe710_4
   - ca-certificates=2023.08.22=haa95532_0
   - cartopy=0.21.1=py311hb6e7958_0
   - certifi=2023.7.22=py311haa95532_0
+  - cffi=1.15.1=py311h2bbff1b_3
+  - charset-normalizer=2.0.4=pyhd3eb1b0_0
   - contourpy=1.1.0=py311h005e61a_0
+  - cryptography=41.0.3=py311h89fc84f_0
   - cycler=0.11.0=pyhd8ed1ab_0
   - fonttools=4.42.0=py311ha68e1ae_0
   - freetype=2.12.1=h546665d_1
@@ -21,6 +25,7 @@ dependencies:
   - gst-plugins-base=1.22.5=h001b923_0
   - gstreamer=1.22.5=hb4038d2_0
   - icu=72.1=h63175ca_0
+  - idna=3.4=py311haa95532_0
   - intel-openmp=2023.2.0=h57928b3_49496
   - kiwisolver=1.4.4=py311h005e61a_1
   - krb5=1.20.1=heb0366b_0
@@ -74,17 +79,21 @@ dependencies:
   - proj=8.2.1=h5ed7ab8_0
   - pthread-stubs=0.4=hcd874cb_1001
   - pthreads-win32=2.9.1=hfa6e2cd_3
+  - pycparser=2.21=pyhd3eb1b0_0
+  - pyopenssl=23.2.0=py311haa95532_0
   - pyparsing=3.0.9=pyhd8ed1ab_0
   - pyproj=3.4.1=py311hdd1a45a_0
   - pyqt=5.15.9=py311h125bc19_4
   - pyqt5-sip=12.12.2=py311h12c1d0e_4
   - pyshp=2.1.3=pyhd3eb1b0_0
+  - pysocks=1.7.1=py311haa95532_0
   - python=3.11.4=h2628c8c_0_cpython
   - python-dateutil=2.8.2=pyhd8ed1ab_0
   - python-tzdata=2023.3=pyhd8ed1ab_0
   - python_abi=3.11=3_cp311
   - pytz=2023.3=pyhd8ed1ab_0
   - qt-main=5.15.8=h2c8576c_12
+  - requests=2.31.0=py311haa95532_0
   - scipy=1.11.3=py311h0b4df5a_1
   - setuptools=68.0.0=pyhd8ed1ab_0
   - shapely=2.0.1=py311h672afca_0
@@ -98,10 +107,12 @@ dependencies:
   - tornado=6.3.2=py311ha68e1ae_0
   - tzdata=2023c=h71feb2d_0
   - ucrt=10.0.22621.0=h57928b3_0
+  - urllib3=1.26.16=py311haa95532_0
   - vc=14.3=h64f974e_17
   - vc14_runtime=14.36.32532=hfdfe4a8_17
   - vs2015_runtime=14.36.32532=h05e6639_17
   - wheel=0.41.1=pyhd8ed1ab_0
+  - win_inet_pton=1.1.0=py311haa95532_0
   - xorg-libxau=1.0.11=hcd874cb_0
   - xorg-libxdmcp=1.1.3=hcd874cb_0
   - xz=5.2.6=h8d14728_0

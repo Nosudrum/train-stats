@@ -85,6 +85,7 @@ dependencies:
   - python_abi=3.11=3_cp311
   - pytz=2023.3=pyhd8ed1ab_0
   - qt-main=5.15.8=h2c8576c_12
+  - scipy=1.11.3=py311h0b4df5a_1
   - setuptools=68.0.0=pyhd8ed1ab_0
   - shapely=2.0.1=py311h672afca_0
   - sip=6.7.11=py311h12c1d0e_0

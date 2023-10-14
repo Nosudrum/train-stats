@@ -3,3 +3,5 @@ data/data_url.txt
 data/mapbox_token.txt
 assets/GitHub.afdesign
 data/mapbox_style_token.txt
+data/mapbox_style_id.txt
+__pycache__

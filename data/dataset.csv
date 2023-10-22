@@ -1,5 +1,5 @@
 Departure (Local),Arrival (Local),Duration,Origin,Destination,Train type,Train number,Distance (km),Alphabetical trip,
-441,441,592:11:00,24 days,16 hours,11 minutes,,64589.3,AUTOMATIC,Commentaire
+442,442,592:37:00,24 days,16 hours,37 minutes,,65402.6,AUTOMATIC,Commentaire
 2013-08-03,2013-08-03,,St-Louis,Strasbourg,,,134.8,St-Louis - Strasbourg,
 2013-08-03,2013-08-03,,Strasbourg,Paris Gare de l’Est,,,438.7,Paris Gare de l’Est - Strasbourg,
 2013-08-03,2013-08-03,,Paris Austerlitz,Brive-la-Gaillarde,,,498.8,Brive-la-Gaillarde - Paris Austerlitz,
@@ -404,18 +404,15 @@ Departure (Local),Arrival (Local),Duration,Origin,Destination,Train type,Train n
 2023-10-06 14:22,2023-10-06 17:02,2:40,Paris Gare de Lyon,Mulhouse,TGV Lyria,9215,490.4,Mulhouse - Paris Gare de Lyon,
 2023-10-06 17:16,2023-10-06 17:29,0:13,Mulhouse,St-Louis,TER,96227,27,Mulhouse - St-Louis,
 2023-10-08 13:21,2023-10-08 13:35,0:14,Lausanne,Vevey,IR,1721,18.4,Lausanne - Vevey,
-,,,,,,,, - ,
-2023-10-16 08:22,2023-10-16 09:58,1:36,Basel Badischer Bahnhof,Karlsruhe Hbf,ICE,372,191.3,Basel Badischer Bahnhof - Karlsruhe Hbf,
-2023-10-16 10:06,2023-10-16 11:00,0:54,Karlsruhe Hbf,Stuttgart Hbf,IRE,1,86.7,Karlsruhe Hbf - Stuttgart Hbf,
+2023-10-16 08:22,2023-10-16 09:58,1:36,Basel Badischer Bahnhof,Karlsruhe Hbf,ICE,372,191.3,Basel Badischer Bahnhof - Karlsruhe Hbf,10min retard
+2023-10-16 10:06,2023-10-16 11:00,0:54,Karlsruhe Hbf,Stuttgart Hbf,IRE,1,86.7,Karlsruhe Hbf - Stuttgart Hbf,20min retard
 2023-10-16 11:28,2023-10-16 11:36,0:08,Stuttgart Hbf,Stuttgart-Zuffenhausen,S5,,6.3,Stuttgart Hbf - Stuttgart-Zuffenhausen,
-,,,,,,,, - ,
-2023-10-18 09:24,2023-10-18 09:32,0:08,Stuttgart-Zuffenhausen,Stuttgart Hbf,S5,,6.3,Stuttgart Hbf - Stuttgart-Zuffenhausen,
-2023-10-18 09:51,2023-10-18 10:28,0:37,Stuttgart Hbf,Mannheim Hbf,ICE,612,106.6,Mannheim Hbf - Stuttgart Hbf,
-2023-10-18 10:36,2023-10-18 12:15,1:39,Mannheim Hbf,Saarbrücken Hbf,RE,1,130.2,Mannheim Hbf - Saarbrücken Hbf,
-,,,,,,,,,
-18/10/2023,18/10/2023,0:00,Saarbrücken Hbf,Völklingen,,,10.6,Saarbrücken Hbf - Völklingen,
-18/10/2023,18/10/2023,0:00,Völklingen,Saarbrücken Hbf,,,10.6,Saarbrücken Hbf - Völklingen,
-,,,,,,,,,
+2023-10-16 12:47,2023-10-16 12:53,0:06,Stuttgart-Zuffenhausen,Ludwigsburg,S4,,7.4,Ludwigsburg - Stuttgart-Zuffenhausen,5min retard
+2023-10-16 18:06,2023-10-16 18:13,0:07,Ludwigsburg ,Stuttgart-Zuffenhausen,S4,,7.4,Ludwigsburg  - Stuttgart-Zuffenhausen,
+2023-10-18 11:51,2023-10-18 12:28,0:37,Stuttgart Hbf,Mannheim Hbf,ICE,610,106.6,Mannheim Hbf - Stuttgart Hbf,
+2023-10-18 12:36,2023-10-18 14:15,1:39,Mannheim Hbf,Saarbrücken Hbf,RE,1,130.2,Mannheim Hbf - Saarbrücken Hbf,4min retard
+2023-10-19 10:01,2023-10-19 10:13,0:12,Saarbrücken Hbf,Völklingen,RB,70,10.6,Saarbrücken Hbf - Völklingen,
+2023-10-19 13:32,2023-10-19 13:41,0:09,Völklingen,Saarbrücken Hbf,RE,1,10.6,Saarbrücken Hbf - Völklingen,5min retard
 2023-10-20 09:39,2023-10-20 11:25,1:46,Saarbrücken Hbf,Strasbourg,RE,19,114.7,Saarbrücken Hbf - Strasbourg,
 2023-10-20 15:51,2023-10-20 17:08,1:17,Strasbourg,Basel SBB,TER,96225,141.5,Basel SBB - Strasbourg,
 ,,,,,,,,,
@@ -433,7 +430,7 @@ Departure (Local),Arrival (Local),Duration,Origin,Destination,Train type,Train n
 2023-10-26 19:59,2023-10-26 20:55,0:56,Stralsund Hbf,Rostock Hbf,RE,9,73.1,Rostock Hbf - Stralsund Hbf,
 ,,,,,,,,,
 2023-10-27 08:21,2023-10-27 10:23,2:02,Rostock Hbf,Berlin Hbf,IC,2175,222.8,Berlin Hbf - Rostock Hbf,
-2023-10-27 11:01,2023-10-27 13:07,2:06,Berlin Hbf,Dresden Hbf,EC,379,,Berlin Hbf - Dresden Hbf,"OpenStreetMap indique tronçon Mahlow Zossen en travaux, impossible générer GeoJSON"
+2023-10-27 11:01,2023-10-27 13:07,2:06,Berlin Hbf,Dresden Hbf,EC,379,194.8,Berlin Hbf - Dresden Hbf,"OpenStreetMap indique tronçon Mahlow Zossen en travaux, impossible générer GeoJSON"
 ,,,,,,,,,
 2023-10-29 18:14,2023-10-29 19:50,1:36,Dresden Hbf,Leipzig Hbf,RE,50,124.8,Dresden Hbf - Leipzig Hbf,
 ,,,,,,,,,

@@ -55,7 +55,7 @@ for journey in os.listdir('../data/journeys_coords'):
     with open('../data/journeys_coords/' + journey, 'r', encoding="utf8") as f:
         geojson = json.load(f)
         coords = np.array(geojson['features'][0]['geometry']['coordinates'])
-        ax[0].plot(coords[:, 0], coords[:, 1], s, color=c, markersize=0.5, transform=ccrs.PlateCarree(), zorder=count)
+        ax[0].plot(coords[:, 0], coords[:, 1], s, color=c, markersize=0.5, transform=ccrs.PlateCarree(), zorder=count, solid_capstyle="round")
 
 # Setup colorbar
 sm = cm.ScalarMappable(cmap=color_map, norm=plt.Normalize(vmin=0, vmax=values.max()))

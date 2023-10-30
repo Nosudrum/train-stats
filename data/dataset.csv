@@ -1,5 +1,5 @@
 Departure (Local),Arrival (Local),Duration,Origin,Destination,Train type,Train number,Distance (km),Alphabetical trip,
-449,449,602:50:00,25 days,2 hours,50 minutes,,67095.8,AUTOMATIC,Commentaire
+449,449,602:50:00,25 days,2 hours,50 minutes,,67638.2,AUTOMATIC,Commentaire
 2013-08-03,2013-08-03,,St-Louis,Strasbourg,,,134.8,St-Louis - Strasbourg,
 2013-08-03,2013-08-03,,Strasbourg,Paris Gare de l’Est,,,438.7,Paris Gare de l’Est - Strasbourg,
 2013-08-03,2013-08-03,,Paris Austerlitz,Brive-la-Gaillarde,,,498.8,Brive-la-Gaillarde - Paris Austerlitz,
@@ -431,10 +431,8 @@ Departure (Local),Arrival (Local),Duration,Origin,Destination,Train type,Train n
 2023-10-26 16:11,2023-10-26 16:48,0:37,Zinnowitz,Züssow,RB,23,28.1,Zinnowitz - Züssow,
 2023-10-26 17:05,2023-10-26 17:43,0:38,Züssow,Stralsund Hbf,RE,3,48.8,Stralsund Hbf - Züssow,
 2023-10-26 17:59,2023-10-26 18:55,0:56,Stralsund Hbf,Rostock Hbf,RE,9,73.1,Rostock Hbf - Stralsund Hbf,
-,,,,,,,,,
 2023-10-27 08:21,2023-10-27 10:23,2:02,Rostock Hbf,Berlin Hbf,IC,2175,222.8,Berlin Hbf - Rostock Hbf,
-2023-10-27 11:01,2023-10-27 13:07,2:06,Berlin Hbf,Dresden Hbf,EC,379,194.8,Berlin Hbf - Dresden Hbf,OpenStreetMap indique tronçon Mahlow Zossen en travaux
-,,,,,,,,,
+2023-10-27 11:01,2023-10-27 13:07,2:06,Berlin Hbf,Dresden Hbf,EC,379,194.8,Berlin Hbf - Dresden Hbf,5min retard
 2023-10-29 09:23,2023-10-29 10:30,1:07,Dresden Hbf,Leipzig Hbf,IC,2548,124.8,Dresden Hbf - Leipzig Hbf,
 ,,,,,,,,,
 2023-10-31 09:48,2023-10-31 11:52,2:04,Leipzig Hbf,Nürnberg Hbf,ICE,505,311.2,Leipzig Hbf - Nürnberg Hbf,

@@ -1,5 +1,5 @@
 Departure (Local),Arrival (Local),Duration,Origin,Destination,Train type,Train number,Distance (km),Alphabetical trip,
-449,449,602:50:00,25 days,2 hours,50 minutes,,67638.2,AUTOMATIC,Commentaire
+450,450,607:01:00,25 days,7 hours,1 minutes,,67949.4,AUTOMATIC,Commentaire
 2013-08-03,2013-08-03,,St-Louis,Strasbourg,,,134.8,St-Louis - Strasbourg,
 2013-08-03,2013-08-03,,Strasbourg,Paris Gare de l’Est,,,438.7,Paris Gare de l’Est - Strasbourg,
 2013-08-03,2013-08-03,,Paris Austerlitz,Brive-la-Gaillarde,,,498.8,Brive-la-Gaillarde - Paris Austerlitz,
@@ -434,8 +434,7 @@ Departure (Local),Arrival (Local),Duration,Origin,Destination,Train type,Train n
 2023-10-27 08:21,2023-10-27 10:23,2:02,Rostock Hbf,Berlin Hbf,IC,2175,222.8,Berlin Hbf - Rostock Hbf,
 2023-10-27 11:01,2023-10-27 13:07,2:06,Berlin Hbf,Dresden Hbf,EC,379,194.8,Berlin Hbf - Dresden Hbf,5min retard
 2023-10-29 09:23,2023-10-29 10:30,1:07,Dresden Hbf,Leipzig Hbf,IC,2548,124.8,Dresden Hbf - Leipzig Hbf,
-,,,,,,,,,
-2023-10-31 09:48,2023-10-31 11:52,2:04,Leipzig Hbf,Nürnberg Hbf,ICE,505,311.2,Leipzig Hbf - Nürnberg Hbf,
+2023-10-31 09:48,2023-10-31 11:52,2:04,Leipzig Hbf,Nürnberg Hbf,ICE,505,311.2,Leipzig Hbf - Nürnberg Hbf,4min retard 
 ,,,,,,,,,
 2023-11-01 13:30,2023-11-01 15:36,2:06,Nürnberg Hbf,Frankfurt (Main) Hbf,ICE,28,226.1,Frankfurt (Main) Hbf - Nürnberg Hbf,
 2023-11-01 16:06,2023-11-01 18:46,2:40,Frankfurt (Main) Hbf,Basel Badischer Bahnhof,ICE,77,328.1,Basel Badischer Bahnhof - Frankfurt (Main) Hbf,
@@ -456,3 +455,4 @@ Departure (Local),Arrival (Local),Duration,Origin,Destination,Train type,Train n
 2023-12-28 16:15,2023-12-28 18:27,2:12,Manchester Picadilly,London Euston,Avanti West Coast ,,303.5,London Euston - Manchester Picadilly,
 ,,,,,,,,,
 2024-01-01 10:24,2024-01-01 13:48,3:24,London Saint-Pancras International,Paris Gare du Nord,Eurostar,9018,490.8,London Saint-Pancras International - Paris Gare du Nord,
+2024-01-01 15:11,2024-01-01 19:22,4:11,Paris Montparnasse,Toulouse Matabiau,TGV InOui,8509,793.9,Paris Montparnasse - Toulouse Matabiau,

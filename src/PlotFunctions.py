@@ -105,7 +105,7 @@ def finish_map(
         color="dimgray",
         labelpad=10,
     )
-    plt.tight_layout()
+
     if colorbar is not None:
         colorbar.ax.xaxis.set_tick_params(color="white")
         colorbar.outline.set_edgecolor("white")

@@ -6,7 +6,7 @@ import matplotlib
 import matplotlib.cm as cm
 
 from PlotFunctions import *
-from test3 import journeys
+from test3 import journeys, total_distance, total_time
 
 # read Mapbox token
 with open('../data/mapbox_token.txt', 'r') as f:
@@ -57,6 +57,7 @@ for journey in os.listdir('../data/journeys_coords'):
         coords = np.array(geojson['features'][0]['geometry']['coordinates'])
         ax[0].plot(coords[:, 0], coords[:, 1], s, color=c, markersize=0.5, transform=ccrs.PlateCarree(), zorder=count, solid_capstyle="round")
 
+
 # Setup colorbar
 sm = cm.ScalarMappable(cmap=color_map, norm=plt.Normalize(vmin=0, vmax=values.max()))
 sm.set_array([])
@@ -68,5 +69,11 @@ plt.setp(plt.getp(cbar.ax, 'xticklabels'), color='white', fontsize=12)
 ax[0].set(
     title="All European train journeys since 2013",
 )
+plt.tight_layout()
+fig_axes = fig.add_axes([0.97, 0.027, 0.3, 0.3], anchor="SE", zorder=1)
+fig_axes.text(0, 0.12, f"{round(total_distance):_} km ({round(total_distance / 1.609344):_} mi)".replace('_', ' '), ha="right", va="bottom", color="white", fontsize=10)
+fig_axes.text(0, 0, f"> {total_time.days} days {divmod(total_time.seconds, 3600)[0]} hours {divmod(total_time.seconds, 3600)[1] // 60} minutes", ha="right", va="bottom", color="white", fontsize=10)
+
+fig_axes.axis("off")
 
 finish_map(fig, ax, "test", colorbar=cbar, show=False)

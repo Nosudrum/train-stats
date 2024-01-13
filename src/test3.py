@@ -1,5 +1,6 @@
 import pandas as pd
 import requests
+from datetime import datetime
 
 YOUR_SHEET_ID = "1_D1kQjm1KoyVXcmUTxerClQrp661OozyZrYYs5QUjbs"
 
@@ -23,3 +24,5 @@ journey_firstdate = df[["journey", "Departure (Local)"]].groupby("journey").min(
 journeys = journey_counts.join(journey_distances).join(journey_firstdate)
 
 journeys.rename(columns={"Distance (km)": "distance", "Departure (Local)": "firstdate"}, inplace=True)
+total_time = pd.to_timedelta(df[df["Arrival (Local)"] < datetime.now()]["Duration"].dropna()+":00").sum()
+total_distance = df[df["Arrival (Local)"] < datetime.now()]["Distance (km)"].dropna().sum()

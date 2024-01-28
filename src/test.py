@@ -1,5 +1,6 @@
 import json
 import os
+from tqdm import tqdm
 
 import cartopy.io.img_tiles as cimgt
 import matplotlib
@@ -18,31 +19,34 @@ with open('../data/mapbox_style_token.txt', 'r') as f:
 with open('../data/mapbox_style_id.txt', 'r') as f:
     mapbox_style_id = f.read()
 
-# isolate coordinates
+longitude_min = -21
+longitude_max = 29
+latitude_min = 37
+latitude_max = 67
 
-# fig, ax = plt.subplots(facecolor=github_dark, figsize=(7, 5.2))
+# Projections
+# ccrs.Robinson()
+# ccrs.Orthographic(
+#     central_longitude=(longitude_min + longitude_max) / 2,
+#     central_latitude=(latitude_min + latitude_max) / 2)
+#                       )
 
 fig, ax = dark_figure(grid=False, projection=ccrs.Robinson())
-
 request = cimgt.MapboxStyleTiles(mapbox_style_token, "nosu", mapbox_style_id, cache=False)
-# fig = plt.figure(figsize=(10, 5), facecolor="#0D1117")
-# ax[0] = fig.add_subplot(1, 1, 1, projection=ccrs.Robinson())
-extent = [-6, 18, 40, 55]  # (xmin, xmax, ymin, ymax) #
+extent = [longitude_min, longitude_max, latitude_min, latitude_max]
 ax[0].set_extent(extent)
 ax[0].add_image(request, 5, regrid_shape=3000)
-# ax[0].imshow(plt.imread("../plots/test2.png"), extent=extent)
-# , origin='upper',
-# transform=ccrs.PlateCarree()
-
-# , interpolation='spline36', regrid_shape=2000
-#
 
 # for all journeys in the dataset
 now = datetime.now()
 values = journeys["count"].values
 color_map = matplotlib.colormaps["viridis"]
 
-for journey in os.listdir('../data/journeys_coords'):
+journeys_list = os.listdir('../data/journeys_coords')
+pbar = tqdm(journeys_list, ncols=150)
+
+for journey in pbar:
+    pbar.set_description("Plotting " + journey)
     journey_name = journey.replace(".geojson", "")
     if journeys.loc[journey_name, "firstdate"] < now:
         s = "-"
@@ -55,8 +59,11 @@ for journey in os.listdir('../data/journeys_coords'):
     with open('../data/journeys_coords/' + journey, 'r', encoding="utf8") as f:
         geojson = json.load(f)
         coords = np.array(geojson['features'][0]['geometry']['coordinates'])
-        ax[0].plot(coords[:, 0], coords[:, 1], s, color=c, markersize=0.5, transform=ccrs.PlateCarree(), zorder=count, solid_capstyle="round")
+        ax[0].plot(coords[:, 0], coords[:, 1], s, linewidth=1.2, color=c, transform=ccrs.PlateCarree(), zorder=count,
+                   solid_capstyle="round")
 
+# Logging
+print("Finalizing plot...")
 
 # Setup colorbar
 sm = cm.ScalarMappable(cmap=color_map, norm=plt.Normalize(vmin=0, vmax=values.max()))
@@ -71,8 +78,11 @@ ax[0].set(
 )
 plt.tight_layout()
 fig_axes = fig.add_axes([0.97, 0.027, 0.3, 0.3], anchor="SE", zorder=1)
-fig_axes.text(0, 0.12, f"{round(total_distance):_} km ({round(total_distance / 1.609344):_} mi)".replace('_', ' '), ha="right", va="bottom", color="white", fontsize=10)
-fig_axes.text(0, 0, f"> {total_time.days} days {divmod(total_time.seconds, 3600)[0]} hours {divmod(total_time.seconds, 3600)[1] // 60} minutes", ha="right", va="bottom", color="white", fontsize=10)
+fig_axes.text(0, 0.12, f"{round(total_distance):_} km ({round(total_distance / 1.609344):_} mi)".replace('_', ' '),
+              ha="right", va="bottom", color="white", fontsize=10)
+fig_axes.text(0, 0,
+              f"> {total_time.days} days {divmod(total_time.seconds, 3600)[0]} hours {divmod(total_time.seconds, 3600)[1] // 60} minutes",
+              ha="right", va="bottom", color="white", fontsize=10)
 
 fig_axes.axis("off")
 

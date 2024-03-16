@@ -22,7 +22,7 @@ with open('../data/mapbox_style_id.txt', 'r') as f:
 longitude_min = -21
 longitude_max = 29
 latitude_min = 37
-latitude_max = 67
+latitude_max = 66.5
 
 # Projections
 # ccrs.Robinson()

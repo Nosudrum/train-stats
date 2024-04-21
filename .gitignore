@@ -1,5 +1,6 @@
 .idea
 data/datasheet_id.txt
+data/dataset.csv
 data/mapbox_token.txt
 assets/GitHub.afdesign
 data/mapbox_style_token.txt

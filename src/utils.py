@@ -3,6 +3,7 @@ from math import prod
 import os
 import matplotlib.pyplot as plt
 from PIL import Image
+import pandas as pd
 
 GITHUB_BADGE = Image.open("../assets/GitHub.png")
 
@@ -11,7 +12,7 @@ GITHUB_DARK = "#0D1117"
 MAPBOX_STYLE_TOKEN_PATH = "../data/mapbox_style_token.txt"
 MAPBOX_STYLE_ID_PATH = "../data/mapbox_style_id.txt"
 DATASHEET_ID_PATH = "../data/datasheet_id.txt"
-JOURNEYS_PATH = "../data/journeys_coords"
+JOURNEYS_PATH = "../data/journeys_coords/"
 DATASET_PATH = "../data/dataset.csv"
 
 
@@ -103,3 +104,64 @@ def get_datasheet_id():
     else:
         raise Exception("No Datasheet ID found")
     return datasheet_id
+
+
+def extract_journeys(trips, filter_start=None, filter_end=None):
+    if filter_start is not None:
+        trips = trips[trips["Departure (Local)"] >= filter_start]
+    if filter_end is not None:
+        trips = trips[trips["Arrival (Local)"] <= filter_end]
+    journey_counts = trips["journey"].value_counts().to_frame()
+    journey_distances = trips[["journey", "Distance (km)"]].groupby("journey").mean()
+    journey_firstdate = trips[["journey", "Arrival (Local)"]].groupby("journey").min()
+    journeys = journey_counts.join(journey_distances).join(journey_firstdate)
+    journeys.rename(columns={"Distance (km)": "distance", "Arrival (Local)": "firstdate"}, inplace=True)
+    return journeys
+
+
+def km_to_mi(km):
+    return km * 0.621371
+
+
+def format_timedelta(dt):
+    days = dt.days
+    hours = divmod(dt.seconds, 3600)[0]
+    minutes = divmod(dt.seconds, 3600)[1] // 60
+    
+    string = ""
+    if days > 0:
+        string += f"{days} day{'s' if days > 1 else ''}"
+    if hours > 0:
+        string += f" {hours} hour{'s' if hours > 1 else ''}"
+    if minutes > 0:
+        string += f" {minutes} minute{'s' if minutes > 1 else ''}"
+
+    return string
+
+
+def format_km(km):
+    return f"{round(km):_} km ({round(km_to_mi(km)):_} mi)".replace('_', ' ')
+
+
+def compute_stats(trips, start=None, end=None):
+    if not start:
+        start = trips["Departure (Local)"].min()
+    if not end:
+        end = trips["Arrival (Local)"].max()
+    trips_total_mask = (trips["Departure (Local)"] >= start) & (trips["Arrival (Local)"] <= end)
+    trips_current_mask = (trips["Departure (Local)"] >= start) & (trips["Arrival (Local)"] < datetime.now())
+    total_duration = pd.to_timedelta(trips[trips_total_mask]["Duration"].dropna() + ":00").sum()
+    total_distance = trips[trips_total_mask]["Distance (km)"].dropna().sum()
+    current_duration = pd.to_timedelta(trips[trips_current_mask]["Duration"].dropna() + ":00").sum()
+    current_distance = trips[trips_current_mask]["Distance (km)"].dropna().sum()
+
+    if end < datetime.now() or start > datetime.now():
+        # Trip has ended or hasn't started
+        distance_str = format_km(total_distance)
+        duration_str = format_timedelta(total_duration)
+    else:
+        # Trip is ongoing
+        distance_str = format_km(current_distance) + " out of " + format_km(total_distance)
+        duration_str = format_timedelta(current_duration) + " out of " + format_timedelta(total_duration)
+    
+    return distance_str, duration_str

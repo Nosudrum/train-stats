@@ -10,7 +10,7 @@ from tqdm import tqdm
 from datetime import datetime
 import pandas as pd
 
-from ..utils import dark_figure, finish_map, get_mapbox_secrets, JOURNEYS_PATH
+from utils import dark_figure, finish_map, get_mapbox_secrets, JOURNEYS_PATH
 import matplotlib.pyplot as plt
 
 # Import Mapbox secrets

@@ -9,7 +9,7 @@ from cartopy.crs import Robinson, PlateCarree
 from cartopy.io.img_tiles import MapboxStyleTiles
 from tqdm import tqdm
 
-from utils import dark_figure, finish_map, JOURNEYS_PATH, extract_journeys, compute_stats
+from utils import dark_figure, finish_map, JOURNEYS_PATH, extract_trips_journeys, compute_stats
 
 # Setup map boundaries
 LON_MIN = -21
@@ -21,7 +21,7 @@ ZOOM_LEVEL = 5
 
 def plot_all_europe(trips, mapbox_style_token, mapbox_style_id):
     # Compute journeys dataframe
-    journeys = extract_journeys(trips)
+    trips, journeys = extract_trips_journeys(trips)
 
     # Setup figure
     fig, ax = dark_figure(grid=False, projection=Robinson())

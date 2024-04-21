@@ -10,7 +10,7 @@ from cartopy.io.img_tiles import MapboxStyleTiles
 from matplotlib.colors import LinearSegmentedColormap
 from tqdm import tqdm
 
-from utils import dark_figure, finish_map, JOURNEYS_PATH, extract_journeys, compute_stats
+from utils import dark_figure, finish_map, JOURNEYS_PATH, extract_trips_journeys, compute_stats
 
 # Trip start/end dates
 START = datetime(2024, 4, 26, 0, 0, 0)
@@ -25,8 +25,8 @@ ZOOM_LEVEL = 5
 
 
 def plot_scandinavia_2024(trips, mapbox_style_token, mapbox_style_id):
-    # Compute journeys dataframe
-    journeys = extract_journeys(trips, filter_start=START, filter_end=END)
+    # Compute trips and journeys dataframe
+    trips, journeys = extract_trips_journeys(trips, filter_start=START, filter_end=END)
 
     # Setup figure
     fig, ax = dark_figure(grid=False, projection=Robinson())
@@ -40,26 +40,33 @@ def plot_scandinavia_2024(trips, mapbox_style_token, mapbox_style_id):
     trip_duration_days = (END - START).days + 1
     color_map = matplotlib.colormaps["viridis"]
 
-    journeys_list = journeys.index.to_list()
-    for journey in tqdm(journeys_list, ncols=150, desc="Scandinavia 2024"):
-        if journeys.loc[journey, "firstdate"] < now:
+    trip_list = trips.index.to_list()
+    for trip in tqdm(trip_list, ncols=150, desc="Scandinavia 2024"):
+        # Get the departure datetime
+        trip_departure = trips.loc[trip, "Departure (Local)"]
+        # Compute the trip day number
+        trip_day = (trip_departure.date() - START.date()).days + 1
+        # Color corresponding to the trip day
+        trip_ratio = (trip_day - 1) / (trip_duration_days - 1)  # value must be between 0 and 1
+        c = color_map(trip_ratio)
+
+        # Dashes or not
+        if trips.loc[trip, "Arrival (Local)"] < now:
             s = "-"
+            dashes = [1, 0]
         else:
             s = ":"
+            dashes = [1, 1 + trip_ratio]
 
-        # Get the first date on which this journey was travelled
-        first_travel = journeys.loc[journey, "firstdate"]
-        # Compute the trip day number
-        trip_day = (first_travel.date() - START.date()).days + 1
-        # Color corresponding to the trip day
-        c = color_map((trip_day - 1) / (trip_duration_days - 1))  # value must be between 0 and 1
-
-        with open(JOURNEYS_PATH + journey + ".geojson", 'r', encoding="utf8") as f:
+        # Plot the trip
+        with open(JOURNEYS_PATH + trips.loc[trip, "journey"] + ".geojson", 'r', encoding="utf8") as f:
             geojson = json.load(f)
             coords = np.array(geojson['features'][0]['geometry']['coordinates'])
             ax[0].plot(coords[:, 0], coords[:, 1], s, linewidth=1.2, color=c, transform=PlateCarree(),
-                       zorder=(trip_duration_days - trip_day) + 1,
-                       solid_capstyle="round")
+                       zorder=(trip_duration_days - trip_day) + 2,
+                       solid_capstyle="round",
+                       dashes=dashes
+                       )
 
     # Logging
     print("Finalizing plot...")

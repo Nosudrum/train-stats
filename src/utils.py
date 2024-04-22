@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime
 from math import prod
 import os
 import matplotlib.pyplot as plt
@@ -38,26 +38,23 @@ def dark_figure(subplots=(1, 1), figsize=(7, 5.2), projection=None, grid=False):
 
 def finish_map(
         fig,
-        axes,
+        _axes,
         path,
         show,
         save_transparent=False,
         colorbar=None,
+        logo_position=None,
 ):
-    axes[0].set_xlabel(
-        datetime.now(timezone.utc).strftime(
-            "Plot generated on %Y/%m/%d at %H:%M:%S UTC."
-        ),
-        color="dimgray",
-        labelpad=10,
-    )
 
     if colorbar is not None:
         colorbar.ax.xaxis.set_tick_params(color="white")
         colorbar.outline.set_edgecolor("white")
         plt.setp(plt.getp(colorbar.ax, "xticklabels"), color="white", fontsize=8)
     fig.subplots_adjust(bottom=0.12)
-    fig_axes2 = fig.add_axes([0.014, 0.02, 0.3, 0.3], anchor="SW", zorder=1)
+    if logo_position:
+        fig_axes2 = fig.add_axes(logo_position, anchor="NW", zorder=1)
+    else:
+        fig_axes2 = fig.add_axes([0.014, 0.02, 0.3, 0.3], anchor="SW", zorder=1)
     fig_axes2.imshow(GITHUB_BADGE)
     fig_axes2.axis("off")
     if save_transparent:

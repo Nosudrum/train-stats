@@ -150,13 +150,13 @@ def compute_stats(trips, start=None, end=None, timezone=UTC_TZ):
     if not end:
         end = trips["Arrival (Local)"].max()
     trips_total_mask = (trips["Departure (Local)"] >= start) & (trips["Arrival (Local)"] <= end)
-    trips_current_mask = (trips["Departure (Local)"] >= start) & (trips["Arrival (Local)"] < datetime.now(tzinfo=timezone))
+    trips_current_mask = (trips["Departure (Local)"] >= start) & (trips["Arrival (Local)"] < datetime.now(tz=timezone))
     total_duration = pd.to_timedelta(trips[trips_total_mask]["Duration"].dropna() + ":00").sum()
     total_distance = trips[trips_total_mask]["Distance (km)"].dropna().sum()
     current_duration = pd.to_timedelta(trips[trips_current_mask]["Duration"].dropna() + ":00").sum()
     current_distance = trips[trips_current_mask]["Distance (km)"].dropna().sum()
 
-    if end < datetime.now(tzinfo=timezone) or start > datetime.now(tzinfo=timezone):
+    if end < datetime.now(tz=timezone) or start > datetime.now(tz=timezone):
         # Trip has ended or hasn't started
         distance_str = format_km(total_distance)
         duration_str = format_timedelta(total_duration)

@@ -32,14 +32,14 @@ def process_data():
 
         origin_tz = stations.loc[stations["name"] == origin, "time_zone"]
         if not origin_tz.empty:
-            trips.iloc[index].loc["Departure (Local)"] = trips.iloc[index].loc["Departure (Local)"].tz_localize(
+            trips.loc[index, "Departure (Local)"] = trips.loc[index, "Departure (Local)"].tz_localize(
                 pytz.timezone(origin_tz.item()))
         else:
             print(f"[{origin}] from logbook not found in stations.csv")
 
         destination_tz = stations.loc[stations["name"] == destination, "time_zone"]
         if not destination_tz.empty:
-            trips.iloc[index].loc["Arrival (Local)"] = trips.iloc[index].loc["Arrival (Local)"].tz_localize(
+            trips.loc[index, "Arrival (Local)"] = trips.loc[index, "Arrival (Local)"].tz_localize(
                 pytz.timezone(destination_tz.item()))
         else:
             print(f"[{destination}] from logbook not found in stations.csv")

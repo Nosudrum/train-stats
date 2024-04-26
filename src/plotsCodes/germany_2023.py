@@ -10,7 +10,7 @@ from cartopy.io.img_tiles import MapboxStyleTiles
 from matplotlib.colors import LinearSegmentedColormap
 from tqdm import tqdm
 
-from utils import dark_figure, finish_map, JOURNEYS_PATH, extract_trips_journeys, compute_stats
+from utils import dark_figure, finish_map, JOURNEYS_PATH, extract_trips_journeys, compute_stats, PARIS_TZ
 
 # Trip start/end dates
 START = datetime(2023, 10, 16, 0, 0, 0)

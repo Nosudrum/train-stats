@@ -1,17 +1,21 @@
-from processing import process_data
+import os
+
 from plotsCodes.all_europe import plot_all_europe
 from plotsCodes.germany_2023 import plot_germany_2023
 from plotsCodes.scandinavia_2024 import plot_scandinavia_2024
 from plotsCodes.scandinavia_2024_portrait import plot_scandinavia_2024_portrait
+from processing import process_data
 from utils import get_mapbox_secrets
+
+os.makedirs("../plots", exist_ok=True)
 
 if __name__ == "__main__":
     # Import Mapbox secrets
     MAPBOX_STYLE_TOKEN, MAPBOX_STYLE_ID = get_mapbox_secrets()
-    
+
     # Import data
     trips = process_data()
-    
+
     # Generate plots
     print("Generating plots...")
     plot_all_europe(trips, mapbox_style_id=MAPBOX_STYLE_ID, mapbox_style_token=MAPBOX_STYLE_TOKEN)

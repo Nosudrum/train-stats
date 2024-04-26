@@ -36,7 +36,7 @@ def plot_scandinavia_2024(trips, mapbox_style_token, mapbox_style_id):
     ax[0].add_image(request, ZOOM_LEVEL, regrid_shape=3000)
 
     # For all journeys in the dataset
-    now = datetime.now(tzinfo=PARIS_TZ)
+    now = datetime.now(tz=PARIS_TZ)
     trip_duration_days = (END - START).days + 1
     color_map = matplotlib.colormaps["viridis"]
 

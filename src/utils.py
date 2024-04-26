@@ -4,6 +4,7 @@ import os
 import matplotlib.pyplot as plt
 from PIL import Image
 import pandas as pd
+import pytz
 
 GITHUB_BADGE = Image.open("../assets/GitHub.png")
 
@@ -14,6 +15,11 @@ MAPBOX_STYLE_ID_PATH = "../data/mapbox_style_id.txt"
 DATASHEET_ID_PATH = "../data/datasheet_id.txt"
 JOURNEYS_PATH = "../data/journeys_coords/"
 DATASET_PATH = "../data/dataset.csv"
+STATIONS_PATH = "../data/stations.csv"
+CUSTOM_STATIONS_PATH = "../data/custom_stations_tz.csv"
+
+PARIS_TZ = pytz.timezone("Europe/Paris")
+UTC_TZ = pytz.utc
 
 
 def dark_figure(subplots=(1, 1), figsize=(7, 5.2), projection=None, grid=False):
@@ -140,19 +146,19 @@ def format_km(km):
     return f"{round(km):_} km ({round(km_to_mi(km)):_} mi)".replace('_', ' ')
 
 
-def compute_stats(trips, start=None, end=None):
+def compute_stats(trips, start=None, end=None, timezone=UTC_TZ):
     if not start:
         start = trips["Departure (Local)"].min()
     if not end:
         end = trips["Arrival (Local)"].max()
     trips_total_mask = (trips["Departure (Local)"] >= start) & (trips["Arrival (Local)"] <= end)
-    trips_current_mask = (trips["Departure (Local)"] >= start) & (trips["Arrival (Local)"] < datetime.now())
+    trips_current_mask = (trips["Departure (Local)"] >= start) & (trips["Arrival (Local)"] < datetime.now(tz=timezone))
     total_duration = pd.to_timedelta(trips[trips_total_mask]["Duration"].dropna() + ":00").sum()
     total_distance = trips[trips_total_mask]["Distance (km)"].dropna().sum()
     current_duration = pd.to_timedelta(trips[trips_current_mask]["Duration"].dropna() + ":00").sum()
     current_distance = trips[trips_current_mask]["Distance (km)"].dropna().sum()
 
-    if end < datetime.now() or start > datetime.now():
+    if end < datetime.now(tz=timezone) or start > datetime.now(tz=timezone):
         # Trip has ended or hasn't started
         distance_str = format_km(total_distance)
         duration_str = format_timedelta(total_duration)

@@ -10,7 +10,7 @@ from cartopy.io.img_tiles import MapboxStyleTiles
 from matplotlib.colors import LinearSegmentedColormap
 from tqdm import tqdm
 
-from utils import dark_figure, finish_map, JOURNEYS_PATH, extract_trips_journeys, compute_stats
+from utils import dark_figure, finish_map, JOURNEYS_PATH, extract_trips_journeys, compute_stats, PARIS_TZ
 
 # Trip start/end dates
 START = datetime(2024, 4, 26, 0, 0, 0)
@@ -36,7 +36,7 @@ def plot_scandinavia_2024_portrait(trips, mapbox_style_token, mapbox_style_id):
     ax[0].add_image(request, ZOOM_LEVEL, regrid_shape=3000)
 
     # For all journeys in the dataset
-    now = datetime.now()
+    now = datetime.now(tzinfo=PARIS_TZ)
     trip_duration_days = (END - START).days + 1
     color_map = matplotlib.colormaps["viridis"]
 
@@ -88,7 +88,7 @@ def plot_scandinavia_2024_portrait(trips, mapbox_style_token, mapbox_style_id):
     plt.tight_layout()
 
     # Stats
-    distance_str, duration_str = compute_stats(trips, start=START, end=END)
+    distance_str, duration_str = compute_stats(trips, start=START, end=END, timezone=PARIS_TZ)
     fig_axes = fig.add_axes([0.95, 0.027, 0.3, 0.3], anchor="SE", zorder=1)
     index = duration_str.find(" out of")
     if index != -1:

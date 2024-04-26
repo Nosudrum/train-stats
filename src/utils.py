@@ -16,6 +16,7 @@ DATASHEET_ID_PATH = "../data/datasheet_id.txt"
 JOURNEYS_PATH = "../data/journeys_coords/"
 DATASET_PATH = "../data/dataset.csv"
 STATIONS_PATH = "../data/stations.csv"
+CUSTOM_STATIONS_PATH = "../data/stations.csv"
 
 PARIS_TZ = pytz.timezone("Europe/Paris")
 UTC_TZ = pytz.utc

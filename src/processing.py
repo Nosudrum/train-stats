@@ -12,11 +12,11 @@ def process_data():
     with open(DATASET_PATH, 'wb') as f:
         f.write(r.content)
     trips = pd.read_csv(DATASET_PATH, header=0, skiprows=[1])
-    
+
     # Replace special things
     trips.replace('\xa0', ' ', regex=True, inplace=True)  # Remove non-breaking spaces
     trips.replace("Biel/Bienne", "BielBienne", regex=True, inplace=True)  # Get rid of slash
-    
+
     # Rework dataframe
     trips = trips.rename(columns={"Alphabetical trip": "journey"})
     trips.dropna(inplace=True, subset=["Departure (Local)"])
@@ -30,15 +30,17 @@ def process_data():
         origin = row["Origin"]
         destination = row["Destination"]
 
-        origin_data = stations[stations["name"] == origin]
-        if not origin_data.empty:
-            trips.iloc[index]["Departure (Local)"] = trips.iloc[index]["Departure (Local)"].tz_localize(pytz.timezone(origin_data["time_zone"].item()))
+        origin_tz = stations.loc[stations["name"] == origin, "time_zone"]
+        if not origin_tz.empty:
+            trips.iloc[index].loc["Departure (Local)"] = trips.iloc[index].loc["Departure (Local)"].tz_localize(
+                pytz.timezone(origin_tz.item()))
         else:
             print(f"[{origin}] from logbook not found in stations.csv")
 
-        destination_data = stations[stations["name"] == destination]
-        if not destination_data.empty:
-            trips.iloc[index]["Arrival (Local)"] = trips.iloc[index]["Arrival (Local)"].tz_localize(pytz.timezone(destination_data["time_zone"].item()))
+        destination_tz = stations.loc[stations["name"] == destination, "time_zone"]
+        if not destination_tz.empty:
+            trips.iloc[index].loc["Arrival (Local)"] = trips.iloc[index].loc["Arrival (Local)"].tz_localize(
+                pytz.timezone(destination_tz.item()))
         else:
             print(f"[{destination}] from logbook not found in stations.csv")
 

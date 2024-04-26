@@ -13,8 +13,8 @@ from tqdm import tqdm
 from utils import dark_figure, finish_map, JOURNEYS_PATH, extract_trips_journeys, compute_stats, PARIS_TZ
 
 # Trip start/end dates
-START = datetime(2023, 10, 16, 0, 0, 0)
-END = datetime(2023, 11, 1, 23, 59, 59)
+START = datetime(2023, 10, 16, 0, 0, 0, tzinfo=PARIS_TZ)
+END = datetime(2023, 11, 1, 23, 59, 59, tzinfo=PARIS_TZ)
 
 # Setup map boundaries
 LON_MIN = 3

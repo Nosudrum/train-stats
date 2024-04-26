@@ -7,14 +7,15 @@ from plotsCodes.scandinavia_2024_portrait import plot_scandinavia_2024_portrait
 from processing import process_data
 from utils import get_mapbox_secrets
 
-os.makedirs("../plots", exist_ok=True)
-
 if __name__ == "__main__":
     # Import Mapbox secrets
     MAPBOX_STYLE_TOKEN, MAPBOX_STYLE_ID = get_mapbox_secrets()
 
     # Import data
     trips = process_data()
+
+    # Create the plots folder if needed
+    os.makedirs("../plots", exist_ok=True)
 
     # Generate plots
     print("Generating plots...")

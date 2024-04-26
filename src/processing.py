@@ -24,7 +24,7 @@ def process_data():
     trips["Arrival (Local)"] = pd.to_datetime(trips["Arrival (Local)"], format="mixed")
 
     # Import stations CSV
-    stations = pd.read_csv(STATIONS_PATH, header=0, skiprows=[1])
+    stations = pd.read_csv(STATIONS_PATH, header=0)
     for index, row in trips.iterrows():
         # Get origin/destination timezones
         origin = row["Origin"]

@@ -1,6 +1,7 @@
 import pandas as pd
 import requests
-from utils import get_datasheet_id, DATASET_PATH
+from utils import get_datasheet_id, DATASET_PATH, STATIONS_PATH
+import pytz
 
 
 def process_data():
@@ -21,5 +22,24 @@ def process_data():
     trips.dropna(inplace=True, subset=["Departure (Local)"])
     trips["Departure (Local)"] = pd.to_datetime(trips["Departure (Local)"], format="mixed")
     trips["Arrival (Local)"] = pd.to_datetime(trips["Arrival (Local)"], format="mixed")
-    
+
+    # Import stations CSV
+    stations = pd.read_csv(STATIONS_PATH, header=0, skiprows=[1])
+    for index, row in trips.iterrows():
+        # Get origin/destination timezones
+        origin = row["Origin"]
+        destination = row["Destination"]
+
+        origin_data = stations[stations["name"] == origin]
+        if origin_data:
+            trips.iloc[index]["Departure (Local)"] = trips.iloc[index]["Departure (Local)"].dt.tz_localize(pytz.timezone(origin_data["time_zone"]))
+        else:
+            print(f"[{origin}] from logbook not found in stations.csv")
+
+        destination_data = stations[stations["name"] == destination]
+        if destination_data:
+            trips.iloc[index]["Arrival (Local)"] = trips.iloc[index]["Arrival (Local)"].dt.tz_localize(pytz.timezone(destination_data["time_zone"]))
+        else:
+            print(f"[{destination}] from logbook not found in stations.csv")
+
     return trips

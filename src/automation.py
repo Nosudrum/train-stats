@@ -1,5 +1,3 @@
-import os
-
 from plotsCodes.all_europe import plot_all_europe
 from plotsCodes.germany_2023 import plot_germany_2023
 from plotsCodes.scandinavia_2024 import plot_scandinavia_2024
@@ -13,9 +11,6 @@ if __name__ == "__main__":
 
     # Import data
     trips = process_data()
-
-    # Create the plots folder if needed
-    os.makedirs("../plots", exist_ok=True)
 
     # Generate plots
     print("Generating plots...")

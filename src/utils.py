@@ -1,14 +1,26 @@
 from datetime import datetime
-from math import prod
+from math import prod, ceil, floor
 import os
 import matplotlib.pyplot as plt
 from PIL import Image
-import pandas as pd
 import pytz
+import numpy as np
 
 GITHUB_BADGE = Image.open("../assets/GitHub.png")
 
 GITHUB_DARK = "#0D1117"
+COLORS_DICT = {
+    "red": "#e41a1c",
+    "orange": "#ff7f00",
+    "blue": "#377eb8",
+    "pink": "#f781bf",
+    "yellow": "#dede00",
+    "green": "#4daf4a",
+    "grey": "#999999",
+    "purple": "#984ea3",
+}
+COLORS = ["blue", "orange", "red", "green", "pink", "yellow", "purple", "grey"]
+COLORS = [COLORS_DICT[i] for i in COLORS]
 
 MAPBOX_STYLE_TOKEN_PATH = "../data/mapbox_style_token.txt"
 MAPBOX_STYLE_ID_PATH = "../data/mapbox_style_id.txt"
@@ -51,7 +63,6 @@ def finish_map(
         colorbar=None,
         logo_position=None,
 ):
-
     if colorbar is not None:
         colorbar.ax.xaxis.set_tick_params(color="white")
         colorbar.outline.set_edgecolor("white")
@@ -69,6 +80,74 @@ def finish_map(
     if show:
         plt.show()
     plt.close()
+
+
+def finish_figure(
+    fig,
+    axes,
+    path,
+    show,
+    save_transparent=False,
+    override_ylim=None,
+    override_yticks=None,
+    colorbar=None,
+):
+    if override_yticks is None:
+        ticks = axes_ticks(axes[0].get_ylim()[1])
+        axes[0].set_yticks(ticks)
+    else:
+        ticks = override_yticks
+        axes[0].set_yticks(ticks)
+    if override_ylim is None:
+        axes[0].set_ylim([0, ticks[-1] * 1.25])
+    else:
+        axes[0].set_ylim(override_ylim)
+    if colorbar is not None:
+        colorbar.ax.xaxis.set_tick_params(color="white")
+        colorbar.outline.set_edgecolor("white")
+        plt.setp(plt.getp(colorbar.ax, "xticklabels"), color="white", fontsize=8)
+    fig.subplots_adjust(bottom=0.20)
+    fig_axes2 = fig.add_axes([0.014, 0.02, 0.3, 0.3], anchor="SW", zorder=1)
+    fig_axes2.imshow(GITHUB_BADGE)
+    fig_axes2.axis("off")
+    if save_transparent:
+        plt.savefig("../plots/" + path + "_transparent.png", transparent=True, dpi=500)
+    plt.savefig("../plots/" + path + ".png", transparent=False, dpi=500)
+    if show:
+        plt.show()
+    plt.close()
+
+
+def axes_ticks(value):
+    value = floor(value)
+    if value < 5:
+        interval = 1
+    elif value < 14:
+        interval = 2
+    elif value < 30:
+        interval = 5
+    elif value < 100:
+        interval = 10
+    elif value < 200:
+        interval = 25
+    elif value < 500:
+        interval = 50
+    elif value < 1000:
+        interval = 100
+    elif value < 2000:
+        interval = 250
+    elif value < 5000:
+        interval = 500
+    elif value < 10000:
+        interval = 1000
+    elif value < 20000:
+        interval = 2500
+    elif value < 50000:
+        interval = 5000
+    else:
+        interval = 1
+    upper_bound = interval * (ceil(value / interval) + 1)
+    return np.arange(0, upper_bound, interval)
 
 
 def get_mapbox_secrets():
@@ -130,7 +209,7 @@ def format_timedelta(dt):
     days = dt.days
     hours = divmod(dt.seconds, 3600)[0]
     minutes = divmod(dt.seconds, 3600)[1] // 60
-    
+
     string = ""
     if days > 0:
         string += f"{days} day{'s' if days > 1 else ''}"
@@ -153,9 +232,9 @@ def compute_stats(trips, start=None, end=None, timezone=UTC_TZ):
         end = trips["Arrival (Local)"].max()
     trips_total_mask = (trips["Departure (Local)"] >= start) & (trips["Arrival (Local)"] <= end)
     trips_current_mask = (trips["Departure (Local)"] >= start) & (trips["Arrival (Local)"] < datetime.now(tz=timezone))
-    total_duration = pd.to_timedelta(trips[trips_total_mask]["Duration"].dropna() + ":00").sum()
+    total_duration = trips[trips_total_mask]["Duration"].sum()
     total_distance = trips[trips_total_mask]["Distance (km)"].dropna().sum()
-    current_duration = pd.to_timedelta(trips[trips_current_mask]["Duration"].dropna() + ":00").sum()
+    current_duration = trips[trips_current_mask]["Duration"].dropna().sum()
     current_distance = trips[trips_current_mask]["Distance (km)"].dropna().sum()
 
     if end < datetime.now(tz=timezone) or start > datetime.now(tz=timezone):
@@ -166,5 +245,15 @@ def compute_stats(trips, start=None, end=None, timezone=UTC_TZ):
         # Trip is ongoing
         distance_str = format_km(current_distance) + " out of " + format_km(total_distance)
         duration_str = format_timedelta(current_duration) + " out of " + format_timedelta(total_duration)
-    
+
     return distance_str, duration_str
+
+
+def prepare_legend(reverse):
+    handles_, labels_ = plt.gca().get_legend_handles_labels()
+    handles_ = [k for j in [handles_[i::4] for i in range(4)] for k in j]
+    labels_ = [k for j in [labels_[i::4] for i in range(4)] for k in j]
+    if reverse:
+        return handles_[::-1], labels_[::-1]
+    else:
+        return handles_, labels_

@@ -42,6 +42,11 @@ def process_data():
         destination = row["Destination"]
         trips.loc[index, "Arrival (Local)"] = trips.loc[index, "Arrival (Local)"].tz_localize(
             get_station_timezone(destination))
+    trips["Departure (Local)"] = pd.to_datetime(trips["Departure (Local)"], utc=True)
+    trips["Arrival (Local)"] = pd.to_datetime(trips["Arrival (Local)"], utc=True)
+    
+    # Format durations
+    trips["Duration"] = pd.to_timedelta((trips["Duration"].str.split(':', expand=True).astype(int) * (60, 1)).sum(axis=1), unit='min')
 
     # Replace special things
     trips.replace('\xa0', ' ', regex=True, inplace=True)  # Remove non-breaking spaces

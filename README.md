@@ -19,13 +19,13 @@
   </p>
 
 <p  align="center">
-  <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/number_per_duration.png">
-  <img src="plots/number_per_duration.png" width="100%" />
+  <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/number_per_duration_stacked.png">
+  <img src="plots/number_per_duration_stacked.png" width="100%" />
   </a>
   </p>
 
 <p  align="center">
-  <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/distance_per_duration.png">
-  <img src="plots/distance_per_duration.png" width="100%" />
+  <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/distance_per_duration_stacked.png">
+  <img src="plots/distance_per_duration_stacked.png" width="100%" />
   </a>
   </p>

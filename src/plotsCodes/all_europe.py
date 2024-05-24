@@ -33,7 +33,7 @@ def plot_all_europe(trips, mapbox_style_token, mapbox_style_id):
     # For all journeys in the dataset
     now = datetime.now(tz=PARIS_TZ)
     values = journeys["count"].values
-    color_map = matplotlib.colormaps["viridis"]
+    color_map = matplotlib.colormaps["rainbow"]
 
     journeys_list = journeys.index.to_list()
     for journey in tqdm(journeys_list, ncols=150, desc="All Europe"):

@@ -38,7 +38,7 @@ def plot_scandinavia_2024(trips, mapbox_style_token, mapbox_style_id):
     # For all journeys in the dataset
     now = datetime.now(tz=PARIS_TZ)
     trip_duration_days = (END - START).days + 1
-    color_map = matplotlib.colormaps["viridis"]
+    color_map = matplotlib.colormaps["rainbow"]
 
     trip_list = trips.index.to_list()
     for trip in tqdm(trip_list, ncols=150, desc="Scandinavia 2024"):

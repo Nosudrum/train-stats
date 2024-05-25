@@ -1,10 +1,38 @@
-# Nosu's Train Stats
+# Arnaud's Train Stats
+
+## Introduction
+
+This repository contains maps and graphs about my personal train travel statistics, as well as the code used to generate them.
+I started tracking all my journeys by train in a spreadsheet in 2022, and managed to fill the historic data all the way to 2013.
+
+## Table of Contents
+
+* [Full map & stats](#full-map--stats)
+* [Trip-specific maps](#trip-specific-maps)
+* [Portrait maps](#portrait-maps)
+
+## Full map & stats
 
 <p  align="center">
   <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/all_europe.png">
   <img src="plots/all_europe.png" width="100%" />
   </a>
   </p>
+
+
+<p  align="center">
+  <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/number_per_duration_stacked.png">
+  <img src="plots/number_per_duration_stacked.png" width="100%" />
+  </a>
+  </p>
+
+<p  align="center">
+  <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/distance_per_duration_stacked.png">
+  <img src="plots/distance_per_duration_stacked.png" width="100%" />
+  </a>
+  </p>
+
+## Trip-specific maps
 
 <p  align="center">
   <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/2023_germany.png">
@@ -18,17 +46,7 @@
   </a>
   </p>
 
-<p  align="center">
-  <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/number_per_duration_stacked.png">
-  <img src="plots/number_per_duration_stacked.png" width="100%" />
-  </a>
-  </p>
-
-<p  align="center">
-  <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/distance_per_duration_stacked.png">
-  <img src="plots/distance_per_duration_stacked.png" width="100%" />
-  </a>
-  </p>
+## Portrait maps
 
 <p  align="center">
   <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/all_europe_portrait.png">

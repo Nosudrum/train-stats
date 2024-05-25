@@ -29,3 +29,12 @@
   <img src="plots/distance_per_duration_stacked.png" width="100%" />
   </a>
   </p>
+
+<p  align="center">
+  <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/all_europe_portrait.png">
+  <img src="plots/all_europe_portrait.png" width="49%" />
+  </a>
+    <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/2024_scandinavia_portrait.png">
+  <img src="plots/2024_scandinavia_portrait.png" width="49%" />
+  </a>
+  </p>

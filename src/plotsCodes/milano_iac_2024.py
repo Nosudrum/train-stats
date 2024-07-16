@@ -17,11 +17,11 @@ START = datetime(2024, 10, 12, 0, 0, 0, tzinfo=PARIS_TZ)
 END = datetime(2024, 10, 20, 23, 59, 59, tzinfo=PARIS_TZ)
 
 # Setup map boundaries
-LON_MIN = 1.4
-LON_MAX = 9.2
-LAT_MIN = 43
-LAT_MAX = 47.4
-ZOOM_LEVEL = 6
+LON_MIN = 1
+LON_MAX = 10
+LAT_MIN = 42
+LAT_MAX = 48
+ZOOM_LEVEL = 7
 
 
 def plot_milano_iac_2024(trips, mapbox_style_token, mapbox_style_id):

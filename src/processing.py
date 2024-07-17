@@ -5,7 +5,7 @@ import pytz
 
 # Import stations CSV
 STATIONS = pd.read_csv(STATIONS_PATH, sep=';', low_memory=False)
-CUSTOM_STATIONS = pd.read_csv(CUSTOM_STATIONS_PATH, sep=';')
+CUSTOM_STATIONS = pd.read_csv(CUSTOM_STATIONS_PATH, sep=',')
 
 
 def get_station_timezone(name):

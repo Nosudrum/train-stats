@@ -17,10 +17,10 @@ START = datetime(2024, 10, 3, 0, 0, 0, tzinfo=PARIS_TZ)
 END = datetime(2024, 10, 6, 23, 59, 59, tzinfo=PARIS_TZ)
 
 # Setup map boundaries
-LON_MIN = 1
+LON_MIN = 0
 LON_MAX = 9.7
 LAT_MIN = 42
-LAT_MAX = 47.5
+LAT_MAX = 49
 ZOOM_LEVEL = 7
 
 
@@ -98,4 +98,4 @@ def plot_october_lausanne_2024(trips, mapbox_style_token, mapbox_style_id):
     fig_axes.text(0, 0, duration_str, ha="right", va="bottom", color="white", fontsize=10)
     fig_axes.axis("off")
 
-    finish_map(fig, ax, "2024_milano_iac", colorbar=cbar, show=False)
+    finish_map(fig, ax, "2024_october_lausanne", colorbar=cbar, show=False)

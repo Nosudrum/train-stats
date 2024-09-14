@@ -1,6 +1,7 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from math import prod, ceil, floor
 import os
+
 import matplotlib.pyplot as plt
 from PIL import Image
 import pytz
@@ -83,14 +84,14 @@ def finish_map(
 
 
 def finish_figure(
-    fig,
-    axes,
-    path,
-    show,
-    save_transparent=False,
-    override_ylim=None,
-    override_yticks=None,
-    colorbar=None,
+        fig,
+        axes,
+        path,
+        show,
+        save_transparent=False,
+        override_ylim=None,
+        override_yticks=None,
+        colorbar=None,
 ):
     if override_yticks is None:
         ticks = axes_ticks(axes[0].get_ylim()[1])
@@ -258,3 +259,21 @@ def prepare_legend(reverse):
         return handles_[::-1], labels_[::-1]
     else:
         return handles_, labels_
+
+
+def get_trip_labels(start_day, end_day, fixed_number=None):
+    if start_day.month == end_day.month and start_day.year == end_day.year:
+        header = start_day.strftime("%B %Y")
+    elif start_day.year == end_day.year:
+        header = f"{start_day.strftime('%B')} - {end_day.strftime('%B %Y')}"
+    else:
+        header = f"{start_day.strftime('%B %Y')} - {end_day.strftime('%B %Y')}"
+
+    labels = []
+    for ii in range((end_day - start_day).days + 1):
+        labels.append((start_day + timedelta(days=ii)).day)
+
+    if fixed_number is not None:
+        step = (len(labels) - 1) // (fixed_number - 1)  # Ste
+        labels = [labels[i * step] for i in range(fixed_number)]
+    return header, labels

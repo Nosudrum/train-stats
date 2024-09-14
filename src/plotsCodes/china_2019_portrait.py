@@ -5,13 +5,13 @@ import matplotlib
 import matplotlib.cm as cm
 import matplotlib.pyplot as plt
 import numpy as np
+import pytz
 from cartopy.crs import PlateCarree
 from cartopy.io.img_tiles import MapboxStyleTiles
 from matplotlib.colors import LinearSegmentedColormap
 from tqdm import tqdm
-import pytz
 
-from utils import dark_figure, finish_map, JOURNEYS_PATH, extract_trips_journeys, compute_stats
+from utils import dark_figure, finish_map, JOURNEYS_PATH, extract_trips_journeys, compute_stats, get_trip_labels
 
 CHINA_TZ = pytz.timezone("Asia/Shanghai")
 
@@ -84,8 +84,9 @@ def plot_china_2019_portrait(trips, mapbox_style_token, mapbox_style_id):
     cax = ax[0].inset_axes([0.08, 0.08, 0.8, 0.035])
     cbar = fig.colorbar(sm, orientation="horizontal", cax=cax, boundaries=bounds,
                         ticks=np.linspace(0.5, trip_duration_days + 1.5, trip_duration_days))
-    cbar.ax.set_xticklabels(np.arange(1, trip_duration_days + 1))
-    cbar.ax.set_title("Trip day", color="white", fontsize=8)
+    cbar_title, cbar_ticks = get_trip_labels(START, END)
+    cbar.ax.set_title(cbar_title, color="white", fontsize=8)
+    cbar.ax.set_xticklabels(cbar_ticks)
     cbar.outline.set_edgecolor('white')
     plt.setp(plt.getp(cbar.ax, 'xticklabels'), color='white', fontsize=12)
     plt.tight_layout()

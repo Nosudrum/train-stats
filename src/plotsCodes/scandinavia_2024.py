@@ -10,7 +10,8 @@ from cartopy.io.img_tiles import MapboxStyleTiles
 from matplotlib.colors import LinearSegmentedColormap
 from tqdm import tqdm
 
-from utils import dark_figure, finish_map, JOURNEYS_PATH, extract_trips_journeys, compute_stats, PARIS_TZ
+from utils import dark_figure, finish_map, JOURNEYS_PATH, extract_trips_journeys, compute_stats, PARIS_TZ, \
+    get_trip_labels
 
 # Trip start/end dates
 START = datetime(2024, 4, 26, 0, 0, 0, tzinfo=PARIS_TZ)
@@ -81,8 +82,9 @@ def plot_scandinavia_2024(trips, mapbox_style_token, mapbox_style_id):
     cax = ax[0].inset_axes([0.1, 0.08, 0.8, 0.035])
     cbar = fig.colorbar(sm, orientation="horizontal", cax=cax, boundaries=bounds,
                         ticks=np.linspace(0.5, trip_duration_days + 1.5, trip_duration_days))
-    cbar.ax.set_xticklabels(np.arange(1, trip_duration_days + 1))
-    cbar.ax.set_title("Trip day", color="white", fontsize=8)
+    cbar_title, cbar_ticks = get_trip_labels(START, END)
+    cbar.ax.set_title(cbar_title, color="white", fontsize=8)
+    cbar.ax.set_xticklabels(cbar_ticks)
     cbar.outline.set_edgecolor('white')
     plt.setp(plt.getp(cbar.ax, 'xticklabels'), color='white', fontsize=12)
 

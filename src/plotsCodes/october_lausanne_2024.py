@@ -19,8 +19,8 @@ END = datetime(2024, 10, 6, 23, 59, 59, tzinfo=PARIS_TZ)
 # Setup map boundaries
 LON_MIN = -3.5
 LON_MAX = 10
-LAT_MIN = 42
-LAT_MAX = 50.2
+LAT_MIN = 41.7
+LAT_MAX = 49.5
 ZOOM_LEVEL = 7
 
 

@@ -73,4 +73,7 @@ I started tracking all my journeys by train in a spreadsheet in 2022, and manage
   <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/2019_china_portrait.png">
   <img src="plots/2019_china_portrait.png" width="49%" />
   </a>
+  <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/2023_uk_nye.png">
+  <img src="plots/2023_uk_nye.png" width="49%" />
+  </a>
   </p>

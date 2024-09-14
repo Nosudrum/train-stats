@@ -47,6 +47,12 @@ I started tracking all my journeys by train in a spreadsheet in 2022, and manage
   </p>
 
 <p  align="center">
+  <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/2024_october_lausanne.png">
+  <img src="plots/2024_october_lausanne.png" width="100%" />
+  </a>
+  </p>
+
+<p  align="center">
   <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/2024_milano_iac.png">
   <img src="plots/2024_milano_iac.png" width="100%" />
   </a>
@@ -60,5 +66,11 @@ I started tracking all my journeys by train in a spreadsheet in 2022, and manage
   </a>
     <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/2024_scandinavia_portrait.png">
   <img src="plots/2024_scandinavia_portrait.png" width="49%" />
+  </a>
+  </p>
+
+<p  align="center">
+  <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/2019_china_portrait.png">
+  <img src="plots/2019_china_portrait.png" width="49%" />
   </a>
   </p>

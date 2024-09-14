@@ -189,16 +189,17 @@ def get_datasheet_id():
 
 
 def extract_trips_journeys(trips, filter_start=None, filter_end=None):
+    trips_copy = trips.copy()
     if filter_start is not None:
-        trips = trips[trips["Departure (Local)"] >= filter_start]
+        trips_copy = trips_copy[trips_copy["Departure (Local)"] >= filter_start]
     if filter_end is not None:
-        trips = trips[trips["Arrival (Local)"] <= filter_end]
-    journey_counts = trips["journey"].value_counts().to_frame()
-    journey_distances = trips[["journey", "Distance (km)"]].groupby("journey").mean()
-    journey_firstdate = trips[["journey", "Arrival (Local)"]].groupby("journey").min()
+        trips_copy = trips_copy[trips_copy["Arrival (Local)"] <= filter_end]
+    journey_counts = trips_copy["journey"].value_counts().to_frame()
+    journey_distances = trips_copy[["journey", "Distance (km)"]].groupby("journey").mean()
+    journey_firstdate = trips_copy[["journey", "Arrival (Local)"]].groupby("journey").min()
     journeys = journey_counts.join(journey_distances).join(journey_firstdate)
     journeys.rename(columns={"Distance (km)": "distance", "Arrival (Local)": "firstdate"}, inplace=True)
-    return trips, journeys
+    return trips_copy, journeys
 
 
 def km_to_mi(km):

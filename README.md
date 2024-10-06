@@ -47,7 +47,7 @@ I started tracking all my journeys by train in a spreadsheet in 2022, and manage
   </p>
 
 <p  align="center">
-  <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/2024_october_lausanne.png">
+  <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/2024_october_alsace.png">
   <img src="plots/2024_october_alsace.png" width="100%" />
   </a>
   </p>

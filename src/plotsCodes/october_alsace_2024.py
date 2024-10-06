@@ -25,7 +25,7 @@ LAT_MAX = 49.5
 ZOOM_LEVEL = 7
 
 
-def plot_october_lausanne_2024(trips, mapbox_style_token, mapbox_style_id):
+def plot_october_alsace_2024(trips, mapbox_style_token, mapbox_style_id):
     # Compute journeys dataframe
     trips, journeys = extract_trips_journeys(trips, filter_start=START, filter_end=END)
 
@@ -89,7 +89,7 @@ def plot_october_lausanne_2024(trips, mapbox_style_token, mapbox_style_id):
     plt.setp(plt.getp(cbar.ax, 'xticklabels'), color='white', fontsize=12)
 
     ax[0].set(
-        title="Lausanne October 2024",
+        title="Alsace October 2024",
     )
     plt.tight_layout()
 
@@ -100,4 +100,4 @@ def plot_october_lausanne_2024(trips, mapbox_style_token, mapbox_style_id):
     fig_axes.text(0, 0, duration_str, ha="right", va="bottom", color="white", fontsize=10)
     fig_axes.axis("off")
 
-    finish_map(fig, ax, "2024_october_lausanne", colorbar=cbar, show=False)
+    finish_map(fig, ax, "2024_october_alsace", colorbar=cbar, show=False)

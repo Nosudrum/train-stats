@@ -11,7 +11,7 @@ I started tracking all my journeys by train in a spreadsheet in 2022, and manage
 * [Trip-specific maps](#trip-specific-maps)
 * [Portrait maps](#portrait-maps)
 
-## Full map & stats
+## Full map & timeline
 
 <p  align="center">
   <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/all_europe.png">
@@ -19,6 +19,13 @@ I started tracking all my journeys by train in a spreadsheet in 2022, and manage
   </a>
   </p>
 
+<p  align="center">
+  <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/distance_per_day.png">
+  <img src="plots/distance_per_day.png" width="100%" />
+  </a>
+  </p>
+
+## Duration stats
 
 <p  align="center">
   <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/number_per_duration_stacked.png">
@@ -31,6 +38,27 @@ I started tracking all my journeys by train in a spreadsheet in 2022, and manage
   <img src="plots/distance_per_duration_stacked.png" width="100%" />
   </a>
   </p>
+
+## Operator stats
+
+<p  align="center">
+  <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/number_per_operator_stacked.png">
+  <img src="plots/number_per_operator_stacked.png" width="100%" />
+  </a>
+  </p>
+
+<p  align="center">
+  <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/distance_per_operator_stacked.png">
+  <img src="plots/distance_per_operator_stacked.png" width="100%" />
+  </a>
+  </p>
+
+<p  align="center">
+  <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/duration_per_operator_stacked.png">
+  <img src="plots/duration_per_operator_stacked.png" width="100%" />
+  </a>
+  </p>
+
 
 ## Trip-specific maps
 

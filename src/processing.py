@@ -52,4 +52,7 @@ def process_data():
     trips.replace('\xa0', ' ', regex=True, inplace=True)  # Remove non-breaking spaces
     trips.replace("Biel/Bienne", "BielBienne", regex=True, inplace=True)  # Get rid of slash
 
+    trips["Day of year"] = trips["Departure (Local)"].dt.dayofyear
+    trips.loc[~trips["Departure (Local)"].dt.is_leap_year & (trips["Departure (Local)"].dt.dayofyear < 60), "Day of year"] += 1
+
     return trips

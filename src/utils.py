@@ -40,7 +40,13 @@ def dark_figure(subplots=(1, 1), figsize=(7, 5.2), projection=None, grid=False):
     axes = []
     for ii in range(0, prod(subplots)):
         axes.append(
-            fig.add_subplot(subplots[0], subplots[1], ii + 1, facecolor=GITHUB_DARK, projection=projection)
+            fig.add_subplot(
+                subplots[0],
+                subplots[1],
+                ii + 1,
+                facecolor=GITHUB_DARK,
+                projection=projection,
+            )
         )
         axes[ii].tick_params(axis="x", colors="white", which="both")
         axes[ii].tick_params(axis="y", colors="white", which="both")
@@ -56,13 +62,13 @@ def dark_figure(subplots=(1, 1), figsize=(7, 5.2), projection=None, grid=False):
 
 
 def finish_map(
-        fig,
-        _axes,
-        path,
-        show,
-        save_transparent=False,
-        colorbar=None,
-        logo_position=None,
+    fig,
+    _axes,
+    path,
+    show,
+    save_transparent=False,
+    colorbar=None,
+    logo_position=None,
 ):
     if colorbar is not None:
         colorbar.ax.xaxis.set_tick_params(color="white")
@@ -84,24 +90,24 @@ def finish_map(
 
 
 def finish_figure(
-        fig,
-        axes,
-        path,
-        show,
-        save_transparent=False,
-        override_ylim=None,
-        override_yticks=None,
-        colorbar=None,
+    fig,
+    axes,
+    path,
+    show,
+    save_transparent=False,
+    override_ylim=None,
+    override_yticks=None,
+    colorbar=None,
 ):
     if override_yticks is None:
         ticks = axes_ticks(axes[0].get_ylim()[1])
         axes[0].set_yticks(ticks)
-    else:
+    elif override_yticks:
         ticks = override_yticks
         axes[0].set_yticks(ticks)
     if override_ylim is None:
         axes[0].set_ylim([0, ticks[-1] * 1.25])
-    else:
+    elif override_ylim:
         axes[0].set_ylim(override_ylim)
     if colorbar is not None:
         colorbar.ax.xaxis.set_tick_params(color="white")
@@ -155,7 +161,7 @@ def get_mapbox_secrets():
     # Mapbox style token
     if os.path.exists(MAPBOX_STYLE_TOKEN_PATH):
         print("Using Mapbox style token from file")
-        with open(MAPBOX_STYLE_TOKEN_PATH, 'r') as f:
+        with open(MAPBOX_STYLE_TOKEN_PATH, "r") as f:
             mapbox_style_token = f.read()
     elif "MAPBOX_STYLE_TOKEN" in os.environ:
         print("Using Mapbox style token from environment")
@@ -166,7 +172,7 @@ def get_mapbox_secrets():
     # Mapbox style ID
     if os.path.exists(MAPBOX_STYLE_ID_PATH):
         print("Using Mapbox style ID from file")
-        with open(MAPBOX_STYLE_ID_PATH, 'r') as f:
+        with open(MAPBOX_STYLE_ID_PATH, "r") as f:
             mapbox_style_id = f.read()
     elif "MAPBOX_STYLE_ID" in os.environ:
         print("Using Mapbox style ID from environment")
@@ -179,7 +185,7 @@ def get_mapbox_secrets():
 def get_datasheet_id():
     if os.path.exists(DATASHEET_ID_PATH):
         print("Using Datasheet ID from file")
-        with open(DATASHEET_ID_PATH, 'r') as f:
+        with open(DATASHEET_ID_PATH, "r") as f:
             datasheet_id = f.read()
     elif "DATASHEET_ID" in os.environ:
         print("Using Datasheet ID from environment")
@@ -196,10 +202,17 @@ def extract_trips_journeys(trips, filter_start=None, filter_end=None):
     if filter_end is not None:
         trips_copy = trips_copy[trips_copy["Arrival (Local)"] <= filter_end]
     journey_counts = trips_copy["journey"].value_counts().to_frame()
-    journey_distances = trips_copy[["journey", "Distance (km)"]].groupby("journey").mean()
-    journey_firstdate = trips_copy[["journey", "Arrival (Local)"]].groupby("journey").min()
+    journey_distances = (
+        trips_copy[["journey", "Distance (km)"]].groupby("journey").mean()
+    )
+    journey_firstdate = (
+        trips_copy[["journey", "Arrival (Local)"]].groupby("journey").min()
+    )
     journeys = journey_counts.join(journey_distances).join(journey_firstdate)
-    journeys.rename(columns={"Distance (km)": "distance", "Arrival (Local)": "firstdate"}, inplace=True)
+    journeys.rename(
+        columns={"Distance (km)": "distance", "Arrival (Local)": "firstdate"},
+        inplace=True,
+    )
     return trips_copy, journeys
 
 
@@ -224,7 +237,7 @@ def format_timedelta(dt):
 
 
 def format_km(km):
-    return f"{round(km):_} km ({round(km_to_mi(km)):_} mi)".replace('_', ' ')
+    return f"{round(km):_} km ({round(km_to_mi(km)):_} mi)".replace("_", " ")
 
 
 def compute_stats(trips, start=None, end=None, timezone=UTC_TZ):
@@ -232,8 +245,12 @@ def compute_stats(trips, start=None, end=None, timezone=UTC_TZ):
         start = trips["Departure (Local)"].min()
     if not end:
         end = trips["Arrival (Local)"].max()
-    trips_total_mask = (trips["Departure (Local)"] >= start) & (trips["Arrival (Local)"] <= end)
-    trips_current_mask = (trips["Departure (Local)"] >= start) & (trips["Arrival (Local)"] < datetime.now(tz=timezone))
+    trips_total_mask = (trips["Departure (Local)"] >= start) & (
+        trips["Arrival (Local)"] <= end
+    )
+    trips_current_mask = (trips["Departure (Local)"] >= start) & (
+        trips["Arrival (Local)"] < datetime.now(tz=timezone)
+    )
     total_duration = trips[trips_total_mask]["Duration"].sum()
     total_distance = trips[trips_total_mask]["Distance (km)"].dropna().sum()
     current_duration = trips[trips_current_mask]["Duration"].dropna().sum()
@@ -245,8 +262,14 @@ def compute_stats(trips, start=None, end=None, timezone=UTC_TZ):
         duration_str = format_timedelta(total_duration)
     else:
         # Trip is ongoing
-        distance_str = format_km(current_distance) + " out of " + format_km(total_distance)
-        duration_str = format_timedelta(current_duration) + " out of " + format_timedelta(total_duration)
+        distance_str = (
+            format_km(current_distance) + " out of " + format_km(total_distance)
+        )
+        duration_str = (
+            format_timedelta(current_duration)
+            + " out of "
+            + format_timedelta(total_duration)
+        )
 
     return distance_str, duration_str
 

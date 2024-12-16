@@ -21,6 +21,7 @@ jobs:
     - name: 🍳 Update Plots
       env:
           DATASHEET_ID: ${{ secrets.DATASHEET_ID }}
+          ADDITIONAL_SPENDING_ID: ${{ secrets.ADDITIONAL_SPENDING_ID }}
           MAPBOX_STYLE_ID: ${{ secrets.MAPBOX_STYLE_ID }}
           MAPBOX_STYLE_TOKEN: ${{ secrets.MAPBOX_STYLE_TOKEN }}
       run: |

@@ -12,8 +12,9 @@ from plotsCodes.number_per_operator_stacked import plot_number_per_operator_stac
 from plotsCodes.october_alsace_2024 import plot_october_alsace_2024
 from plotsCodes.scandinavia_2024 import plot_scandinavia_2024
 from plotsCodes.scandinavia_2024_portrait import plot_scandinavia_2024_portrait
+from plotsCodes.spending_per_operator_stacked import plot_spending_per_operator_stacked
 from plotsCodes.uk_nye_2023 import plot_uk_nye_2023
-from processing import process_data
+from processing import process_trips, process_additional_spending
 from utils import get_mapbox_secrets
 
 if __name__ == "__main__":
@@ -21,7 +22,8 @@ if __name__ == "__main__":
     MAPBOX_STYLE_TOKEN, MAPBOX_STYLE_ID = get_mapbox_secrets()
 
     # Import data
-    trips = process_data()
+    trips = process_trips()
+    additional_spending = process_additional_spending()
 
     # Generate plots
     print("Generating plots...")
@@ -60,6 +62,7 @@ if __name__ == "__main__":
     plot_distance_per_duration_stacked(trips)
     plot_distance_per_operator_stacked(trips)
     plot_duration_per_operator_stacked(trips)
+    plot_spending_per_operator_stacked(trips, additional_spending)
 
     # Exit successfully
     print("All done!")

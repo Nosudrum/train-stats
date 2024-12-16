@@ -26,8 +26,10 @@ COLORS = [COLORS_DICT[i] for i in COLORS]
 MAPBOX_STYLE_TOKEN_PATH = "../data/mapbox_style_token.txt"
 MAPBOX_STYLE_ID_PATH = "../data/mapbox_style_id.txt"
 DATASHEET_ID_PATH = "../data/datasheet_id.txt"
+ADDITIONAL_SPENDING_ID_PATH = "../data/additional_spending_id.txt"
 JOURNEYS_PATH = "../data/journeys_coords/"
-DATASET_PATH = "../data/dataset.csv"
+TRIPS_PATH = "../data/dataset.csv"
+ADDITIONAL_SPENDING_PATH = "../data/additional_spending.csv"
 STATIONS_PATH = "../data/stations.csv"
 CUSTOM_STATIONS_PATH = "../data/custom_stations_tz.csv"
 
@@ -193,6 +195,19 @@ def get_datasheet_id():
     else:
         raise Exception("No Datasheet ID found")
     return datasheet_id
+
+
+def get_additional_spending_id():
+    if os.path.exists(ADDITIONAL_SPENDING_ID_PATH):
+        print("Using Additional Spending ID from file")
+        with open(ADDITIONAL_SPENDING_ID_PATH, "r") as f:
+            additional_spending_id = f.read()
+    elif "ADDITIONAL_SPENDING_ID" in os.environ:
+        print("Using Additional Spending ID from environment")
+        additional_spending_id = os.environ["ADDITIONAL_SPENDING_ID"]
+    else:
+        raise Exception("No Additional Spending ID found")
+    return additional_spending_id
 
 
 def extract_trips_journeys(trips, filter_start=None, filter_end=None):

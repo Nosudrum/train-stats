@@ -59,6 +59,12 @@ I started tracking all my journeys by train in a spreadsheet in 2022, and manage
   </a>
   </p>
 
+<p  align="center">
+  <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/spending_per_operator_stacked.png">
+  <img src="plots/spending_per_operator_stacked.png" width="100%" />
+  </a>
+  </p>
+
 
 ## Trip-specific maps
 

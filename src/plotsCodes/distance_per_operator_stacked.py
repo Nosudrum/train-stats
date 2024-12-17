@@ -10,6 +10,7 @@ from utils import (
 from datetime import datetime
 import matplotlib.pyplot as plt
 
+import pandas as pd
 import numpy as np
 
 
@@ -22,7 +23,21 @@ def plot_distance_per_operator_stacked(trips):
     bottom = np.zeros(len(years))
 
     operators = past_trips["Operator"].copy()
-    operators_sorted = operators.value_counts().index.tolist()
+    all_operators = operators.unique().tolist()
+    operators_distance = []
+    for operator in all_operators:
+        operators_distance.append(
+            past_trips.loc[operators == operator]["Distance (km)"].sum()
+        )
+
+    operators_distance = np.array(operators_distance)
+    operators_distance_df = pd.DataFrame(
+        {"Operator": all_operators, "Distance": operators_distance}
+    )
+
+    operators_sorted = operators_distance_df.sort_values(
+        by="Distance", ascending=False
+    ).Operator.tolist()
     operators_selected = operators_sorted[0:7]
     operators.loc[~operators.isin(operators_selected)] = "Others"
     operators_selected.append("Others")

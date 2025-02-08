@@ -1,22 +1,31 @@
+from datetime import datetime
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
 from utils import (
     dark_figure,
     extract_trips_journeys,
     PARIS_TZ,
+    GITHUB_DARK,
     COLORS,
     prepare_legend,
     finish_figure,
     compute_stats,
 )
-from datetime import datetime
-import matplotlib.pyplot as plt
-
-import pandas as pd
-import numpy as np
 
 
 # Plot of km travelled by train operator
 def plot_distance_per_operator_stacked(trips):
     past_trips, _ = extract_trips_journeys(trips, filter_end=datetime.now(tz=PARIS_TZ))
+    future_trips, _ = extract_trips_journeys(
+        trips,
+        filter_start=datetime.now(tz=PARIS_TZ),
+        filter_end=datetime(
+            datetime.now(tz=PARIS_TZ).year + 1, 1, 1, 0, 0, 0, tzinfo=PARIS_TZ
+        ),
+    )
 
     fig, ax = dark_figure()
     years = past_trips["Departure (Local)"].dt.year.unique().tolist()
@@ -63,6 +72,18 @@ def plot_distance_per_operator_stacked(trips):
             align="edge",
         )
         bottom += distances
+    ax[0].bar(
+        future_trips["Departure (Local)"].dt.year.unique().tolist(),
+        future_trips["Distance (km)"].sum(),
+        bottom=bottom[-1],
+        color=GITHUB_DARK,
+        label=None,
+        width=1,
+        align="edge",
+        hatch="///",
+        linewidth=0,
+        edgecolor="white",
+    )
     handles, labels = prepare_legend(reverse=False)
     ax[0].legend(
         handles, labels, loc="upper center", ncol=4, frameon=False, labelcolor="white"

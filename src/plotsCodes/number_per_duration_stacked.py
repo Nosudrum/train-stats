@@ -1,3 +1,8 @@
+from datetime import datetime, timedelta
+
+import matplotlib.pyplot as plt
+import numpy as np
+
 from utils import (
     dark_figure,
     extract_trips_journeys,
@@ -8,9 +13,6 @@ from utils import (
     compute_stats,
     GITHUB_DARK,
 )
-import numpy as np
-from datetime import datetime, timedelta
-import matplotlib.pyplot as plt
 
 # Setup train duration tiers
 TIERS = [

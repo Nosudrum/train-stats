@@ -1,8 +1,18 @@
-from utils import dark_figure, GITHUB_DARK, extract_trips_journeys, PARIS_TZ, COLORS, prepare_legend, finish_figure, compute_stats
 from datetime import datetime, timedelta
-import matplotlib.pyplot as plt
 
+import matplotlib.pyplot as plt
 import numpy as np
+
+from utils import (
+    dark_figure,
+    GITHUB_DARK,
+    extract_trips_journeys,
+    PARIS_TZ,
+    COLORS,
+    prepare_legend,
+    finish_figure,
+    compute_stats,
+)
 
 # Setup train duration tiers
 TIERS = [
@@ -20,9 +30,13 @@ TIERS = [
 # Plot of km travelled by train journey duration
 def plot_distance_per_duration_stacked(trips):
     past_trips, _ = extract_trips_journeys(trips, filter_end=datetime.now(tz=PARIS_TZ))
-    future_trips, _ = extract_trips_journeys(trips, filter_start=datetime.now(tz=PARIS_TZ),
-                                             filter_end=datetime(datetime.now(tz=PARIS_TZ).year + 1, 1, 1,
-                                                                 0, 0, 0, tzinfo=PARIS_TZ))
+    future_trips, _ = extract_trips_journeys(
+        trips,
+        filter_start=datetime.now(tz=PARIS_TZ),
+        filter_end=datetime(
+            datetime.now(tz=PARIS_TZ).year + 1, 1, 1, 0, 0, 0, tzinfo=PARIS_TZ
+        ),
+    )
 
     fig, ax = dark_figure()
     years = past_trips["Departure (Local)"].dt.year.unique().tolist()
@@ -31,10 +45,15 @@ def plot_distance_per_duration_stacked(trips):
         min_duration = timedelta(hours=tier[0])
         max_duration = timedelta(hours=tier[1])
         distances = []
-        tier_mask = past_trips["Duration"].between(min_duration, max_duration, inclusive="left")
+        tier_mask = past_trips["Duration"].between(
+            min_duration, max_duration, inclusive="left"
+        )
         for year in years:
             distances.append(
-                past_trips.loc[tier_mask & (past_trips["Departure (Local)"].dt.year == year), "Distance (km)"].sum()
+                past_trips.loc[
+                    tier_mask & (past_trips["Departure (Local)"].dt.year == year),
+                    "Distance (km)",
+                ].sum()
             )
         distances = np.array(distances)
         ax[0].bar(
@@ -73,7 +92,11 @@ def plot_distance_per_duration_stacked(trips):
     # Stats
     distance_str, duration_str = compute_stats(past_trips, timezone=PARIS_TZ)
     fig_axes = fig.add_axes([0.97, 0.027, 0.3, 0.3], anchor="SE", zorder=1)
-    fig_axes.text(0, 0.12, distance_str, ha="right", va="bottom", color="white", fontsize=10)
-    fig_axes.text(0, 0, duration_str, ha="right", va="bottom", color="white", fontsize=10)
+    fig_axes.text(
+        0, 0.12, distance_str, ha="right", va="bottom", color="white", fontsize=10
+    )
+    fig_axes.text(
+        0, 0, duration_str, ha="right", va="bottom", color="white", fontsize=10
+    )
     fig_axes.axis("off")
     finish_figure(fig, ax, "distance_per_duration_stacked", show=False)

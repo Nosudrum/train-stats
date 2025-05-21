@@ -7,15 +7,17 @@ I started tracking all my journeys by train in a spreadsheet in 2022, and manage
 
 ## Table of Contents
 
-* [Full map & stats](#full-map--stats)
+* [Full map & timeline](#full-map--timeline)
+* [Duration stats](#duration-stats)
+* [Operator stats](#operator-stats)
 * [Trip-specific maps](#trip-specific-maps)
 * [Portrait maps](#portrait-maps)
 
 ## Full map & timeline
 
 <p  align="center">
-  <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/all_europe.png">
-  <img src="plots/all_europe.png" width="100%" />
+  <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/all_europe_heatmap.png">
+  <img src="plots/all_europe_heatmap.png" width="100%" />
   </a>
   </p>
 
@@ -95,8 +97,8 @@ I started tracking all my journeys by train in a spreadsheet in 2022, and manage
 ## Portrait maps
 
 <p  align="center">
-  <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/all_europe_portrait.png">
-  <img src="plots/all_europe_portrait.png" width="49%" />
+  <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/all_europe_heatmap_portrait.png">
+  <img src="plots/all_europe_heatmap_portrait.png" width="49%" />
   </a>
     <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/2024_scandinavia_portrait.png">
   <img src="plots/2024_scandinavia_portrait.png" width="49%" />

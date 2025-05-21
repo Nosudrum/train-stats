@@ -1,4 +1,6 @@
 from plotsCodes.all_europe import plot_all_europe
+from plotsCodes.all_europe_heatmap import plot_all_europe_heatmap
+from plotsCodes.all_europe_heatmap_portrait import plot_all_europe_heatmap_portrait
 from plotsCodes.all_europe_portrait import plot_all_europe_portrait
 from plotsCodes.china_2019_portrait import plot_china_2019_portrait
 from plotsCodes.distance_per_day import plot_distance_per_day
@@ -28,6 +30,12 @@ if __name__ == "__main__":
     # Generate plots
     print("Generating plots...")
 
+    plot_all_europe_heatmap(
+        trips, mapbox_style_id=MAPBOX_STYLE_ID, mapbox_style_token=MAPBOX_STYLE_TOKEN
+    )
+    plot_all_europe_heatmap_portrait(
+        trips, mapbox_style_id=MAPBOX_STYLE_ID, mapbox_style_token=MAPBOX_STYLE_TOKEN
+    )
     plot_all_europe(
         trips, mapbox_style_id=MAPBOX_STYLE_ID, mapbox_style_token=MAPBOX_STYLE_TOKEN
     )

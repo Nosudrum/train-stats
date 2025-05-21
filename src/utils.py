@@ -1,11 +1,13 @@
+import json
+import os
 from datetime import datetime, timedelta
 from math import prod, ceil, floor
-import os
 
 import matplotlib.pyplot as plt
-from PIL import Image
-import pytz
 import numpy as np
+import pandas as pd
+import pytz
+from PIL import Image
 
 GITHUB_BADGE = Image.open("../assets/GitHub.png")
 
@@ -229,6 +231,29 @@ def extract_trips_journeys(trips, filter_start=None, filter_end=None):
         inplace=True,
     )
     return trips_copy, journeys
+
+
+def extract_points_from_journeys(journeys_list):
+    all_coordinates = np.empty((0, 2))
+
+    for journey in journeys_list:
+        with open(
+            JOURNEYS_PATH + journey + ".geojson",
+            "r",
+            encoding="utf8",
+        ) as f:
+            geojson = json.load(f)
+            coordinates = np.array(geojson["features"][0]["geometry"]["coordinates"])
+            # remove duplicates within a single journey
+            unique_coordinates = np.unique(coordinates, axis=0)
+            all_coordinates = np.append(all_coordinates, unique_coordinates, axis=0)
+
+    return pd.DataFrame(
+        {
+            "lon": all_coordinates[:, 0],
+            "lat": all_coordinates[:, 1],
+        }
+    )
 
 
 def km_to_mi(km):

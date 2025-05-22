@@ -9,6 +9,8 @@ from plotsCodes.distance_per_operator_stacked import plot_distance_per_operator_
 from plotsCodes.duration_per_operator_stacked import plot_duration_per_operator_stacked
 from plotsCodes.germany_2023 import plot_germany_2023
 from plotsCodes.milano_iac_2024 import plot_milano_iac_2024
+from plotsCodes.netherlands_germany_2025 import plot_netherlands_germany_2025
+from plotsCodes.netherlands_germany_2025_portrait import plot_nl_de_2025_portrait
 from plotsCodes.number_per_duration_stacked import plot_number_per_duration_stacked
 from plotsCodes.number_per_operator_stacked import plot_number_per_operator_stacked
 from plotsCodes.october_alsace_2024 import plot_october_alsace_2024
@@ -48,6 +50,13 @@ if __name__ == "__main__":
     plot_germany_2023(
         trips, mapbox_style_id=MAPBOX_STYLE_ID, mapbox_style_token=MAPBOX_STYLE_TOKEN
     )
+    plot_netherlands_germany_2025(
+        trips, mapbox_style_id=MAPBOX_STYLE_ID, mapbox_style_token=MAPBOX_STYLE_TOKEN
+    )
+    plot_nl_de_2025_portrait(
+        trips, mapbox_style_id=MAPBOX_STYLE_ID, mapbox_style_token=MAPBOX_STYLE_TOKEN
+    )
+
     plot_scandinavia_2024(
         trips, mapbox_style_id=MAPBOX_STYLE_ID, mapbox_style_token=MAPBOX_STYLE_TOKEN
     )

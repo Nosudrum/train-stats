@@ -94,14 +94,29 @@ I started tracking all my journeys by train in a spreadsheet in 2022, and manage
   </a>
   </p>
 
+<p  align="center">
+  <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/2025_netherlands_germany.png">
+  <img src="plots/2025_netherlands_germany.png" width="100%" />
+  </a>
+  </p>
+
 ## Portrait maps
 
 <p  align="center">
   <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/all_europe_heatmap_portrait.png">
   <img src="plots/all_europe_heatmap_portrait.png" width="49%" />
   </a>
+    <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/all_europe_portrait.png">
+  <img src="plots/all_europe_portrait.png" width="49%" />
+  </a>
+  </p>
+
+<p  align="center">
     <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/2024_scandinavia_portrait.png">
   <img src="plots/2024_scandinavia_portrait.png" width="49%" />
+  </a>
+    <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/2025_netherlands_germany_portrait.png">
+  <img src="plots/2025_netherlands_germany_portrait.png" width="49%" />
   </a>
   </p>
 

@@ -24,6 +24,7 @@ jobs:
           ADDITIONAL_SPENDING_ID: ${{ secrets.ADDITIONAL_SPENDING_ID }}
           MAPBOX_STYLE_ID: ${{ secrets.MAPBOX_STYLE_ID }}
           MAPBOX_STYLE_TOKEN: ${{ secrets.MAPBOX_STYLE_TOKEN }}
+          MAPBOX_USERNAME: ${{ secrets.MAPBOX_USERNAME }}
       run: |
         cd ${GITHUB_WORKSPACE}/src/
         python automation.py

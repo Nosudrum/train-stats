@@ -6,11 +6,10 @@ import matplotlib.cm as cm
 import matplotlib.pyplot as plt
 import numpy as np
 from cartopy.crs import Robinson, PlateCarree
-from cartopy.io.img_tiles import MapboxStyleTiles
 from matplotlib.colors import LinearSegmentedColormap, BoundaryNorm
 from tqdm import tqdm
 
-from utils import (
+from utils.plot_utils import (
     dark_figure,
     finish_map,
     JOURNEYS_PATH,
@@ -19,30 +18,30 @@ from utils import (
     PARIS_TZ,
     get_trip_labels,
 )
+from utils.mapbox import MapboxStyle
 
 # Trip start/end dates
-START = datetime(2024, 10, 12, 0, 0, 0, tzinfo=PARIS_TZ)
-END = datetime(2024, 10, 20, 23, 59, 59, tzinfo=PARIS_TZ)
+START = datetime(2024, 10, 3, 0, 0, 0, tzinfo=PARIS_TZ)
+END = datetime(2024, 10, 6, 23, 59, 59, tzinfo=PARIS_TZ)
 
 # Setup map boundaries
-LON_MIN = 1
-LON_MAX = 9.7
-LAT_MIN = 42
-LAT_MAX = 47.5
+LON_MIN = -3.5
+LON_MAX = 10
+LAT_MIN = 41.7
+LAT_MAX = 49.5
 ZOOM_LEVEL = 7
 
 
-def plot_milano_iac_2024(trips, mapbox_style_token, mapbox_style_id):
+def plot_october_alsace_2024(trips, mapbox_style: MapboxStyle):
     # Compute journeys dataframe
     trips, journeys = extract_trips_journeys(trips, filter_start=START, filter_end=END)
     now = datetime.now(tz=PARIS_TZ)
 
     # Setup figure
     fig, ax = dark_figure(grid=False, projection=Robinson())
-    request = MapboxStyleTiles(mapbox_style_token, "nosu", mapbox_style_id, cache=False)
     extent = [LON_MIN, LON_MAX, LAT_MIN, LAT_MAX]
     ax[0].set_extent(extent)
-    ax[0].add_image(request, ZOOM_LEVEL, regrid_shape=3000)
+    ax[0].add_image(mapbox_style, ZOOM_LEVEL, regrid_shape=3000)
 
     # Setup colormap
     trip_duration_days = (END - START).days + 1
@@ -59,7 +58,7 @@ def plot_milano_iac_2024(trips, mapbox_style_token, mapbox_style_id):
 
     # For all journeys in the dataset
     trip_list = trips.index.to_list()
-    for trip in tqdm(trip_list, ncols=150, desc="Milano IAC 2024"):
+    for trip in tqdm(trip_list, ncols=150, desc="October Lausanne 2024"):
         # Get the departure datetime
         trip_departure = trips.loc[trip, "Departure (Local)"]
         # Compute the trip day number (1-indexed)
@@ -116,7 +115,7 @@ def plot_milano_iac_2024(trips, mapbox_style_token, mapbox_style_id):
     plt.setp(plt.getp(cbar.ax, "xticklabels"), color="white", fontsize=12)
 
     ax[0].set(
-        title="Milano IAC 2024 Interrail Trip",
+        title="Alsace October 2024",
     )
     plt.tight_layout()
 
@@ -133,4 +132,4 @@ def plot_milano_iac_2024(trips, mapbox_style_token, mapbox_style_id):
     )
     fig_axes.axis("off")
 
-    finish_map(fig, ax, "2024_milano_iac", colorbar=cbar, show=False)
+    finish_map(fig, ax, "2024_october_alsace", colorbar=cbar, show=False)

@@ -1,48 +1,44 @@
-import json
 from datetime import datetime
 
 import matplotlib
 import matplotlib.cm as cm
 import matplotlib.pyplot as plt
 import numpy as np
-from cartopy.crs import Robinson, PlateCarree
-from cartopy.io.img_tiles import MapboxStyleTiles
+import pytz
+from cartopy.crs import PlateCarree
 from matplotlib.colors import LinearSegmentedColormap, BoundaryNorm
 from tqdm import tqdm
 
-from utils import (
+from utils import MapboxStyle, TrainStatsData
+from utils.plot_utils import (
     dark_figure,
     finish_map,
-    JOURNEYS_PATH,
-    extract_trips_journeys,
-    compute_stats,
-    PARIS_TZ,
     get_trip_labels,
 )
 
+CHINA_TZ = pytz.timezone("Asia/Shanghai")
+
 # Trip start/end dates
-START = datetime(2023, 12, 23, 0, 0, 0, tzinfo=PARIS_TZ)
-END = datetime(2024, 1, 1, 23, 59, 59, tzinfo=PARIS_TZ)
+START = datetime(2019, 8, 3, 0, 0, 0, tzinfo=CHINA_TZ)
+END = datetime(2019, 8, 10, 23, 59, 59, tzinfo=CHINA_TZ)
 
 # Setup map boundaries
-LON_MIN = -3
-LON_MAX = 8.5
-LAT_MIN = 41
-LAT_MAX = 54
+LON_MIN = 114.5
+LON_MAX = 123.5
+LAT_MIN = 28.5
+LAT_MAX = 40.5
 ZOOM_LEVEL = 6
 
 
-def plot_uk_nye_2023(trips, mapbox_style_token, mapbox_style_id):
+def plot_china_2019_portrait(data: TrainStatsData, mapbox_style: MapboxStyle):
     # Compute trips and journeys dataframe
-    trips, journeys = extract_trips_journeys(trips, filter_start=START, filter_end=END)
-    now = datetime.now(tz=PARIS_TZ)
+    trips = data.get_trips(filter_start=START, filter_end=END)
 
     # Setup figure
-    fig, ax = dark_figure(grid=False, projection=Robinson(), figsize=(4, 7.1111))
-    request = MapboxStyleTiles(mapbox_style_token, "nosu", mapbox_style_id, cache=False)
+    fig, ax = dark_figure(grid=False, projection=PlateCarree(), figsize=(4, 7.1111))
     extent = [LON_MIN, LON_MAX, LAT_MIN, LAT_MAX]
     ax[0].set_extent(extent)
-    ax[0].add_image(request, ZOOM_LEVEL, regrid_shape=3000)
+    ax[0].add_image(mapbox_style, ZOOM_LEVEL, regrid_shape=3000)
 
     # Setup colormap
     trip_duration_days = (END - START).days + 1
@@ -59,7 +55,7 @@ def plot_uk_nye_2023(trips, mapbox_style_token, mapbox_style_id):
 
     # For all journeys in the dataset
     trip_list = trips.index.to_list()
-    for trip in tqdm(trip_list, ncols=150, desc="UK NYE 2023 (portrait)"):
+    for trip in tqdm(trip_list, ncols=150, desc="China 2019 (portrait)"):
         # Get the departure datetime
         trip_departure = trips.loc[trip, "Departure (Local)"]
         # Compute the trip day number (1-indexed)
@@ -71,7 +67,7 @@ def plot_uk_nye_2023(trips, mapbox_style_token, mapbox_style_id):
         c = sm.to_rgba(trip_day - 1)
 
         # Dashes or not
-        if trips.loc[trip, "Arrival (Local)"] < now:
+        if trips.loc[trip, "Arrival (Local)"] < data.NOW:
             s = "-"
             dashes = [1, 0]
         else:
@@ -79,24 +75,18 @@ def plot_uk_nye_2023(trips, mapbox_style_token, mapbox_style_id):
             dashes = [1, 1 + trip_ratio]
 
         # Plot the trip
-        with open(
-            JOURNEYS_PATH + trips.loc[trip, "journey"] + ".geojson",
-            "r",
-            encoding="utf8",
-        ) as f:
-            geojson = json.load(f)
-            coords = np.array(geojson["features"][0]["geometry"]["coordinates"])
-            ax[0].plot(
-                coords[:, 0],
-                coords[:, 1],
-                s,
-                linewidth=1.2,
-                color=c,
-                transform=PlateCarree(),
-                zorder=(trip_duration_days - trip_day) + 2,
-                solid_capstyle="round",
-                dashes=dashes,
-            )
+        coordinates = data.get_journey_coordinates(trips.loc[trip, "journey"])
+        ax[0].plot(
+            coordinates[:, 0],
+            coordinates[:, 1],
+            s,
+            linewidth=1.7,
+            color=c,
+            transform=PlateCarree(),
+            zorder=(trip_duration_days - trip_day) + 2,
+            solid_capstyle="round",
+            dashes=dashes,
+        )
 
     # Logging
     print("Finalizing plot...")
@@ -117,9 +107,7 @@ def plot_uk_nye_2023(trips, mapbox_style_token, mapbox_style_id):
     plt.tight_layout()
 
     # Stats
-    distance_str, duration_str = compute_stats(
-        trips, start=START, end=END, timezone=PARIS_TZ
-    )
+    distance_str, duration_str = data.get_stats(start=START, end=END)
     fig_axes = fig.add_axes([0.95, 0.027, 0.3, 0.3], anchor="SE", zorder=1)
     index = duration_str.find(" out of")
     if index != -1:
@@ -157,7 +145,7 @@ def plot_uk_nye_2023(trips, mapbox_style_token, mapbox_style_id):
     finish_map(
         fig,
         ax,
-        "2023_uk_nye",
+        "2019_china_portrait",
         colorbar=cbar,
         show=False,
         logo_position=[0.05, 0.656, 0.4, 0.3],

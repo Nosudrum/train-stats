@@ -1,3 +1,4 @@
+.env
 .idea
 data/datasheet_id.txt
 data/dataset.csv

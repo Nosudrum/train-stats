@@ -1,16 +1,14 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 import matplotlib.pyplot as plt
 import numpy as np
 
-from utils import (
+from utils import TrainStatsData
+from utils.plot_utils import (
     dark_figure,
-    extract_trips_journeys,
-    PARIS_TZ,
     COLORS,
     prepare_legend,
     finish_figure,
-    compute_stats,
     GITHUB_DARK,
 )
 
@@ -28,23 +26,17 @@ TIERS = [
 
 
 # Plot of km travelled by train journey duration
-def plot_number_per_duration_stacked(trips):
-    past_trips, _ = extract_trips_journeys(trips, filter_end=datetime.now(tz=PARIS_TZ))
-    future_trips, _ = extract_trips_journeys(
-        trips,
-        filter_start=datetime.now(tz=PARIS_TZ),
-        filter_end=datetime(
-            datetime.now(tz=PARIS_TZ).year + 1, 1, 1, 0, 0, 0, tzinfo=PARIS_TZ
-        ),
-    )
+def plot_number_per_duration_stacked(data: TrainStatsData):
+    past_trips = data.get_past_trips()
+    future_trips = data.get_future_trips(current_year_only=True)
 
     fig, ax = dark_figure()
     years = past_trips["Departure (Local)"].dt.year.unique().tolist()
-    data = []
+    plot_data = []
     for tier in TIERS:
         min_duration = timedelta(hours=tier[0])
         max_duration = timedelta(hours=tier[1])
-        data.append(
+        plot_data.append(
             past_trips[
                 past_trips["Duration"].between(
                     min_duration, max_duration, inclusive="left"
@@ -52,11 +44,11 @@ def plot_number_per_duration_stacked(trips):
             ]["Departure (Local)"].dt.year.values.tolist()
         )
     future_trips_mask = future_trips["Departure (Local)"].dt.year.isin(years)
-    data.append(
+    plot_data.append(
         future_trips[future_trips_mask]["Departure (Local)"].dt.year.values.tolist()
     )
     _, _, bar_containers = ax[0].hist(
-        data,
+        plot_data,
         bins=np.append(np.unique(years), max(years) + 1),
         histtype="bar",
         stacked=True,
@@ -81,7 +73,7 @@ def plot_number_per_duration_stacked(trips):
     plt.tight_layout()
 
     # Stats
-    distance_str, duration_str = compute_stats(past_trips, timezone=PARIS_TZ)
+    distance_str, duration_str = data.get_stats(end=data.NOW)
     fig_axes = fig.add_axes([0.97, 0.027, 0.3, 0.3], anchor="SE", zorder=1)
     fig_axes.text(
         0, 0.12, distance_str, ha="right", va="bottom", color="white", fontsize=10

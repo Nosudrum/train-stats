@@ -1,15 +1,11 @@
-from datetime import datetime
-
 import matplotlib.cm as cm
 import matplotlib.pyplot as plt
 import numpy as np
 
-from utils import (
+from utils import TrainStatsData
+from utils.plot_utils import (
     dark_figure,
-    extract_trips_journeys,
-    PARIS_TZ,
     finish_figure,
-    compute_stats,
 )
 
 MAX_DAYS_PER_YEAR = 366
@@ -32,8 +28,8 @@ MONTHS_LABELS = [
 ]
 
 
-def plot_distance_per_day(trips):
-    past_trips, _ = extract_trips_journeys(trips, filter_end=datetime.now(tz=PARIS_TZ))
+def plot_distance_per_day(data: TrainStatsData):
+    past_trips = data.get_past_trips()
 
     fig, ax = dark_figure()
     years = past_trips["Departure (Local)"].dt.year.unique().tolist()
@@ -81,7 +77,7 @@ def plot_distance_per_day(trips):
     plt.tight_layout()
 
     # Stats
-    distance_str, duration_str = compute_stats(past_trips, timezone=PARIS_TZ)
+    distance_str, duration_str = data.get_stats(end=data.NOW)
     fig_axes = fig.add_axes([0.97, 0.027, 0.3, 0.3], anchor="SE", zorder=1)
     fig_axes.text(
         0, 0.12, distance_str, ha="right", va="bottom", color="white", fontsize=10

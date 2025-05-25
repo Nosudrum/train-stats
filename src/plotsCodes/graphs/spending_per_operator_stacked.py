@@ -1,31 +1,22 @@
-from datetime import datetime
-
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from utils import (
+from utils import TrainStatsData
+from utils.plot_utils import (
     dark_figure,
-    extract_trips_journeys,
-    PARIS_TZ,
     COLORS,
     GITHUB_DARK,
     prepare_legend,
     finish_figure,
-    compute_stats,
 )
 
 
 # Plot of km travelled by train operator
-def plot_spending_per_operator_stacked(trips, additional_spending):
-    past_trips, _ = extract_trips_journeys(trips, filter_end=datetime.now(tz=PARIS_TZ))
-    future_trips, _ = extract_trips_journeys(
-        trips,
-        filter_start=datetime.now(tz=PARIS_TZ),
-        filter_end=datetime(
-            datetime.now(tz=PARIS_TZ).year + 1, 1, 1, 0, 0, 0, tzinfo=PARIS_TZ
-        ),
-    )
+def plot_spending_per_operator_stacked(data: TrainStatsData):
+    past_trips = data.get_past_trips()
+    future_trips = data.get_future_trips(current_year_only=True)
+    additional_spending = data.get_additional_spending()
 
     fig, ax = dark_figure()
     years = past_trips["Departure (Local)"].dt.year.unique().tolist()
@@ -116,7 +107,7 @@ def plot_spending_per_operator_stacked(trips, additional_spending):
     plt.tight_layout()
 
     # Stats
-    distance_str, duration_str = compute_stats(past_trips, timezone=PARIS_TZ)
+    distance_str, duration_str = data.get_stats(end=data.NOW)
     fig_axes = fig.add_axes([0.97, 0.027, 0.3, 0.3], anchor="SE", zorder=1)
     fig_axes.text(
         0, 0.12, distance_str, ha="right", va="bottom", color="white", fontsize=10

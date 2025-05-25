@@ -2,7 +2,7 @@ from datetime import datetime
 
 import pandas as pd
 import requests
-from utils import (
+from utils.plot_utils import (
     get_datasheet_id,
     TRIPS_PATH,
     STATIONS_PATH,

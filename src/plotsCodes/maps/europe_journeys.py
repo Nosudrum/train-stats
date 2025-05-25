@@ -1,21 +1,13 @@
-import json
-from datetime import datetime
-
 import matplotlib
 import matplotlib.cm as cm
 import matplotlib.pyplot as plt
-import numpy as np
 from cartopy.crs import Robinson, PlateCarree
-from cartopy.io.img_tiles import MapboxStyleTiles
 from tqdm import tqdm
 
-from utils import (
+from utils import MapboxStyle, TrainStatsData
+from utils.plot_utils import (
     dark_figure,
     finish_map,
-    JOURNEYS_PATH,
-    extract_trips_journeys,
-    compute_stats,
-    PARIS_TZ,
 )
 
 # Setup map boundaries
@@ -26,25 +18,23 @@ LAT_MAX = 66.5
 ZOOM_LEVEL = 5
 
 
-def plot_all_europe(trips, mapbox_style_token, mapbox_style_id):
+def plot_all_europe(data: TrainStatsData, mapbox_style: MapboxStyle):
     # Compute journeys dataframe
-    trips, journeys = extract_trips_journeys(trips)
+    journeys = data.get_journeys()
 
     # Setup figure
     fig, ax = dark_figure(grid=False, projection=Robinson())
-    request = MapboxStyleTiles(mapbox_style_token, "nosu", mapbox_style_id, cache=False)
     extent = [LON_MIN, LON_MAX, LAT_MIN, LAT_MAX]
     ax[0].set_extent(extent)
-    ax[0].add_image(request, ZOOM_LEVEL, regrid_shape=3000)
+    ax[0].add_image(mapbox_style, ZOOM_LEVEL, regrid_shape=3000)
 
     # For all journeys in the dataset
-    now = datetime.now(tz=PARIS_TZ)
     values = journeys["count"].values
     color_map = matplotlib.colormaps["rainbow"]
 
     journeys_list = journeys.index.to_list()
     for journey in tqdm(journeys_list, ncols=150, desc="All Europe"):
-        if journeys.loc[journey, "firstdate"] < now:
+        if journeys.loc[journey, "firstdate"] < data.NOW:
             s = "-"
         else:
             s = ":"
@@ -52,19 +42,17 @@ def plot_all_europe(trips, mapbox_style_token, mapbox_style_id):
         count = journeys.loc[journey, "count"]
         c = color_map((count - 1) / (values.max() - 1))
 
-        with open(JOURNEYS_PATH + journey + ".geojson", "r", encoding="utf8") as f:
-            geojson = json.load(f)
-            coords = np.array(geojson["features"][0]["geometry"]["coordinates"])
-            ax[0].plot(
-                coords[:, 0],
-                coords[:, 1],
-                s,
-                linewidth=1.2,
-                color=c,
-                transform=PlateCarree(),
-                zorder=count,
-                solid_capstyle="round",
-            )
+        coordinates = data.get_journey_coordinates(journey)
+        ax[0].plot(
+            coordinates[:, 0],
+            coordinates[:, 1],
+            s,
+            linewidth=1.2,
+            color=c,
+            transform=PlateCarree(),
+            zorder=count,
+            solid_capstyle="round",
+        )
 
     # Logging
     print("Finalizing plot...")
@@ -85,7 +73,7 @@ def plot_all_europe(trips, mapbox_style_token, mapbox_style_id):
     plt.tight_layout()
 
     # Stats
-    distance_str, duration_str = compute_stats(trips, end=now, timezone=PARIS_TZ)
+    distance_str, duration_str = data.get_stats(end=data.NOW)
     fig_axes = fig.add_axes([0.97, 0.027, 0.3, 0.3], anchor="SE", zorder=1)
     fig_axes.text(
         0, 0.12, distance_str, ha="right", va="bottom", color="white", fontsize=10

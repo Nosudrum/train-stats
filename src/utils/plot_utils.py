@@ -25,8 +25,6 @@ COLORS_DICT = {
 COLORS = ["blue", "orange", "red", "green", "pink", "yellow", "purple", "grey"]
 COLORS = [COLORS_DICT[i] for i in COLORS]
 
-MAPBOX_STYLE_TOKEN_PATH = "../data/mapbox_style_token.txt"
-MAPBOX_STYLE_ID_PATH = "../data/mapbox_style_id.txt"
 DATASHEET_ID_PATH = "../data/datasheet_id.txt"
 ADDITIONAL_SPENDING_ID_PATH = "../data/additional_spending_id.txt"
 JOURNEYS_PATH = "../data/journeys_coords/"
@@ -159,31 +157,6 @@ def axes_ticks(value):
         interval = 1
     upper_bound = interval * (ceil(value / interval) + 1)
     return np.arange(0, upper_bound, interval)
-
-
-def get_mapbox_secrets():
-    # Mapbox style token
-    if os.path.exists(MAPBOX_STYLE_TOKEN_PATH):
-        print("Using Mapbox style token from file")
-        with open(MAPBOX_STYLE_TOKEN_PATH, "r") as f:
-            mapbox_style_token = f.read()
-    elif "MAPBOX_STYLE_TOKEN" in os.environ:
-        print("Using Mapbox style token from environment")
-        mapbox_style_token = os.environ["MAPBOX_STYLE_TOKEN"]
-    else:
-        raise Exception("No Mapbox style token found")
-
-    # Mapbox style ID
-    if os.path.exists(MAPBOX_STYLE_ID_PATH):
-        print("Using Mapbox style ID from file")
-        with open(MAPBOX_STYLE_ID_PATH, "r") as f:
-            mapbox_style_id = f.read()
-    elif "MAPBOX_STYLE_ID" in os.environ:
-        print("Using Mapbox style ID from environment")
-        mapbox_style_id = os.environ["MAPBOX_STYLE_ID"]
-    else:
-        raise Exception("No Mapbox style ID found")
-    return mapbox_style_token, mapbox_style_id
 
 
 def get_datasheet_id():

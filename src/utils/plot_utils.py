@@ -1,11 +1,8 @@
-import json
-import os
-from datetime import datetime, timedelta
+from datetime import timedelta
 from math import prod, ceil, floor
 
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 import pytz
 from PIL import Image
 
@@ -25,16 +22,7 @@ COLORS_DICT = {
 COLORS = ["blue", "orange", "red", "green", "pink", "yellow", "purple", "grey"]
 COLORS = [COLORS_DICT[i] for i in COLORS]
 
-DATASHEET_ID_PATH = "../data/datasheet_id.txt"
-ADDITIONAL_SPENDING_ID_PATH = "../data/additional_spending_id.txt"
-JOURNEYS_PATH = "../data/journeys_coords/"
-TRIPS_PATH = "../data/dataset.csv"
-ADDITIONAL_SPENDING_PATH = "../data/additional_spending.csv"
-STATIONS_PATH = "../data/stations.csv"
-CUSTOM_STATIONS_PATH = "../data/custom_stations_tz.csv"
-
 PARIS_TZ = pytz.timezone("Europe/Paris")
-UTC_TZ = pytz.utc
 
 
 def dark_figure(subplots=(1, 1), figsize=(7, 5.2), projection=None, grid=False):
@@ -101,6 +89,7 @@ def finish_figure(
     override_yticks=None,
     colorbar=None,
 ):
+    ticks = None
     if override_yticks is None:
         ticks = axes_ticks(axes[0].get_ylim()[1])
         axes[0].set_yticks(ticks)
@@ -157,134 +146,6 @@ def axes_ticks(value):
         interval = 1
     upper_bound = interval * (ceil(value / interval) + 1)
     return np.arange(0, upper_bound, interval)
-
-
-def get_datasheet_id():
-    if os.path.exists(DATASHEET_ID_PATH):
-        print("Using Datasheet ID from file")
-        with open(DATASHEET_ID_PATH, "r") as f:
-            datasheet_id = f.read()
-    elif "DATASHEET_ID" in os.environ:
-        print("Using Datasheet ID from environment")
-        datasheet_id = os.environ["DATASHEET_ID"]
-    else:
-        raise Exception("No Datasheet ID found")
-    return datasheet_id
-
-
-def get_additional_spending_id():
-    if os.path.exists(ADDITIONAL_SPENDING_ID_PATH):
-        print("Using Additional Spending ID from file")
-        with open(ADDITIONAL_SPENDING_ID_PATH, "r") as f:
-            additional_spending_id = f.read()
-    elif "ADDITIONAL_SPENDING_ID" in os.environ:
-        print("Using Additional Spending ID from environment")
-        additional_spending_id = os.environ["ADDITIONAL_SPENDING_ID"]
-    else:
-        raise Exception("No Additional Spending ID found")
-    return additional_spending_id
-
-
-def extract_trips_journeys(trips, filter_start=None, filter_end=None):
-    trips_copy = trips.copy()
-    if filter_start is not None:
-        trips_copy = trips_copy[trips_copy["Departure (Local)"] >= filter_start]
-    if filter_end is not None:
-        trips_copy = trips_copy[trips_copy["Arrival (Local)"] <= filter_end]
-    journey_counts = trips_copy["journey"].value_counts().to_frame()
-    journey_distances = (
-        trips_copy[["journey", "Distance (km)"]].groupby("journey").mean()
-    )
-    journey_firstdate = (
-        trips_copy[["journey", "Arrival (Local)"]].groupby("journey").min()
-    )
-    journeys = journey_counts.join(journey_distances).join(journey_firstdate)
-    journeys.rename(
-        columns={"Distance (km)": "distance", "Arrival (Local)": "firstdate"},
-        inplace=True,
-    )
-    return trips_copy, journeys
-
-
-def extract_points_from_journeys(journeys_list):
-    all_coordinates = np.empty((0, 2))
-
-    for journey in journeys_list:
-        with open(
-            JOURNEYS_PATH + journey + ".geojson",
-            "r",
-            encoding="utf8",
-        ) as f:
-            geojson = json.load(f)
-            coordinates = np.array(geojson["features"][0]["geometry"]["coordinates"])
-            # remove duplicates within a single journey
-            unique_coordinates = np.unique(coordinates, axis=0)
-            all_coordinates = np.append(all_coordinates, unique_coordinates, axis=0)
-
-    return pd.DataFrame(
-        {
-            "lon": all_coordinates[:, 0],
-            "lat": all_coordinates[:, 1],
-        }
-    )
-
-
-def km_to_mi(km):
-    return km * 0.621371
-
-
-def format_timedelta(dt):
-    days = dt.days
-    hours = divmod(dt.seconds, 3600)[0]
-    minutes = divmod(dt.seconds, 3600)[1] // 60
-
-    string = ""
-    if days > 0:
-        string += f"{days} day{'s' if days > 1 else ''}"
-    if hours > 0:
-        string += f" {hours} hour{'s' if hours > 1 else ''}"
-    if minutes > 0:
-        string += f" {minutes} minute{'s' if minutes > 1 else ''}"
-
-    return string
-
-
-def format_km(km):
-    return f"{round(km):_} km ({round(km_to_mi(km)):_} mi)".replace("_", " ")
-
-
-def compute_stats(trips, start=None, end=None, timezone=UTC_TZ):
-    if not start:
-        start = trips["Departure (Local)"].min()
-    if not end:
-        end = trips["Arrival (Local)"].max()
-    trips_total_mask = (trips["Departure (Local)"] >= start) & (
-        trips["Arrival (Local)"] <= end
-    )
-    trips_current_mask = (trips["Departure (Local)"] >= start) & (
-        trips["Arrival (Local)"] < datetime.now(tz=timezone)
-    )
-    total_duration = trips[trips_total_mask]["Duration"].sum()
-    total_distance = trips[trips_total_mask]["Distance (km)"].dropna().sum()
-    current_duration = trips[trips_current_mask]["Duration"].dropna().sum()
-    current_distance = trips[trips_current_mask]["Distance (km)"].dropna().sum()
-
-    if end < datetime.now(tz=timezone) or start > datetime.now(tz=timezone):
-        # Trip has ended or hasn't started
-        distance_str = format_km(total_distance)
-        duration_str = format_timedelta(total_duration)
-    else:
-        # Trip is ongoing
-        distance_str = (
-            format_km(current_distance) + " out of " + format_km(total_distance)
-        )
-        duration_str = (
-            format_timedelta(current_duration)
-            + " out of "
-            + format_timedelta(total_duration)
-        )
-
-    return distance_str, duration_str
 
 
 def prepare_legend(reverse):

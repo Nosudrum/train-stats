@@ -3,7 +3,6 @@ from math import prod, ceil, floor
 
 import matplotlib.pyplot as plt
 import numpy as np
-import pytz
 from PIL import Image
 
 GITHUB_BADGE = Image.open("../assets/GitHub.png")
@@ -22,7 +21,24 @@ COLORS_DICT = {
 COLORS = ["blue", "orange", "red", "green", "pink", "yellow", "purple", "grey"]
 COLORS = [COLORS_DICT[i] for i in COLORS]
 
-PARIS_TZ = pytz.timezone("Europe/Paris")
+MAX_DAYS_PER_YEAR = 366
+
+MONTHS_TICKS = [1, 32, 61, 92, 122, 153, 183, 214, 245, 275, 306, 336]
+
+MONTHS_LABELS = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+]
 
 
 def dark_figure(subplots=(1, 1), figsize=(7, 5.2), projection=None, grid=False):

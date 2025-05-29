@@ -76,7 +76,7 @@ class PlotConfig:
             case "Spending per operator":
                 return plot_spending_per_operator(data)
             case "Distance timeline":
-                return plot_distance_timeline(data)
+                return plot_distance_timeline(data, self._plot_params)
             case "Trip map":
                 return plot_trip_map(
                     data, mapbox_style, self._trip_params, self._map_params

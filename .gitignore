@@ -1,5 +1,5 @@
 .env
-.py~
+*.py~
 .idea
 data/additional_spending.csv
 data/trips.csv

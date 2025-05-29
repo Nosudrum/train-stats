@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from tqdm import tqdm
 
 from utils import TrainStatsData
 from utils.plot_utils import (
@@ -9,10 +10,11 @@ from utils.plot_utils import (
     GITHUB_DARK,
     finish_figure,
 )
+from utils.plotting import PlotParams
 
 
 # Plot of km travelled by train operator
-def plot_number_per_operator(data: TrainStatsData):
+def plot_number_per_operator(data: TrainStatsData, params: PlotParams):
     past_trips = data.get_past_trips()
     future_trips = data.get_future_trips(current_year_only=True)
 
@@ -25,7 +27,7 @@ def plot_number_per_operator(data: TrainStatsData):
     operators.loc[~operators.isin(operators_selected)] = "Others"
     operators_selected.append("Others")
     plot_data = []
-    for operator in operators_selected:
+    for operator in tqdm(operators_selected, ncols=150, desc=params.title):
         plot_data.append(
             past_trips[operators == operator][
                 "Departure (Local)"
@@ -54,7 +56,7 @@ def plot_number_per_operator(data: TrainStatsData):
     ax[0].set(
         ylabel="Number of trains",
         xlim=[min(years), max(years) + 1],
-        title="Number of trains taken per operator since " + str(min(years)),
+        title=params.title,
     )
     ax[0].legend(
         handles, labels, loc="upper center", ncol=4, frameon=False, labelcolor="white"
@@ -63,12 +65,22 @@ def plot_number_per_operator(data: TrainStatsData):
 
     # Stats
     distance_str, duration_str = data.get_stats(end=data.NOW)
-    fig_axes = fig.add_axes([0.97, 0.027, 0.3, 0.3], anchor="SE", zorder=1)
-    fig_axes.text(
-        0, 0.12, distance_str, ha="right", va="bottom", color="white", fontsize=10
-    )
-    fig_axes.text(
-        0, 0, duration_str, ha="right", va="bottom", color="white", fontsize=10
-    )
+    fig_axes = fig.add_axes(params.get_stats_axes(), anchor="SE", zorder=1)
+
+    stats_texts = params.get_split_stats_texts(distance_str, duration_str)
+    stats_positions = params.get_split_stats_positions(distance_str, duration_str)
+
+    for text, position in zip(stats_texts, stats_positions):
+        fig_axes.text(
+            position[0],
+            position[1],
+            text,
+            ha="right",
+            va="bottom",
+            color="white",
+            fontsize=params.get_stats_font_size(),
+        )
+
     fig_axes.axis("off")
-    finish_figure(fig, ax, "number_per_operator")
+
+    finish_figure(fig, ax, params.file_name)

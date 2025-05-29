@@ -12,7 +12,7 @@ if __name__ == "__main__":
     print("Generating plots...")
     config = data.get_plots_config()
 
-    for index, plot in config.iterrows():
+    for _, plot in config.iterrows():
         PlotConfig(**plot).run(data, mapbox_style)
 
     # Exit successfully

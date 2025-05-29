@@ -65,17 +65,17 @@ class PlotConfig:
     def run(self, data: TrainStatsData, mapbox_style: MapboxStyle):
         match self._plot_type:
             case "Distance per duration":
-                return plot_distance_per_duration(data)
+                return plot_distance_per_duration(data, self._plot_params)
             case "Distance per operator":
-                return plot_distance_per_operator(data)
+                return plot_distance_per_operator(data, self._plot_params)
             case "Duration per operator":
-                return plot_duration_per_operator(data)
+                return plot_duration_per_operator(data, self._plot_params)
             case "Number per duration":
-                return plot_number_per_duration(data)
+                return plot_number_per_duration(data, self._plot_params)
             case "Number per operator":
-                return plot_number_per_operator(data)
+                return plot_number_per_operator(data, self._plot_params)
             case "Spending per operator":
-                return plot_spending_per_operator(data)
+                return plot_spending_per_operator(data, self._plot_params)
             case "Heatmap":
                 return plot_heatmap(data, mapbox_style, self._map_params)
             case "Journeys map":

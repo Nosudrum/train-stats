@@ -40,6 +40,17 @@ MONTHS_LABELS = [
     "Dec",
 ]
 
+DURATION_TIERS = [
+    (0, 2, "up to 2h"),
+    (2, 4, "2h to 4h"),
+    (4, 6, "4h to 6h"),
+    (6, 8, "6h to 8h"),
+    (8, 10, "8h to 10h"),
+    (10, 12, "10h to 12h"),
+    (12, 14, "12h to 14h"),
+    (14, 999, "over 14h"),
+]
+
 
 def dark_figure(subplots=(1, 1), figsize=(7, 5.2), projection=None, grid=False):
     fig = plt.figure(facecolor=GITHUB_DARK, figsize=figsize)

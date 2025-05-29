@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 
 import numpy as np
 from cartopy.crs import PlateCarree, Robinson, Projection
@@ -9,7 +10,7 @@ class TripParams:
         self.start: datetime = start
         self.end: datetime = end
 
-    def get_trip_duration_days(self):
+    def get_trip_duration_days(self) -> int:
         return (self.end - self.start).days + 1
 
 
@@ -19,25 +20,25 @@ class PlotParams:
         self.file_name: str = file_name
         self.is_portrait: bool = is_portrait
 
-    def get_fig_size(self):
+    def get_fig_size(self) -> tuple[float, float]:
         if self.is_portrait:
             return 4, 7.1111
         else:
             return 7, 5.2
 
-    def get_line_width(self):
+    def get_line_width(self) -> float:
         if self.is_portrait:
             return 1.7
         else:
             return 1.2
 
-    def get_colorbar_axes(self):
+    def get_colorbar_axes(self) -> list[float]:
         if self.is_portrait:
             return [0.08, 0.08, 0.8, 0.035]
         else:
             return [0.1, 0.08, 0.8, 0.035]
 
-    def get_colorbar_ticks(self, count: int):
+    def get_colorbar_ticks(self, count: int) -> np.ndarray:
         if count <= 10 or (not self.is_portrait and count <= 26):
             return np.arange(0.5, count + 0.5)
         largest_divider = 1
@@ -46,7 +47,7 @@ class PlotParams:
                 largest_divider = i
         return np.linspace(0, count - 1, largest_divider + 1) + 0.5
 
-    def get_stats_axes(self):
+    def get_stats_axes(self) -> list[float]:
         if self.is_portrait:
             return [0.95, 0.027, 0.3, 0.3]
         else:
@@ -62,19 +63,19 @@ class PlotParams:
 
     def get_split_stats_positions(self, distance_str: str, duration_str: str):
         if not self.is_portrait:
-            return [0, 0.12], [0, 0]
+            return [0.0, 0.12], [0.0, 0.0]
         if len(self.get_split_stats_texts(distance_str, duration_str)) == 3:
             return [0, 0.08], [0, 0], [0, 0.19]
         else:
             return [0, 0.16], [0, 0.03]
 
-    def get_stats_font_size(self):
+    def get_stats_font_size(self) -> int:
         if self.is_portrait:
             return 9
         else:
             return 10
 
-    def get_logo_position(self):
+    def get_logo_position(self) -> Optional[list[float]]:
         if self.is_portrait:
             return [0.05, 0.656, 0.4, 0.3]
         else:
@@ -102,10 +103,10 @@ class MapParams(PlotParams):
         self.zoom_level: int = zoom_level
         self.map_projection: Projection = self._match_map_projection(map_projection)
 
-    def get_extent(self):
+    def get_extent(self) -> list[float]:
         return [self._lon_min, self._lon_max, self._lat_min, self._lat_max]
 
-    def _match_map_projection(self, map_projection: str):
+    def _match_map_projection(self, map_projection: str) -> Projection:
         if map_projection == "PlateCarree":
             return PlateCarree()
         elif map_projection == "Robinson":

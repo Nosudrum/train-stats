@@ -1,6 +1,7 @@
 from datetime import datetime
 
 import numpy as np
+from cartopy.crs import PlateCarree, Robinson, Projection
 
 
 class TripParams:
@@ -37,7 +38,7 @@ class PlotParams:
             return [0.1, 0.08, 0.8, 0.035]
 
     def get_colorbar_ticks(self, count: int):
-        if not self.is_portrait and count <= 26:
+        if count <= 10 or (not self.is_portrait and count <= 26):
             return np.arange(0.5, count + 0.5)
         largest_divider = 1
         for i in range(2, count - 1):
@@ -90,6 +91,7 @@ class MapParams(PlotParams):
         lat_min: float,
         lat_max: float,
         zoom_level: int,
+        map_projection: str,
         is_portrait: bool = False,
     ):
         super().__init__(title, file_name, is_portrait)
@@ -98,6 +100,15 @@ class MapParams(PlotParams):
         self._lat_min: float = lat_min
         self._lat_max: float = lat_max
         self.zoom_level: int = zoom_level
+        self.map_projection: Projection = self._match_map_projection(map_projection)
 
     def get_extent(self):
         return [self._lon_min, self._lon_max, self._lat_min, self._lat_max]
+
+    def _match_map_projection(self, map_projection: str):
+        if map_projection == "PlateCarree":
+            return PlateCarree()
+        elif map_projection == "Robinson":
+            return Robinson()
+        else:
+            raise ValueError(f"Unknown map projection: {map_projection}.")

@@ -2,7 +2,7 @@ import matplotlib
 import matplotlib.cm as cm
 import matplotlib.pyplot as plt
 import numpy as np
-from cartopy.crs import Robinson, PlateCarree
+from cartopy.crs import PlateCarree
 from matplotlib.colors import LinearSegmentedColormap, BoundaryNorm
 from tqdm import tqdm
 
@@ -22,7 +22,7 @@ def plot_trip_map(
 
     # Setup figure
     fig, ax = dark_figure(
-        grid=False, projection=Robinson(), figsize=params.get_fig_size()
+        grid=False, projection=params.map_projection, figsize=params.get_fig_size()
     )
     ax[0].set_extent(params.get_extent())
     ax[0].add_image(mapbox_style, params.zoom_level, regrid_shape=3000)

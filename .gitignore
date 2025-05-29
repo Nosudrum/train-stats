@@ -3,5 +3,6 @@
 .idea
 data/additional_spending.csv
 data/trips.csv
+data/plots_config.csv
 assets/GitHub.afdesign
 __pycache__

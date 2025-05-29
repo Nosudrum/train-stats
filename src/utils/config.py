@@ -55,6 +55,7 @@ class PlotConfig:
                 kwargs["Lat min"],
                 kwargs["Lat max"],
                 kwargs["Zoom level"],
+                kwargs["Projection"],
                 is_portrait=kwargs["Portrait"],
             )
         else:

@@ -3,7 +3,6 @@ from math import prod, ceil, floor
 
 import matplotlib.pyplot as plt
 import numpy as np
-import pytz
 from PIL import Image
 
 GITHUB_BADGE = Image.open("../assets/GitHub.png")
@@ -22,7 +21,35 @@ COLORS_DICT = {
 COLORS = ["blue", "orange", "red", "green", "pink", "yellow", "purple", "grey"]
 COLORS = [COLORS_DICT[i] for i in COLORS]
 
-PARIS_TZ = pytz.timezone("Europe/Paris")
+MAX_DAYS_PER_YEAR = 366
+
+MONTHS_TICKS = [1, 32, 61, 92, 122, 153, 183, 214, 245, 275, 306, 336]
+
+MONTHS_LABELS = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+]
+
+DURATION_TIERS = [
+    (0, 2, "up to 2h"),
+    (2, 4, "2h to 4h"),
+    (4, 6, "4h to 6h"),
+    (6, 8, "6h to 8h"),
+    (8, 10, "8h to 10h"),
+    (10, 12, "10h to 12h"),
+    (12, 14, "12h to 14h"),
+    (14, 999, "over 14h"),
+]
 
 
 def dark_figure(subplots=(1, 1), figsize=(7, 5.2), projection=None, grid=False):
@@ -55,7 +82,7 @@ def finish_map(
     fig,
     _axes,
     path,
-    show,
+    show=False,
     save_transparent=False,
     colorbar=None,
     logo_position=None,
@@ -83,7 +110,7 @@ def finish_figure(
     fig,
     axes,
     path,
-    show,
+    show=False,
     save_transparent=False,
     override_ylim=None,
     override_yticks=None,

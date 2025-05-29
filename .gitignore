@@ -1,12 +1,8 @@
 .env
-.py~
+*.py~
 .idea
-data/datasheet_id.txt
-data/dataset.csv
-data/additional_spending_id.txt
 data/additional_spending.csv
-data/mapbox_token.txt
+data/trips.csv
+data/plots_config.csv
 assets/GitHub.afdesign
-data/mapbox_style_token.txt
-data/mapbox_style_id.txt
 __pycache__

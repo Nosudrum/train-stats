@@ -21,6 +21,7 @@ class TrainStatsData:
     _STATIONS_PATH = "../data/stations.csv"
     _CUSTOM_STATIONS_PATH = "../data/custom_stations_tz.csv"
     _JOURNEYS_PATH = "../data/journeys_coords/"
+    _PLOTS_CONFIG_PATH = "../data/plots_config.csv"
 
     def __init__(self):
         self._stations: pd.DataFrame = pd.read_csv(
@@ -33,15 +34,20 @@ class TrainStatsData:
         self._additional_spending: pd.DataFrame = self._import_additional_spending(
             os.environ["DATASHEET_ID"], os.environ["ADDITIONAL_SPENDING_ID"]
         )
+        self._plots_config: pd.DataFrame = self._import_plots_config(
+            os.environ["DATASHEET_ID"], os.environ["PLOTS_CONFIG_ID"]
+        )
 
-    def get_past_trips(self, filter_start=None):
+    def get_past_trips(self, filter_start: datetime = None) -> pd.DataFrame:
         return self.get_trips(filter_start=filter_start, filter_end=self.NOW)
 
-    def get_future_trips(self, current_year_only=False):
+    def get_future_trips(self, current_year_only: bool = False) -> pd.DataFrame:
         filter_end = self.EOY if current_year_only else None
         return self.get_trips(filter_start=self.NOW, filter_end=filter_end)
 
-    def get_trips(self, filter_start=None, filter_end=None):
+    def get_trips(
+        self, filter_start: datetime = None, filter_end: datetime = None
+    ) -> pd.DataFrame:
         trips = self._trips.copy(deep=True)
         if filter_start is not None:
             trips = trips[trips["Departure (Local)"] >= filter_start]
@@ -49,10 +55,15 @@ class TrainStatsData:
             trips = trips[trips["Arrival (Local)"] <= filter_end]
         return trips
 
-    def get_additional_spending(self):
+    def get_additional_spending(self) -> pd.DataFrame:
         return self._additional_spending.copy(deep=True)
 
-    def get_journeys(self, filter_start=None, filter_end=None):
+    def get_plots_config(self) -> pd.DataFrame:
+        return self._plots_config.copy(deep=True)
+
+    def get_journeys(
+        self, filter_start: datetime = None, filter_end: datetime = None
+    ) -> pd.DataFrame:
         trips = self.get_trips(filter_start, filter_end)
 
         journey_counts = trips["journey"].value_counts().to_frame()
@@ -69,7 +80,9 @@ class TrainStatsData:
         )
         return journeys
 
-    def get_stats(self, start=None, end=None):
+    def get_stats(
+        self, start: datetime = None, end: datetime = None
+    ) -> tuple[str, str]:
         if not start:
             start = self._trips["Departure (Local)"].min()
         if not end:
@@ -87,7 +100,7 @@ class TrainStatsData:
             self._trips[trips_current_mask]["Distance (km)"].dropna().sum()
         )
 
-        if end < self.NOW or start > self.NOW:
+        if end <= self.NOW or start > self.NOW:
             # Trip has ended or hasn't started
             distance_str = self._format_km(total_distance)
             duration_str = self._format_timedelta(total_duration)
@@ -106,14 +119,16 @@ class TrainStatsData:
 
         return distance_str, duration_str
 
-    def get_journey_coordinates(self, journey):
+    def get_journey_coordinates(self, journey: str) -> np.ndarray:
         with open(
             self._JOURNEYS_PATH + journey + ".geojson", "r", encoding="utf8"
         ) as f:
             geojson = json.load(f)
             return np.array(geojson["features"][0]["geometry"]["coordinates"])
 
-    def get_travel_coordinates(self, filter_start=None, filter_end=None):
+    def get_travel_coordinates(
+        self, filter_start: datetime = None, filter_end: datetime = None
+    ) -> pd.DataFrame:
         trips = self.get_trips(filter_start, filter_end)
         all_coordinates = np.empty((0, 2))
 
@@ -138,13 +153,13 @@ class TrainStatsData:
             }
         )
 
-    def _km_to_mi(self, km):
+    def _km_to_mi(self, km: float) -> float:
         return km * 0.621371
 
-    def _format_km(self, km):
+    def _format_km(self, km: float) -> str:
         return f"{round(km):_} km ({round(self._km_to_mi(km)):_} mi)".replace("_", " ")
 
-    def _format_timedelta(self, dt: timedelta):
+    def _format_timedelta(self, dt: timedelta) -> str:
         days = dt.days
         hours = divmod(dt.seconds, 3600)[0]
         minutes = divmod(dt.seconds, 3600)[1] // 60
@@ -159,7 +174,7 @@ class TrainStatsData:
 
         return string
 
-    def _get_station_timezone(self, station):
+    def _get_station_timezone(self, station: str) -> timezone:
         custom_tz = self._custom_stations.loc[
             self._custom_stations["name"] == station, "time_zone"
         ].head(1)
@@ -175,7 +190,7 @@ class TrainStatsData:
                 f"Could not find station name [{station}] in either standard or custom station CSVs."
             )
 
-    def _import_trips(self, datasheet_id):
+    def _import_trips(self, datasheet_id: str) -> pd.DataFrame:
         # Get trips dataset and save to file
         r = get(
             f"https://docs.google.com/spreadsheet/ccc?key={datasheet_id}&output=csv"
@@ -238,7 +253,9 @@ class TrainStatsData:
 
         return trips
 
-    def _import_additional_spending(self, datasheet_id, additional_spending_id):
+    def _import_additional_spending(
+        self, datasheet_id: str, additional_spending_id: str
+    ) -> pd.DataFrame:
         # Get trips dataset and save to file
         r = get(
             f"https://docs.google.com/spreadsheet/ccc?key={datasheet_id}&gid={additional_spending_id}&output=csv"
@@ -292,3 +309,18 @@ class TrainStatsData:
                 raise ValueError(f"Spending {row['Ticket']} is over more than 2 years")
 
         return pd.DataFrame({"Year": years, "Operator": operators, "Amount": amounts})
+
+    def _import_plots_config(
+        self, datasheet_id: str, plots_config_id: str
+    ) -> pd.DataFrame:
+        # Get trips dataset and save to file
+        r = get(
+            f"https://docs.google.com/spreadsheet/ccc?key={datasheet_id}&gid={plots_config_id}&output=csv"
+        )
+        with open(self._PLOTS_CONFIG_PATH, "wb") as f:
+            f.write(r.content)
+        plots_config_df = pd.read_csv(self._PLOTS_CONFIG_PATH, header=0)
+        plots_config_df.dropna(axis=0, how="all", inplace=True)
+        plots_config_df["Zoom level"] = plots_config_df["Zoom level"].astype("Int64")
+        plots_config_df.replace({np.nan: None}, inplace=True)
+        return plots_config_df

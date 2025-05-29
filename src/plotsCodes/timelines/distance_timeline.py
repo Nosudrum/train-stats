@@ -6,29 +6,16 @@ from utils import TrainStatsData
 from utils.plot_utils import (
     dark_figure,
     finish_figure,
+    MONTHS_TICKS,
+    MAX_DAYS_PER_YEAR,
+    MONTHS_LABELS,
 )
-
-MAX_DAYS_PER_YEAR = 366
-
-MONTHS_TICKS = [1, 32, 61, 92, 122, 153, 183, 214, 245, 275, 306, 336]
-
-MONTHS_LABELS = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-]
+from utils.plotting import PlotParams
 
 
-def plot_distance_per_day(data: TrainStatsData):
+def plot_distance_timeline(data: TrainStatsData, params: PlotParams):
+    print("Plotting distance timeline...")
+
     past_trips = data.get_past_trips()
 
     fig, ax = dark_figure()
@@ -57,7 +44,7 @@ def plot_distance_per_day(data: TrainStatsData):
     )
     ax[0].xaxis.set_ticks_position("bottom")
     ax[0].set(
-        title="Distance (km) travelled by train per day since " + str(min(years)),
+        title=params.title,
         xticks=np.array(MONTHS_TICKS) - 1,
         xticklabels=MONTHS_LABELS,
         ylabel="Year",
@@ -78,19 +65,27 @@ def plot_distance_per_day(data: TrainStatsData):
 
     # Stats
     distance_str, duration_str = data.get_stats(end=data.NOW)
-    fig_axes = fig.add_axes([0.97, 0.027, 0.3, 0.3], anchor="SE", zorder=1)
-    fig_axes.text(
-        0, 0.12, distance_str, ha="right", va="bottom", color="white", fontsize=10
-    )
-    fig_axes.text(
-        0, 0, duration_str, ha="right", va="bottom", color="white", fontsize=10
-    )
+    fig_axes = fig.add_axes(params.get_stats_axes(), anchor="SE", zorder=1)
+
+    stats_texts = params.get_split_stats_texts(distance_str, duration_str)
+    stats_positions = params.get_split_stats_positions(distance_str, duration_str)
+
+    for text, position in zip(stats_texts, stats_positions):
+        fig_axes.text(
+            position[0],
+            position[1],
+            text,
+            ha="right",
+            va="bottom",
+            color="white",
+            fontsize=params.get_stats_font_size(),
+        )
+
     fig_axes.axis("off")
     finish_figure(
         fig,
         ax,
-        "distance_per_day",
-        show=False,
+        params.file_name,
         override_ylim=False,
         override_yticks=False,
         colorbar=cbar,

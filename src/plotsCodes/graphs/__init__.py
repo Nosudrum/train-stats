@@ -1,18 +1,15 @@
-from utils import TrainStatsData
-from .distance_per_duration_stacked import plot_distance_per_duration_stacked
-from .distance_per_operator_stacked import plot_distance_per_operator_stacked
-from .duration_per_operator_stacked import plot_duration_per_operator_stacked
-from .number_per_duration_stacked import plot_number_per_duration_stacked
-from .number_per_operator_stacked import plot_number_per_operator_stacked
-from .spending_per_operator_stacked import plot_spending_per_operator_stacked
+from .distance_per_duration import plot_distance_per_duration
+from .distance_per_operator import plot_distance_per_operator
+from .duration_per_operator import plot_duration_per_operator
+from .number_per_duration import plot_number_per_duration
+from .number_per_operator import plot_number_per_operator
+from .spending_per_operator import plot_spending_per_operator
 
-
-def plot_graphs(data: TrainStatsData):
-    print("Plotting graphs...")
-
-    plot_distance_per_operator_stacked(data)
-    plot_distance_per_duration_stacked(data)
-    plot_duration_per_operator_stacked(data)
-    plot_number_per_operator_stacked(data)
-    plot_number_per_duration_stacked(data)
-    plot_spending_per_operator_stacked(data)
+__all__ = [
+    "plot_distance_per_duration",
+    "plot_distance_per_operator",
+    "plot_duration_per_operator",
+    "plot_number_per_duration",
+    "plot_number_per_operator",
+    "plot_spending_per_operator",
+]

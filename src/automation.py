@@ -1,5 +1,5 @@
-from plotsCodes import plot_graphs, plot_maps, plot_timelines, plot_trips
 from utils import MapboxStyle, TrainStatsData
+from utils.config import PlotConfig
 
 if __name__ == "__main__":
     # Setup Mapbox secrets
@@ -10,11 +10,10 @@ if __name__ == "__main__":
 
     # Generate plots
     print("Generating plots...")
+    config = data.get_plots_config()
 
-    plot_graphs(data)
-    plot_maps(data, mapbox_style)
-    plot_timelines(data)
-    plot_trips(data, mapbox_style)
+    for _, plot in config.iterrows():
+        PlotConfig(**plot).run(data, mapbox_style)
 
     # Exit successfully
     print("All done!")

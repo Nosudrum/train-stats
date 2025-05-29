@@ -1,8 +1,4 @@
-from utils import TrainStatsData
-from .distance_per_day import plot_distance_per_day
+from .distance_timeline import plot_distance_timeline
 
 
-def plot_timelines(data: TrainStatsData):
-    print("Plotting timelines...")
-
-    plot_distance_per_day(data)
+__all__ = ["plot_distance_timeline"]

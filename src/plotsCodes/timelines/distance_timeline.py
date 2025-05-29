@@ -28,7 +28,7 @@ MONTHS_LABELS = [
 ]
 
 
-def plot_distance_per_day(data: TrainStatsData):
+def plot_distance_timeline(data: TrainStatsData):
     past_trips = data.get_past_trips()
 
     fig, ax = dark_figure()
@@ -89,7 +89,7 @@ def plot_distance_per_day(data: TrainStatsData):
     finish_figure(
         fig,
         ax,
-        "distance_per_day",
+        "distance_timeline",
         show=False,
         override_ylim=False,
         override_yticks=False,

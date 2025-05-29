@@ -15,6 +15,8 @@ from .trip_map import plot_trip_map
 from datetime import datetime
 from utils.plot_utils import PARIS_TZ
 
+__all__ = ["plot_trip_map"]
+
 
 def plot_trips(data: TrainStatsData, mapbox_style: MapboxStyle):
     print("Plotting trips...")

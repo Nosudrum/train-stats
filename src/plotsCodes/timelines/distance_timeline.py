@@ -86,7 +86,6 @@ def plot_distance_timeline(data: TrainStatsData, params: PlotParams):
         fig,
         ax,
         params.file_name,
-        show=False,
         override_ylim=False,
         override_yticks=False,
         colorbar=cbar,

@@ -10,6 +10,7 @@ from plotsCodes.graphs import (
     plot_number_per_operator,
     plot_spending_per_operator,
 )
+from plotsCodes.maps import plot_heatmap, plot_journeys_map
 from plotsCodes.timelines import plot_distance_timeline
 from plotsCodes.trips import plot_trip_map
 from utils import TrainStatsData, MapboxStyle, TripParams, MapParams
@@ -75,6 +76,10 @@ class PlotConfig:
                 return plot_number_per_operator(data)
             case "Spending per operator":
                 return plot_spending_per_operator(data)
+            case "Heatmap":
+                return plot_heatmap(data, mapbox_style, self._map_params)
+            case "Journeys map":
+                return plot_journeys_map(data, mapbox_style, self._map_params)
             case "Distance timeline":
                 return plot_distance_timeline(data, self._plot_params)
             case "Trip map":

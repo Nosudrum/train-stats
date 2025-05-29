@@ -130,6 +130,5 @@ def plot_trip_map(
         ax,
         params.file_name,
         colorbar=cbar,
-        show=False,
         logo_position=params.get_logo_position(),
     )

@@ -82,4 +82,4 @@ def plot_number_per_duration(data: TrainStatsData):
         0, 0, duration_str, ha="right", va="bottom", color="white", fontsize=10
     )
     fig_axes.axis("off")
-    finish_figure(fig, ax, "number_per_duration", show=False)
+    finish_figure(fig, ax, "number_per_duration")

@@ -1,4 +1,4 @@
-from .europe_heatmap import plot_all_europe_heatmap
-from .europe_heatmap_portrait import plot_all_europe_heatmap_portrait
-from .europe_journeys import plot_all_europe
-from .europe_journeys_portrait import plot_all_europe_portrait
+from .heatmap import plot_heatmap
+from .journeys_map import plot_journeys_map
+
+__all__ = ["plot_heatmap", "plot_journeys_map"]

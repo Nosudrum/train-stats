@@ -116,4 +116,4 @@ def plot_spending_per_operator(data: TrainStatsData):
         0, 0, duration_str, ha="right", va="bottom", color="white", fontsize=10
     )
     fig_axes.axis("off")
-    finish_figure(fig, ax, "spending_per_operator", show=False)
+    finish_figure(fig, ax, "spending_per_operator")

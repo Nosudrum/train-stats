@@ -13,7 +13,7 @@ from utils.plot_utils import (
 
 
 # Plot of km travelled by train operator
-def plot_spending_per_operator_stacked(data: TrainStatsData):
+def plot_spending_per_operator(data: TrainStatsData):
     past_trips = data.get_past_trips()
     future_trips = data.get_future_trips(current_year_only=True)
     additional_spending = data.get_additional_spending()
@@ -116,4 +116,4 @@ def plot_spending_per_operator_stacked(data: TrainStatsData):
         0, 0, duration_str, ha="right", va="bottom", color="white", fontsize=10
     )
     fig_axes.axis("off")
-    finish_figure(fig, ax, "spending_per_operator_stacked", show=False)
+    finish_figure(fig, ax, "spending_per_operator", show=False)

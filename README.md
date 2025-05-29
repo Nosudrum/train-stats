@@ -30,40 +30,40 @@ I started tracking all my journeys by train in a spreadsheet in 2022, and manage
 ## Duration stats
 
 <p  align="center">
-  <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/number_per_duration_stacked.png">
-  <img src="plots/number_per_duration_stacked.png" width="100%" />
+  <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/number_per_duration.png">
+  <img src="plots/number_per_duration.png" width="100%" />
   </a>
   </p>
 
 <p  align="center">
-  <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/distance_per_duration_stacked.png">
-  <img src="plots/distance_per_duration_stacked.png" width="100%" />
+  <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/distance_per_duration.png">
+  <img src="plots/distance_per_duration.png" width="100%" />
   </a>
   </p>
 
 ## Operator stats
 
 <p  align="center">
-  <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/number_per_operator_stacked.png">
-  <img src="plots/number_per_operator_stacked.png" width="100%" />
+  <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/number_per_operator.png">
+  <img src="plots/number_per_operator.png" width="100%" />
   </a>
   </p>
 
 <p  align="center">
-  <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/distance_per_operator_stacked.png">
-  <img src="plots/distance_per_operator_stacked.png" width="100%" />
+  <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/distance_per_operator.png">
+  <img src="plots/distance_per_operator.png" width="100%" />
   </a>
   </p>
 
 <p  align="center">
-  <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/duration_per_operator_stacked.png">
-  <img src="plots/duration_per_operator_stacked.png" width="100%" />
+  <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/duration_per_operator.png">
+  <img src="plots/duration_per_operator.png" width="100%" />
   </a>
   </p>
 
 <p  align="center">
-  <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/spending_per_operator_stacked.png">
-  <img src="plots/spending_per_operator_stacked.png" width="100%" />
+  <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/spending_per_operator.png">
+  <img src="plots/spending_per_operator.png" width="100%" />
   </a>
   </p>
 

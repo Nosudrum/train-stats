@@ -87,7 +87,7 @@ class TrainStatsData:
             self._trips[trips_current_mask]["Distance (km)"].dropna().sum()
         )
 
-        if end < self.NOW or start > self.NOW:
+        if end <= self.NOW or start > self.NOW:
             # Trip has ended or hasn't started
             distance_str = self._format_km(total_distance)
             duration_str = self._format_timedelta(total_duration)

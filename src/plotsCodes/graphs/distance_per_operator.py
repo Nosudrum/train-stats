@@ -13,7 +13,7 @@ from utils.plot_utils import (
 
 
 # Plot of km travelled by train operator
-def plot_duration_per_operator_stacked(data: TrainStatsData):
+def plot_distance_per_operator(data: TrainStatsData):
     past_trips = data.get_past_trips()
     future_trips = data.get_future_trips(current_year_only=True)
 
@@ -23,13 +23,13 @@ def plot_duration_per_operator_stacked(data: TrainStatsData):
 
     operators = past_trips["Operator"].copy()
     all_operators = operators.unique().tolist()
-    operators_duration = []
+    operators_distance = []
     for operator in all_operators:
-        operators_duration.append(
-            past_trips.loc[operators == operator]["Duration"].sum().total_seconds()
+        operators_distance.append(
+            past_trips.loc[operators == operator]["Distance (km)"].sum()
         )
 
-    operators_distance = np.array(operators_duration)
+    operators_distance = np.array(operators_distance)
     operators_distance_df = pd.DataFrame(
         {"Operator": all_operators, "Distance": operators_distance}
     )
@@ -42,33 +42,29 @@ def plot_duration_per_operator_stacked(data: TrainStatsData):
     operators_selected.append("Others")
 
     for ii, operator in enumerate(operators_selected):
-        durations = []
+        distances = []
         for year in years:
-            durations.append(
+            distances.append(
                 past_trips.loc[
                     (operators == operator)
                     & (past_trips["Departure (Local)"].dt.year == year),
-                    "Duration",
-                ]
-                .sum()
-                .total_seconds()
-                / 3600
-                / 24
+                    "Distance (km)",
+                ].sum()
             )
-        durations = np.array(durations)
+        distances = np.array(distances)
         ax[0].bar(
             years,
-            durations,
+            distances,
             bottom=bottom,
             color=COLORS[ii],
             label=operator,
             width=1,
             align="edge",
         )
-        bottom += durations
+        bottom += distances
     ax[0].bar(
         future_trips["Departure (Local)"].dt.year.unique().tolist(),
-        future_trips["Duration"].sum().total_seconds() / 3600 / 24,
+        future_trips["Distance (km)"].sum(),
         bottom=bottom[-1],
         color=GITHUB_DARK,
         label=None,
@@ -83,9 +79,9 @@ def plot_duration_per_operator_stacked(data: TrainStatsData):
         handles, labels, loc="upper center", ncol=4, frameon=False, labelcolor="white"
     )
     ax[0].set(
-        ylabel="Time spent in trains (days)",
+        ylabel="Distance travelled (km)",
         xlim=[min(years), max(years) + 1],
-        title="Time spent in trains per operator since " + str(min(years)),
+        title="Distance travelled by train per operator since " + str(min(years)),
     )
     plt.tight_layout()
 
@@ -99,4 +95,4 @@ def plot_duration_per_operator_stacked(data: TrainStatsData):
         0, 0, duration_str, ha="right", va="bottom", color="white", fontsize=10
     )
     fig_axes.axis("off")
-    finish_figure(fig, ax, "duration_per_operator_stacked", show=False)
+    finish_figure(fig, ax, "distance_per_operator", show=False)

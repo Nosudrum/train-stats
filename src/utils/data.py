@@ -247,7 +247,7 @@ class TrainStatsData:
         trips["Day of year"] = trips["Departure (Local)"].dt.dayofyear
         trips.loc[
             ~trips["Departure (Local)"].dt.is_leap_year
-            & (trips["Departure (Local)"].dt.dayofyear < 60),
+            & (trips["Departure (Local)"].dt.dayofyear >= 60),
             "Day of year",
         ] += 1
 

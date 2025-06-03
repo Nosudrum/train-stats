@@ -241,6 +241,9 @@ class TrainStatsData:
             "\xa0", " ", regex=True, inplace=True
         )  # Remove non-breaking spaces
         trips.replace(
+            "Sinsheim Museum/Arena", "Sinsheim MuseumArena", regex=True, inplace=True
+        )
+        trips.replace(
             "Biel/Bienne", "BielBienne", regex=True, inplace=True
         )  # Get rid of slash
 

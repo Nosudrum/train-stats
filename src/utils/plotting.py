@@ -65,7 +65,7 @@ class PlotParams:
         if not self.is_portrait:
             return [0.0, 0.12], [0.0, 0.0]
         if len(self.get_split_stats_texts(distance_str, duration_str)) == 3:
-            return [0, 0.08], [0, 0], [0, 0.19]
+            return [0, 0.19], [0, 0.08], [0, 0]
         else:
             return [0, 0.16], [0, 0.03]
 

@@ -11,7 +11,11 @@ from plotsCodes.graphs import (
     plot_spending_per_operator,
 )
 from plotsCodes.maps import plot_heatmap, plot_journeys_map
-from plotsCodes.timelines import plot_distance_timeline
+from plotsCodes.timelines import (
+    plot_distance_timeline,
+    plot_duration_timeline,
+    plot_number_timeline,
+)
 from plotsCodes.trips import plot_trip_map
 from utils import TrainStatsData, MapboxStyle, TripParams, MapParams
 from utils.plotting import PlotParams
@@ -21,6 +25,7 @@ GOOGLE_SHEET_DT_FORMAT = "%d/%m/%Y %H:%M:%S"
 
 class PlotConfig:
     def __init__(self, **kwargs):
+        self._skip = kwargs["Skip"]
         self._plot_type = kwargs["Type"]
 
         # Set the plot parameters
@@ -63,6 +68,9 @@ class PlotConfig:
             self._map_params = None
 
     def run(self, data: TrainStatsData, mapbox_style: MapboxStyle):
+        if self._skip:
+            print(f"Skipping [{self._plot_type}] {self._plot_params.file_name}")
+            return
         match self._plot_type:
             case "Distance per duration":
                 return plot_distance_per_duration(data, self._plot_params)
@@ -82,6 +90,10 @@ class PlotConfig:
                 return plot_journeys_map(data, mapbox_style, self._map_params)
             case "Distance timeline":
                 return plot_distance_timeline(data, self._plot_params)
+            case "Duration timeline":
+                return plot_duration_timeline(data, self._plot_params)
+            case "Number timeline":
+                return plot_number_timeline(data, self._plot_params)
             case "Trip map":
                 return plot_trip_map(
                     data, mapbox_style, self._trip_params, self._map_params

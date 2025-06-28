@@ -7,13 +7,14 @@ I started tracking all my journeys by train in a spreadsheet in 2022, and manage
 
 ## Table of Contents
 
-* [Full map & timeline](#full-map--timeline)
+* [Full map & timeline](#full-map)
+* [Timelines](#timelines)
 * [Duration stats](#duration-stats)
 * [Operator stats](#operator-stats)
 * [Trip-specific maps](#trip-specific-maps)
 * [Portrait maps](#portrait-maps)
 
-## Full map & timeline
+## Full map
 
 <p  align="center">
   <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/all_europe_heatmap.png">
@@ -21,9 +22,23 @@ I started tracking all my journeys by train in a spreadsheet in 2022, and manage
   </a>
   </p>
 
+## Timelines
+
 <p  align="center">
   <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/distance_timeline.png">
   <img src="plots/distance_timeline.png" width="100%" />
+  </a>
+  </p>
+
+<p  align="center">
+  <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/number_timeline.png">
+  <img src="plots/number_timeline.png" width="100%" />
+  </a>
+  </p>
+
+<p  align="center">
+  <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/duration_timeline.png">
+  <img src="plots/duration_timeline.png" width="100%" />
   </a>
   </p>
 

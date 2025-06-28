@@ -21,6 +21,7 @@ GOOGLE_SHEET_DT_FORMAT = "%d/%m/%Y %H:%M:%S"
 
 class PlotConfig:
     def __init__(self, **kwargs):
+        self._skip = kwargs["Skip"]
         self._plot_type = kwargs["Type"]
 
         # Set the plot parameters
@@ -63,6 +64,9 @@ class PlotConfig:
             self._map_params = None
 
     def run(self, data: TrainStatsData, mapbox_style: MapboxStyle):
+        if self._skip:
+            print(f"Skipping [{self._plot_type}] {self._plot_params.file_name}")
+            return
         match self._plot_type:
             case "Distance per duration":
                 return plot_distance_per_duration(data, self._plot_params)

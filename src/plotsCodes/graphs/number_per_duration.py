@@ -2,7 +2,6 @@ from datetime import timedelta
 
 import matplotlib.pyplot as plt
 import numpy as np
-from tqdm import tqdm
 
 from utils import TrainStatsData
 from utils.plot_utils import (
@@ -24,7 +23,7 @@ def plot_number_per_duration(data: TrainStatsData, params: PlotParams):
     fig, ax = dark_figure()
     years = past_trips["Departure (Local)"].dt.year.unique().tolist()
     plot_data = []
-    for tier in tqdm(DURATION_TIERS, ncols=150, desc=params.title):
+    for tier in DURATION_TIERS:
         min_duration = timedelta(hours=tier[0])
         max_duration = timedelta(hours=tier[1])
         plot_data.append(

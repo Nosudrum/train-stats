@@ -50,9 +50,9 @@ class TrainStatsData:
     ) -> pd.DataFrame:
         trips = self._trips.copy(deep=True)
         if filter_start is not None:
-            trips = trips[trips["Departure (Local)"] >= filter_start]
+            trips = trips[trips["Departure"] >= filter_start]
         if filter_end is not None:
-            trips = trips[trips["Arrival (Local)"] <= filter_end]
+            trips = trips[trips["Arrival"] <= filter_end]
         return trips
 
     def get_additional_spending(self) -> pd.DataFrame:
@@ -70,12 +70,10 @@ class TrainStatsData:
         journey_distances = (
             trips[["journey", "Distance (km)"]].groupby("journey").mean()
         )
-        journey_firstdate = (
-            trips[["journey", "Arrival (Local)"]].groupby("journey").min()
-        )
+        journey_firstdate = trips[["journey", "Arrival"]].groupby("journey").min()
         journeys = journey_counts.join(journey_distances).join(journey_firstdate)
         journeys.rename(
-            columns={"Distance (km)": "distance", "Arrival (Local)": "firstdate"},
+            columns={"Distance (km)": "distance", "Arrival": "firstdate"},
             inplace=True,
         )
         return journeys
@@ -84,14 +82,14 @@ class TrainStatsData:
         self, start: datetime = None, end: datetime = None
     ) -> tuple[str, str]:
         if not start:
-            start = self._trips["Departure (Local)"].min()
+            start = self._trips["Departure"].min()
         if not end:
-            end = self._trips["Arrival (Local)"].max()
-        trips_total_mask = (self._trips["Departure (Local)"] >= start) & (
-            self._trips["Arrival (Local)"] <= end
+            end = self._trips["Arrival"].max()
+        trips_total_mask = (self._trips["Departure"] >= start) & (
+            self._trips["Arrival"] <= end
         )
-        trips_current_mask = (self._trips["Departure (Local)"] >= start) & (
-            self._trips["Arrival (Local)"] < self.NOW
+        trips_current_mask = (self._trips["Departure"] >= start) & (
+            self._trips["Arrival"] < self.NOW
         )
         total_duration = self._trips[trips_total_mask]["Duration"].sum()
         total_distance = self._trips[trips_total_mask]["Distance (km)"].dropna().sum()
@@ -209,20 +207,21 @@ class TrainStatsData:
             trips["Arrival (Local)"], format="mixed"
         )
 
+        trips["Arrival"] = trips["Arrival (Local)"]
+        trips["Departure"] = trips["Departure (Local)"]
+
         # Localize departure and arrival times
         for index, row in trips.iterrows():
             origin = row["Origin"]
-            trips.loc[index, "Departure (Local)"] = trips.loc[
-                index, "Departure (Local)"
-            ].tz_localize(self._get_station_timezone(origin))
+            trips.loc[index, "Departure"] = trips.loc[index, "Departure"].tz_localize(
+                self._get_station_timezone(origin)
+            )
             destination = row["Destination"]
-            trips.loc[index, "Arrival (Local)"] = trips.loc[
-                index, "Arrival (Local)"
-            ].tz_localize(self._get_station_timezone(destination))
-        trips["Departure (Local)"] = pd.to_datetime(
-            trips["Departure (Local)"], utc=True
-        )
-        trips["Arrival (Local)"] = pd.to_datetime(trips["Arrival (Local)"], utc=True)
+            trips.loc[index, "Arrival"] = trips.loc[index, "Arrival"].tz_localize(
+                self._get_station_timezone(destination)
+            )
+        trips["Departure"] = pd.to_datetime(trips["Departure"], utc=True)
+        trips["Arrival"] = pd.to_datetime(trips["Arrival"], utc=True)
 
         # Format durations
         trips["Duration"] = pd.to_timedelta(

@@ -11,6 +11,7 @@ I started tracking all my journeys by train in a spreadsheet in 2022, and manage
 * [Timelines](#timelines)
 * [Duration stats](#duration-stats)
 * [Operator stats](#operator-stats)
+* [Timing stats](#timing-stats)
 * [Trip-specific maps](#trip-specific-maps)
 * [Portrait maps](#portrait-maps)
 
@@ -82,6 +83,13 @@ I started tracking all my journeys by train in a spreadsheet in 2022, and manage
   </a>
   </p>
 
+## Timing maps
+
+<p  align="center">
+  <a href="https://raw.githubusercontent.com/Nosudrum/train-stats/main/plots/timed_number_per_operator.png">
+  <img src="plots/timed_number_per_operator.png" width="100%" />
+  </a>
+  </p>
 
 ## Trip-specific maps
 

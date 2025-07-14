@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 from cartopy.crs import PlateCarree
 from matplotlib.colors import LinearSegmentedColormap, BoundaryNorm
-from tqdm import tqdm
 
 from utils import MapboxStyle, TrainStatsData, TripParams, MapParams
 from utils.plot_utils import (
@@ -43,13 +42,9 @@ def plot_trip_map(
 
     # For all journeys in the dataset
     trip_list = trips.index.to_list()
-    for trip_item in tqdm(
-        trip_list,
-        ncols=150,
-        desc=f"{params.title} (Portrait)" if params.is_portrait else params.title,
-    ):
+    for trip_item in trip_list:
         # Get the departure datetime
-        trip_departure = trips.loc[trip_item, "Departure (Local)"]
+        trip_departure = trips.loc[trip_item, "Departure"]
         # Compute the trip day number (1-indexed)
         trip_day = (trip_departure - trip.start).days + 1
         # Color corresponding to the trip day
@@ -59,7 +54,7 @@ def plot_trip_map(
         c = sm.to_rgba(trip_day - 1)
 
         # Dashes or not
-        if trips.loc[trip_item, "Arrival (Local)"] < data.NOW:
+        if trips.loc[trip_item, "Arrival"] < data.NOW:
             s = "-"
             dashes = [1, 0]
         else:

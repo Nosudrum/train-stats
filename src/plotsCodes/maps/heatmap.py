@@ -11,8 +11,6 @@ from utils.plot_utils import (
 
 
 def plot_heatmap(data: TrainStatsData, mapbox_style: MapboxStyle, params: MapParams):
-    print("Plotting heatmap...")
-
     # Setup figure
     fig, ax = dark_figure(
         grid=False, projection=params.map_projection, figsize=params.get_fig_size()

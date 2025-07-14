@@ -9,6 +9,8 @@ from plotsCodes.graphs import (
     plot_number_per_duration,
     plot_number_per_operator,
     plot_spending_per_operator,
+    plot_timed_distance_per_operator,
+    plot_timed_number_per_operator,
 )
 from plotsCodes.maps import plot_heatmap, plot_journeys_map
 from plotsCodes.timelines import (
@@ -71,6 +73,8 @@ class PlotConfig:
         if self._skip:
             print(f"Skipping [{self._plot_type}] {self._plot_params.file_name}")
             return
+        else:
+            print(f"Generating [{self._plot_type}] {self._plot_params.file_name} ...")
         match self._plot_type:
             case "Distance per duration":
                 return plot_distance_per_duration(data, self._plot_params)
@@ -84,6 +88,10 @@ class PlotConfig:
                 return plot_number_per_operator(data, self._plot_params)
             case "Spending per operator":
                 return plot_spending_per_operator(data, self._plot_params)
+            case "Timed distance per operator":
+                return plot_timed_distance_per_operator(data, self._plot_params)
+            case "Timed number per operator":
+                return plot_timed_number_per_operator(data, self._plot_params)
             case "Heatmap":
                 return plot_heatmap(data, mapbox_style, self._map_params)
             case "Journeys map":

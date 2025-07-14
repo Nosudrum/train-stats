@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from tqdm import tqdm
 
 from utils import TrainStatsData
 from utils.plot_utils import (
@@ -27,7 +26,7 @@ def plot_number_per_operator(data: TrainStatsData, params: PlotParams):
     operators.loc[~operators.isin(operators_selected)] = "Others"
     operators_selected.append("Others")
     plot_data = []
-    for operator in tqdm(operators_selected, ncols=150, desc=params.title):
+    for operator in operators_selected:
         plot_data.append(
             past_trips[operators == operator][
                 "Departure (Local)"

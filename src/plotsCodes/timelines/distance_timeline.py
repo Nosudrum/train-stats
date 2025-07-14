@@ -14,8 +14,6 @@ from utils.plotting import PlotParams
 
 
 def plot_distance_timeline(data: TrainStatsData, params: PlotParams):
-    print("Plotting distance timeline...")
-
     past_trips = data.get_past_trips()
 
     fig, ax = dark_figure()

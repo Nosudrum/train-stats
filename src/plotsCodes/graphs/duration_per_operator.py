@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from tqdm import tqdm
 
 from utils import TrainStatsData
 from utils.plot_utils import (
@@ -43,9 +42,7 @@ def plot_duration_per_operator(data: TrainStatsData, params: PlotParams):
     operators.loc[~operators.isin(operators_selected)] = "Others"
     operators_selected.append("Others")
 
-    for ii, operator in tqdm(
-        enumerate(operators_selected), ncols=150, desc=params.title
-    ):
+    for ii, operator in enumerate(operators_selected):
         durations = []
         for year in years:
             durations.append(

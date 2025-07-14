@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from tqdm import tqdm
 
 from utils import TrainStatsData
 from utils.plot_utils import (
@@ -53,9 +52,7 @@ def plot_spending_per_operator(data: TrainStatsData, params: PlotParams):
     ] = "Others"
     operators_selected.append("Others")
 
-    for ii, operator in tqdm(
-        enumerate(operators_selected), ncols=150, desc=params.title
-    ):
+    for ii, operator in enumerate(operators_selected):
         amounts = []
         for year in years:
             amounts.append(

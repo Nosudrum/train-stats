@@ -16,8 +16,6 @@ from utils.plotting import PlotParams
 
 
 def plot_duration_timeline(data: TrainStatsData, params: PlotParams):
-    print("Plotting duration timeline...")
-
     past_trips = data.get_past_trips()
 
     fig, ax = dark_figure()

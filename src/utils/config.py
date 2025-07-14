@@ -9,6 +9,7 @@ from plotsCodes.graphs import (
     plot_number_per_duration,
     plot_number_per_operator,
     plot_spending_per_operator,
+    plot_timed_distance_per_operator,
     plot_timed_number_per_operator,
 )
 from plotsCodes.maps import plot_heatmap, plot_journeys_map
@@ -87,6 +88,8 @@ class PlotConfig:
                 return plot_number_per_operator(data, self._plot_params)
             case "Spending per operator":
                 return plot_spending_per_operator(data, self._plot_params)
+            case "Timed distance per operator":
+                return plot_timed_distance_per_operator(data, self._plot_params)
             case "Timed number per operator":
                 return plot_timed_number_per_operator(data, self._plot_params)
             case "Heatmap":

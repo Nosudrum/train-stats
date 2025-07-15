@@ -307,8 +307,32 @@ class TrainStatsData:
                 years.append(end_date.year)
                 operators.append(row["Operator"])
                 amounts.append(price_on_second_year)
-            elif end_date.year - start_date.year > 1:
-                raise ValueError(f"Spending {row['Ticket']} is over more than 2 years")
+            elif end_date.year - start_date.year == 2:
+                timedelta_full = end_date - start_date
+                timedelta_first_year = datetime(start_date.year, 12, 31) - start_date
+                price_on_first_year = (
+                    price * timedelta_first_year.days / timedelta_full.days
+                )
+                timedelta_third_year = end_date - datetime(end_date.year, 1, 1)
+                price_on_third_year = (
+                    price * timedelta_third_year.days / timedelta_full.days
+                )
+                price_on_second_year = price - price_on_first_year - price_on_third_year
+
+                years.append(start_date.year)
+                operators.append(row["Operator"])
+                amounts.append(price_on_first_year)
+
+                years.append(start_date.year + 1)
+                operators.append(row["Operator"])
+                amounts.append(price_on_second_year)
+
+                years.append(end_date.year)
+                operators.append(row["Operator"])
+                amounts.append(price_on_third_year)
+
+            elif end_date.year - start_date.year > 2:
+                raise ValueError(f"Spending {row['Ticket']} is over more than 3 years")
 
         return pd.DataFrame({"Year": years, "Operator": operators, "Amount": amounts})
 

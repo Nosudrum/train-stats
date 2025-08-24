@@ -19,6 +19,7 @@ from utils.plotting import PlotParams
 # Plot of km travelled by train journey duration
 def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
     past_trips = data.get_past_trips()
+    additional_spending = data.get_additional_spending()
 
     while past_trips["Price"].isna().any():
         # Find the index of the first row with null in 'Price'
@@ -59,27 +60,72 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
     operators.loc[~operators.isin(operators_selected)] = "Others"
     operators_selected.append("Others")
 
+    # Class filters
     first_class = past_trips["Class"] == 1
     second_class = past_trips["Class"] == 2
 
+    # Partial refund
+    rf = past_trips.loc["Reimb"] > 0
+
+    # Interrail
+    interrail_card_IDs = additional_spending.loc[additional_spending["Operator"]=="Eurail"]["ID"].tolist()
+    ir = past_trips["Card"].isin(interrail_card_IDs)
+
+    # No card
+    nc = past_trips["Card"].isna()
+
     fig, ax = dark_figure()
     for ii, operator in enumerate(operators_selected):
+        op = operators==operator
+
         #TODO: show trips partially refunded separately
         #TODO: use the cards and passes links somehow
         
         ax[0].scatter(
-            past_trips.loc[(operators==operator) & first_class]["Distance (km)"].tolist(),
-            past_trips.loc[(operators==operator) & first_class]["Price"].tolist(), 
+            past_trips.loc[(op) & first_class]["Distance (km)"].tolist(),
+            past_trips.loc[(op) & first_class]["Price"].tolist(), 
             color=COLORS[ii],
             marker="*",
+            markersize=1,
         )
 
         ax[0].scatter(
-            past_trips.loc[(operators==operator) & second_class]["Distance (km)"].tolist(),
-            past_trips.loc[(operators==operator) & second_class]["Price"].tolist(), 
+            past_trips.loc[(op) & second_class]["Distance (km)"].tolist(),
+            past_trips.loc[(op) & second_class]["Price"].tolist(), 
             color=COLORS[ii],
             label=operator,
             marker=".",
+            markersize=1,
+        )
+
+        ax[0].scatter(
+            past_trips.loc[(op) & rf]["Distance (km)"].tolist(),
+            past_trips.loc[(op) & rf]["Price"].tolist(), 
+            color=None,
+            edgecolors=COLORS[ii],
+            label=operator,
+            marker="X",
+            markersize=1.5,
+        )
+
+        ax[0].scatter(
+            past_trips.loc[(op) & ir]["Distance (km)"].tolist(),
+            past_trips.loc[(op) & ir]["Price"].tolist(), 
+            color=None,
+            edgecolors=COLORS[ii],
+            label=operator,
+            marker="D",
+            markersize=1.5,
+        )
+
+        ax[0].scatter(
+            past_trips.loc[(op) & nc]["Distance (km)"].tolist(),
+            past_trips.loc[(op) & nc]["Price"].tolist(), 
+            color=None,
+            edgecolors=COLORS[ii],
+            label=operator,
+            marker="D",
+            markersize=1.5,
         )
     
 

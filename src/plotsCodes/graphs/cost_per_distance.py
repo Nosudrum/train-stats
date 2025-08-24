@@ -39,7 +39,7 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
     operators_spending = []
     for operator in all_operators:
         operators_spending.append(
-            (past_trips.loc[operators == operator]["Price"]-past_trips.loc[operators == operator]["Reimb"]).sum()
+            past_trips.loc[operators == operator]["Price"].sum()
         )
 
     operators_spending = np.array(operators_spending)

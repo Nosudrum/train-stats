@@ -68,7 +68,7 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
     rf = past_trips["Reimb"] > 0
 
     # Interrail
-    interrail_card_IDs = additional_spending.loc[additional_spending["Operator"]=="Eurail"]["ID"].tolist()
+    interrail_card_IDs = additional_spending.loc[additional_spending["Operator"]=="Eurail"]["ID"].unique().tolist()
     ir = past_trips["Card"].isin(interrail_card_IDs)
 
     # No card

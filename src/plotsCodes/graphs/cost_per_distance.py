@@ -22,42 +22,42 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
 
     fig, ax = dark_figure()
     years = past_trips["Departure (Local)"].dt.year.unique().tolist()
-    plot_data = []
-    for tier in DURATION_TIERS:
-        min_duration = timedelta(hours=tier[0])
-        max_duration = timedelta(hours=tier[1])
-        plot_data.append(
-            past_trips[
-                past_trips["Duration"].between(
-                    min_duration, max_duration, inclusive="left"
-                )
-            ]["Departure (Local)"].dt.year.values.tolist()
+    bottom = np.zeros(len(years))
+
+    operators = past_trips["Operator"].copy()
+    all_operators = operators.unique().tolist()
+    operators_distance = []
+    for operator in all_operators:
+        operators_distance.append(
+            past_trips.loc[operators == operator]["Distance (km)"].sum()
         )
-    future_trips_mask = future_trips["Departure (Local)"].dt.year.isin(years)
-    plot_data.append(
-        future_trips[future_trips_mask]["Departure (Local)"].dt.year.values.tolist()
+
+    operators_distance = np.array(operators_distance)
+    operators_distance_df = pd.DataFrame(
+        {"Operator": all_operators, "Distance": operators_distance}
     )
-    _, _, bar_containers = ax[0].hist(
-        plot_data,
-        bins=np.append(np.unique(years), max(years) + 1),
-        histtype="bar",
-        stacked=True,
-        label=[tier[2] for tier in DURATION_TIERS],
-        color=COLORS + [GITHUB_DARK],
-    )
-    if future_trips_mask.sum() > 0:
-        for p in bar_containers[-1].patches:
-            p.set_label(None)
-            p.set_hatch("///")
-            p.set_linewidth(0)
-            p.set_edgecolor("white")
+
+    operators_sorted = operators_distance_df.sort_values(
+        by="Distance", ascending=False
+    ).Operator.tolist()
+    operators_selected = operators_sorted[0:7]
+    operators.loc[~operators.isin(operators_selected)] = "Others"
+    operators_selected.append("Others")
+
+    for ii, operator in enumerate(operators_selected):
+        ax[0].scatter(
+            past_trips["Distance (km)"].tolist(),
+            (past_trips["Price"]-past_trips["Reimb"]).tolist(),
+            color=COLORS[ii],
+            label=operator,
+        )
     handles, labels = prepare_legend(reverse=False)
     ax[0].legend(
         handles, labels, loc="upper center", ncol=4, frameon=False, labelcolor="white"
     )
     ax[0].set(
-        ylabel="Total trains taken",
-        xlim=[min(years), max(years) + 1],
+        xlabel="Distance (km)",
+        ylabel="Cost (€)"
         title=params.title,
     )
     plt.tight_layout()

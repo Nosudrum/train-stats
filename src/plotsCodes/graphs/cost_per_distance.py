@@ -47,8 +47,8 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
 
     for ii, operator in enumerate(operators_selected):
         ax[0].scatter(
-            past_trips.loc[operator==operator]["Distance (km)"].tolist(),
-            (past_trips.loc[operator==operator]["Price"]-past_trips.loc[operator==operator]["Reimb"]).tolist(),
+            past_trips.loc[operators==operator]["Distance (km)"].tolist(),
+            (past_trips.loc[operators==operator]["Price"]-past_trips.loc[operators==operator]["Reimb"]).tolist(),
             color=COLORS[ii],
             label=operator,
         )

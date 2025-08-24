@@ -27,19 +27,19 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
 
     operators = past_trips["Operator"].copy()
     all_operators = operators.unique().tolist()
-    operators_distance = []
+    operators_spending = []
     for operator in all_operators:
-        operators_distance.append(
-            past_trips.loc[operators == operator]["Distance (km)"].sum()
+        operators_spending.append(
+            (past_trips.loc[operators == operator]["Price"]-past_trips.loc[operators == operator]["Reimb"]).sum()
         )
 
-    operators_distance = np.array(operators_distance)
-    operators_distance_df = pd.DataFrame(
-        {"Operator": all_operators, "Distance": operators_distance}
+    operators_spending = np.array(operators_spending)
+    operators_spending_df = pd.DataFrame(
+        {"Operator": all_operators, "Spending": operators_spending}
     )
 
-    operators_sorted = operators_distance_df.sort_values(
-        by="Distance", ascending=False
+    operators_sorted = operators_spending_df.sort_values(
+        by="Spending", ascending=False
     ).Operator.tolist()
     operators_selected = operators_sorted[0:7]
     operators.loc[~operators.isin(operators_selected)] = "Others"
@@ -47,8 +47,8 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
 
     for ii, operator in enumerate(operators_selected):
         ax[0].scatter(
-            past_trips["Distance (km)"].tolist(),
-            (past_trips["Price"]-past_trips["Reimb"]).tolist(),
+            past_trips.loc[operator==operator]["Distance (km)"].tolist(),
+            (past_trips[operator==operator]["Price"]-past_trips[operator==operator]["Reimb"]).tolist(),
             color=COLORS[ii],
             label=operator,
         )

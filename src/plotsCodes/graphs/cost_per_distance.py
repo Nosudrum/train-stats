@@ -19,11 +19,21 @@ from utils.plotting import PlotParams
 # Plot of km travelled by train journey duration
 def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
     past_trips = data.get_past_trips()
-    future_trips = data.get_future_trips(current_year_only=True)
 
-    fig, ax = dark_figure()
-    years = past_trips["Departure (Local)"].dt.year.unique().tolist()
-    bottom = np.zeros(len(years))
+    past_trips.dropna(subset=['Price'], inplace=True)
+    while past_trips["Price"].isna().any():
+        # Find the index of the first row with null in 'Price'
+        null_index = past_trips[past_trips['Price'].isna()].index[0]
+
+        # Raise an exception if the first row has a null 'Price'
+        if null_index == 0:
+            raise ValueError("The first row of the dataset needs a non-null 'Price' value.")
+
+        # Add the 'Distance (km)' value to the previous row
+        past_trips.loc[null_index - 1, "Distance (km)"] += past_trips.loc[null_index, "Distance (km)"]
+
+        # Drop the row with null 'Price'
+        past_trips = past_trips.drop(index=null_index).reset_index(drop=True)
 
     operators = past_trips["Operator"].copy()
     all_operators = operators.unique().tolist()
@@ -45,6 +55,8 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
     operators.loc[~operators.isin(operators_selected)] = "Others"
     operators_selected.append("Others")
 
+
+    fig, ax = dark_figure()
     for ii, operator in enumerate(operators_selected):
         #TODO: show trips partially refunded separately
         #TODO: split 1st and second class

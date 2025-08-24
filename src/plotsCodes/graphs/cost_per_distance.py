@@ -46,9 +46,13 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
     operators_selected.append("Others")
 
     for ii, operator in enumerate(operators_selected):
+        #TODO: show trips partially refunded separately
+        #TODO: split 1st and second class
+        #TODO: use the cards and passes links somehow
+        
         ax[0].scatter(
             past_trips.loc[operators==operator]["Distance (km)"].tolist(),
-            (past_trips.loc[operators==operator]["Price"]-past_trips.loc[operators==operator]["Reimb"]).tolist(),
+            past_trips.loc[operators==operator]["Price"].tolist(), 
             color=COLORS[ii],
             label=operator,
         )

@@ -57,7 +57,7 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
     )
     ax[0].set(
         xlabel="Distance (km)",
-        ylabel="Cost (€)"
+        ylabel="Cost (€)",
         title=params.title,
     )
     plt.tight_layout()

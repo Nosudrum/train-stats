@@ -20,7 +20,6 @@ from utils.plotting import PlotParams
 def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
     past_trips = data.get_past_trips()
 
-    past_trips.dropna(subset=['Price'], inplace=True)
     while past_trips["Price"].isna().any():
         # Find the index of the first row with null in 'Price'
         null_index = past_trips[past_trips['Price'].isna()].index[0]

@@ -2,6 +2,7 @@ from datetime import timedelta
 
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 
 from utils import TrainStatsData
 from utils.plot_utils import (

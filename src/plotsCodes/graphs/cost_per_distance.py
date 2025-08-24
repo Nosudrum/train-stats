@@ -28,6 +28,11 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
         if null_index == 0:
             raise ValueError("The first row of the dataset needs a non-null 'Price' value.")
 
+        # Keep the operator value with the biggest distance
+        if past_trips.loc[null_index, "Distance (km)"] > past_trips.loc[null_index - 1,"Distance (km)"]:
+                past_trips.loc[null_index - 1, "Operator"] = past_trips.loc[null_index, "Operator"]
+
+
         # Add the 'Distance (km)' value to the previous row
         past_trips.loc[null_index - 1, "Distance (km)"] += past_trips.loc[null_index, "Distance (km)"]
 

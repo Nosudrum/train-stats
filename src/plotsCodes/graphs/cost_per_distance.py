@@ -59,6 +59,8 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
     operators.loc[~operators.isin(operators_selected)] = "Others"
     operators_selected.append("Others")
 
+    first_class = past_trips["Class"] == 1
+    second_class = past_trips["Class"] == 2
 
     fig, ax = dark_figure()
     for ii, operator in enumerate(operators_selected):
@@ -67,10 +69,19 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
         #TODO: use the cards and passes links somehow
         
         ax[0].scatter(
-            past_trips.loc[operators==operator]["Distance (km)"].tolist(),
-            past_trips.loc[operators==operator]["Price"].tolist(), 
+            past_trips.loc[(operators==operator) & first_class]["Distance (km)"].tolist(),
+            past_trips.loc[(operators==operator) & first_class]["Price"].tolist(), 
             color=COLORS[ii],
             label=operator,
+            marker="*",
+        )
+
+            ax[0].scatter(
+            past_trips.loc[(operators==operator) & first_class]["Distance (km)"].tolist(),
+            past_trips.loc[(operators==operator) & first_class]["Price"].tolist(), 
+            color=COLORS[ii],
+            label=operator,
+            marker=".",
         )
     handles, labels = prepare_legend(reverse=False)
     ax[0].legend(

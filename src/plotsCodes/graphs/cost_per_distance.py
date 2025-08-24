@@ -103,7 +103,6 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
             past_trips.loc[(op) & rf]["Price"].tolist(), 
             color=None,
             edgecolors=COLORS[ii],
-            label=operator,
             marker="X",
             s=1.5,
         )
@@ -113,7 +112,6 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
             past_trips.loc[(op) & ir]["Price"].tolist(), 
             color=None,
             edgecolors=COLORS[ii],
-            label=operator,
             marker="D",
             s=1.5,
         )
@@ -123,7 +121,6 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
             past_trips.loc[(op) & nc]["Price"].tolist(), 
             color=None,
             edgecolors=COLORS[ii],
-            label=operator,
             marker="D",
             s=1.5,
         )

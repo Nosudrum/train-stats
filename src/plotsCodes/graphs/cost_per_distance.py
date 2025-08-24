@@ -94,7 +94,7 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
     ax[0].scatter(
         [],
         [],
-        marker="x (filled)",
+        marker="X",
         c="white",
         label="Partial refund",
         edgecolors="none",
@@ -102,7 +102,7 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
     ax[0].scatter(
         [],
         [],
-        marker="diamond",
+        marker="D",
         c="white",
         label="Interrail",
         edgecolors="none",
@@ -110,7 +110,7 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
     ax[0].scatter(
         [],
         [],
-        marker="square",
+        marker="s",
         c="white",
         label="No card",
         edgecolors="none",

@@ -65,7 +65,6 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
     fig, ax = dark_figure()
     for ii, operator in enumerate(operators_selected):
         #TODO: show trips partially refunded separately
-        #TODO: split 1st and second class
         #TODO: use the cards and passes links somehow
         
         ax[0].scatter(
@@ -82,6 +81,41 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
             label=operator,
             marker=".",
         )
+    
+
+    axes[0].scatter(
+        [],
+        [],
+        marker="*",
+        c="white",
+        label="1st class",
+        edgecolors="none",
+    )
+    axes[0].scatter(
+        [],
+        [],
+        marker="x (filled)",
+        c="white",
+        label="Partial refund",
+        edgecolors="none",
+    )
+    axes[0].scatter(
+        [],
+        [],
+        marker="diamond",
+        c="white",
+        label="Interrail",
+        edgecolors="none",
+    )
+    axes[0].scatter(
+        [],
+        [],
+        marker="square",
+        c="white",
+        label="No card",
+        edgecolors="none",
+    )
+
     handles, labels = prepare_legend(reverse=False)
     ax[0].legend(
         handles, labels, loc="upper center", ncol=4, frameon=False, labelcolor="white"

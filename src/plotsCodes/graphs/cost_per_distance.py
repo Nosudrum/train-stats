@@ -65,7 +65,7 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
     second_class = past_trips["Class"] == 2
 
     # Partial refund
-    rf = past_trips.loc["Reimb"] > 0
+    rf = past_trips["Reimb"] > 0
 
     # Interrail
     interrail_card_IDs = additional_spending.loc[additional_spending["Operator"]=="Eurail"]["ID"].tolist()

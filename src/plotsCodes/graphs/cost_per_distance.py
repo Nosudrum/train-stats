@@ -83,7 +83,7 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
         )
     
 
-    axes[0].scatter(
+    ax[0].scatter(
         [],
         [],
         marker="*",
@@ -91,7 +91,7 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
         label="1st class",
         edgecolors="none",
     )
-    axes[0].scatter(
+    ax[0].scatter(
         [],
         [],
         marker="x (filled)",
@@ -99,7 +99,7 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
         label="Partial refund",
         edgecolors="none",
     )
-    axes[0].scatter(
+    ax[0].scatter(
         [],
         [],
         marker="diamond",
@@ -107,7 +107,7 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
         label="Interrail",
         edgecolors="none",
     )
-    axes[0].scatter(
+    ax[0].scatter(
         [],
         [],
         marker="square",

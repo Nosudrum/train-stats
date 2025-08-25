@@ -103,7 +103,7 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
         ax[0].scatter(
             past_trips.loc[(op) & rf]["Distance (km)"].tolist(),
             past_trips.loc[(op) & rf]["Price"].tolist(), 
-            facecolor=[255,255,255,0],
+            facecolor=(0,0,0,0),
             edgecolors=COLORS[ii],
             marker="X",
             s=20,

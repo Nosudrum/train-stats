@@ -86,8 +86,7 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
             past_trips.loc[(op) & first_class]["Price"].tolist(), 
             color=COLORS[ii],
             marker="*",
-            s=2,
-            linewidth=1,
+            s=5,
         )
 
         ax[0].scatter(
@@ -96,38 +95,37 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
             color=COLORS[ii],
             label=operator,
             marker=".",
-            s=2,
-            linewidth=1,
+            s=5,
         )
 
         ax[0].scatter(
             past_trips.loc[(op) & rf]["Distance (km)"].tolist(),
             past_trips.loc[(op) & rf]["Price"].tolist(), 
-            color=None,
+            facecolor=None,
             edgecolors=COLORS[ii],
             marker="X",
             s=20,
-            linewidth=1,
+            linewidth=0.5,
         )
 
         ax[0].scatter(
             past_trips.loc[(op) & ir]["Distance (km)"].tolist(),
             past_trips.loc[(op) & ir]["Price"].tolist(), 
-            color=None,
+            facecolor=None,
             edgecolors=COLORS[ii],
             marker="D",
             s=20,
-            linewidth=1,
+            linewidth=0.5,
         )
 
         ax[0].scatter(
             past_trips.loc[(op) & nc]["Distance (km)"].tolist(),
             past_trips.loc[(op) & nc]["Price"].tolist(), 
-            color=None,
+            facecolor=None,
             edgecolors=COLORS[ii],
             marker="D",
             s=20,
-            linewidth=1,
+            linewidth=0.5,
         )
     
 

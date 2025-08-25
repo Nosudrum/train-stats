@@ -280,6 +280,7 @@ class TrainStatsData:
         )
 
         # Split each spending into one row per year
+        ids = []
         years = []
         operators = []
         amounts = []
@@ -291,6 +292,7 @@ class TrainStatsData:
             if start_date.year == end_date.year:
                 years.append(start_date.year)
                 operators.append(row["Operator"])
+                ids.append(row["ID"])
                 amounts.append(price)
             elif end_date.year - start_date.year == 1:
                 timedelta_first_year = datetime(start_date.year, 12, 31) - start_date
@@ -302,10 +304,12 @@ class TrainStatsData:
 
                 years.append(start_date.year)
                 operators.append(row["Operator"])
+                ids.append(row["ID"])
                 amounts.append(price_on_first_year)
 
                 years.append(end_date.year)
                 operators.append(row["Operator"])
+                ids.append(row["ID"])
                 amounts.append(price_on_second_year)
             elif end_date.year - start_date.year == 2:
                 timedelta_full = end_date - start_date
@@ -321,20 +325,23 @@ class TrainStatsData:
 
                 years.append(start_date.year)
                 operators.append(row["Operator"])
+                ids.append(row["ID"])
                 amounts.append(price_on_first_year)
 
                 years.append(start_date.year + 1)
                 operators.append(row["Operator"])
+                ids.append(row["ID"])
                 amounts.append(price_on_second_year)
 
                 years.append(end_date.year)
                 operators.append(row["Operator"])
+                ids.append(row["ID"])
                 amounts.append(price_on_third_year)
 
             elif end_date.year - start_date.year > 2:
                 raise ValueError(f"Spending {row['Ticket']} is over more than 3 years")
 
-        return pd.DataFrame({"Year": years, "Operator": operators, "Amount": amounts})
+        return pd.DataFrame({"Year": years, "Operator": operators, "Amount": amounts, "ID": ids})
 
     def _import_plots_config(
         self, datasheet_id: str, plots_config_id: str

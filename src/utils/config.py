@@ -3,6 +3,7 @@ from datetime import datetime
 from pytz import timezone
 
 from plotsCodes.graphs import (
+    plot_cost_per_distance,
     plot_distance_per_duration,
     plot_distance_per_operator,
     plot_duration_per_operator,
@@ -76,6 +77,8 @@ class PlotConfig:
         else:
             print(f"Generating [{self._plot_type}] {self._plot_params.file_name} ...")
         match self._plot_type:
+            case "Cost per distance":
+                return plot_cost_per_distance(data, self._plot_params)
             case "Distance per duration":
                 return plot_distance_per_duration(data, self._plot_params)
             case "Distance per operator":

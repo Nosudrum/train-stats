@@ -169,7 +169,7 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
         handles, labels, loc="upper center", ncol=4, frameon=False, labelcolor="white"
     )
     ax[0].set(
-        xlim=[0, past_trips["Distance (km)"].max()*1.05]
+        xlim=[0, past_trips["Distance (km)"].max()*1.05],
         xlabel="Distance (km)",
         ylabel="Cost (€)",
         title=params.title,

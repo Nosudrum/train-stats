@@ -106,7 +106,7 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
             color=None,
             edgecolors=COLORS[ii],
             marker="X",
-            s=5,
+            s=20,
             linewidth=1,
         )
 
@@ -116,7 +116,7 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
             color=None,
             edgecolors=COLORS[ii],
             marker="D",
-            s=5,
+            s=20,
             linewidth=1,
         )
 
@@ -126,7 +126,7 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
             color=None,
             edgecolors=COLORS[ii],
             marker="D",
-            s=5,
+            s=20,
             linewidth=1,
         )
     
@@ -169,6 +169,7 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
         handles, labels, loc="upper center", ncol=4, frameon=False, labelcolor="white"
     )
     ax[0].set(
+        xlim=[0, past_trips["Distance (km)"].max()*1.05]
         xlabel="Distance (km)",
         ylabel="Cost (€)",
         title=params.title,

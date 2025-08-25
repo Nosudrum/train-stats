@@ -87,7 +87,7 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
             color=COLORS[ii],
             label=operator,
             marker=".",
-            s=15,
+            s=20,
             linewidth=0,
         )
         
@@ -144,10 +144,9 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
         [],
         [],
         marker="*",
-        c="white",
         label="1st class",
         facecolor=(0,0,0,0),
-        edgecolors=COLORS[ii],
+        edgecolors="white",
         s=20,
         linewidth=0.5,
     )
@@ -155,10 +154,9 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
         [],
         [],
         marker="o",
-        c="white",
         label="Partial refund",
         facecolor=(0,0,0,0),
-        edgecolors=COLORS[ii],
+        edgecolors="white",
         s=20,
         linewidth=0.5,
     )
@@ -166,10 +164,9 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
         [],
         [],
         marker="D",
-        c="white",
         label="Interrail",
         facecolor=(0,0,0,0),
-        edgecolors=COLORS[ii],
+        edgecolors="white",
         s=20,
         linewidth=0.5,
     )
@@ -177,10 +174,9 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
         [],
         [],
         marker="s",
-        c="white",
         label="No card",
         facecolor=(0,0,0,0),
-        edgecolors=COLORS[ii],
+        edgecolors="white",
         s=20,
         linewidth=0.5,
     )

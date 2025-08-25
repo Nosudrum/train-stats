@@ -21,6 +21,9 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
     past_trips = data.get_past_trips()
     additional_spending = data.get_additional_spending()
 
+    past_trips = past_trips[past_trips['Price'] != 0]  # Remove rows where Price is zero
+    past_trips = past_trips.reset_index(drop=True)
+
     while past_trips["Price"].isna().any():
         # Find the index of the first row with null in 'Price'
         null_index = past_trips[past_trips['Price'].isna()].index[0]

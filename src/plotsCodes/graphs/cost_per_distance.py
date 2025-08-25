@@ -81,8 +81,15 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
     for ii, operator in enumerate(operators_selected):
         op = operators==operator
 
-        #TODO: show trips partially refunded separately
-        #TODO: use the cards and passes links somehow
+        ax[0].scatter(
+            [],
+            [],
+            color=COLORS[ii],
+            label=operator,
+            marker=".",
+            s=15,
+            linewidth=0,
+        )
         
         ax[0].scatter(
             past_trips.loc[(op) & first_class]["Distance (km)"].tolist(),
@@ -97,7 +104,6 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
             past_trips.loc[(op) & second_class]["Distance (km)"].tolist(),
             past_trips.loc[(op) & second_class]["Price"].tolist(), 
             color=COLORS[ii],
-            label=operator,
             marker=".",
             s=10,
             linewidth=0,
@@ -140,7 +146,10 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
         marker="*",
         c="white",
         label="1st class",
-        edgecolors="none",
+        facecolor=(0,0,0,0),
+        edgecolors=COLORS[ii],
+        s=20,
+        linewidth=0.5,
     )
     ax[0].scatter(
         [],
@@ -148,7 +157,10 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
         marker="o",
         c="white",
         label="Partial refund",
-        edgecolors="none",
+        facecolor=(0,0,0,0),
+        edgecolors=COLORS[ii],
+        s=20,
+        linewidth=0.5,
     )
     ax[0].scatter(
         [],
@@ -156,7 +168,10 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
         marker="D",
         c="white",
         label="Interrail",
-        edgecolors="none",
+        facecolor=(0,0,0,0),
+        edgecolors=COLORS[ii],
+        s=20,
+        linewidth=0.5,
     )
     ax[0].scatter(
         [],
@@ -164,7 +179,10 @@ def plot_cost_per_distance(data: TrainStatsData, params: PlotParams):
         marker="s",
         c="white",
         label="No card",
-        edgecolors="none",
+        facecolor=(0,0,0,0),
+        edgecolors=COLORS[ii],
+        s=20,
+        linewidth=0.5,
     )
 
     handles, labels = prepare_legend(reverse=False)

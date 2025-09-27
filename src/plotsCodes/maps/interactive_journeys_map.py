@@ -51,12 +51,14 @@ def plot_interactive_journeys_map(
         tmp = geopandas.GeoDataFrame.from_features(geojson, crs="epsg:4326")
         tmp["name"] = f"<b>{journey}</b>"
         tmp["count"] = count
-        tmp["label"] = (
-            f"<center>Traveled {count} time{'s' if count > 1 else ''}</center>"
-        )
-        tmp["dashArray"] = (
-            "0, 0" if journeys.loc[journey, "firstdate"] < data.NOW else "2, 10"
-        )
+        if journeys.loc[journey, "firstdate"] < data.NOW:
+            tmp["label"] = (
+                f"<center>Traveled {count} time{'s' if count > 1 else ''}</center>"
+            )
+            tmp["dashArray"] = "0, 0"
+        else:
+            tmp["label"] = "Travel planned in the future"
+            tmp["dashArray"] = "2, 10"
 
         popup = folium.GeoJsonPopup(
             fields=["name", "label"],
@@ -82,4 +84,3 @@ def plot_interactive_journeys_map(
     print("Finalizing plot...")
 
     m.save("../plots/interactive_journeys_map.html")
-

@@ -15,6 +15,10 @@ I started tracking all my journeys by train in a spreadsheet in 2022, and manage
 * [Trip-specific maps](#trip-specific-maps)
 * [Portrait maps](#portrait-maps)
 
+## 🖥Interactive maps
+
+🔗 [Interactive journeys map](https://htmlpreview.github.io/?https://github.com/Nosudrum/train-stats/blob/main/plots/interactive_journeys_map.html)
+
 ## Full map
 
 <p  align="center">

@@ -13,7 +13,11 @@ from plotsCodes.graphs import (
     plot_timed_distance_per_operator,
     plot_timed_number_per_operator,
 )
-from plotsCodes.maps import plot_heatmap, plot_journeys_map
+from plotsCodes.maps import (
+    plot_heatmap,
+    plot_journeys_map,
+    plot_interactive_journeys_map,
+)
 from plotsCodes.timelines import (
     plot_distance_timeline,
     plot_duration_timeline,
@@ -99,6 +103,10 @@ class PlotConfig:
                 return plot_heatmap(data, mapbox_style, self._map_params)
             case "Journeys map":
                 return plot_journeys_map(data, mapbox_style, self._map_params)
+            case "Interactive Journeys Map":
+                return plot_interactive_journeys_map(
+                    data, mapbox_style, self._map_params
+                )
             case "Distance timeline":
                 return plot_distance_timeline(data, self._plot_params)
             case "Duration timeline":

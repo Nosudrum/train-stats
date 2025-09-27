@@ -101,10 +101,32 @@ class MapParams(PlotParams):
         self._lat_min: float = lat_min
         self._lat_max: float = lat_max
         self.zoom_level: int = zoom_level
+        self.projection_name = map_projection
         self.map_projection: Projection = self._match_map_projection(map_projection)
 
     def get_extent(self) -> list[float]:
         return [self._lon_min, self._lon_max, self._lat_min, self._lat_max]
+
+    def get_lon_min(self) -> float:
+        return self._lon_min
+
+    def get_lon_max(self) -> float:
+        return self._lon_max
+
+    def get_lat_min(self) -> float:
+        return self._lat_min
+
+    def get_lat_max(self) -> float:
+        return self._lat_max
+
+    def get_center_lon(self) -> float:
+        return (self._lon_min + self._lon_max) / 2
+
+    def get_center_lat(self) -> float:
+        return (self._lat_min + self._lat_max) / 2
+
+    def get_projection_name(self) -> str:
+        return self.projection_name
 
     def _match_map_projection(self, map_projection: str) -> Projection:
         if map_projection == "PlateCarree":

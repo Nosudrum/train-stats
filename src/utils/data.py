@@ -78,6 +78,9 @@ class TrainStatsData:
         )
         return journeys
 
+    def get_past_journeys(self) -> pd.DataFrame:
+        return self.get_journeys(filter_end=self.NOW)
+
     def get_stats(
         self, start: datetime = None, end: datetime = None
     ) -> tuple[str, str]:
@@ -123,6 +126,12 @@ class TrainStatsData:
         ) as f:
             geojson = json.load(f)
             return np.array(geojson["features"][0]["geometry"]["coordinates"])
+
+    def get_geojson(self, journey: str) -> dict:
+        with open(
+            self._JOURNEYS_PATH + journey + ".geojson", "r", encoding="utf8"
+        ) as f:
+            return json.load(f)
 
     def get_travel_coordinates(
         self, filter_start: datetime = None, filter_end: datetime = None

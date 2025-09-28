@@ -83,4 +83,4 @@ def plot_interactive_journeys_map(
     # Logging
     print("Finalizing plot...")
 
-    m.save("../plots/interactive_journeys_map.html")
+    m.save(f"../plots/{params.file_name}.html")

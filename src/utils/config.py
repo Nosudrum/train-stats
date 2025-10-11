@@ -17,6 +17,7 @@ from plotsCodes.maps import (
     plot_heatmap,
     plot_journeys_map,
     plot_interactive_journeys_map,
+    plot_interactive_heatmap,
 )
 from plotsCodes.timelines import (
     plot_distance_timeline,
@@ -107,6 +108,8 @@ class PlotConfig:
                 return plot_interactive_journeys_map(
                     data, mapbox_style, self._map_params
                 )
+            case "Interactive Heatmap":
+                return plot_interactive_heatmap(data, mapbox_style, self._map_params)
             case "Distance timeline":
                 return plot_distance_timeline(data, self._plot_params)
             case "Duration timeline":

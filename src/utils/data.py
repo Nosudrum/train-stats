@@ -7,6 +7,7 @@ import pandas as pd
 from dotenv import load_dotenv
 from pytz import timezone
 from requests import get
+from tqdm import tqdm
 
 load_dotenv()
 
@@ -121,11 +122,8 @@ class TrainStatsData:
         return distance_str, duration_str
 
     def get_journey_coordinates(self, journey: str) -> np.ndarray:
-        with open(
-            self._JOURNEYS_PATH + journey + ".geojson", "r", encoding="utf8"
-        ) as f:
-            geojson = json.load(f)
-            return np.array(geojson["features"][0]["geometry"]["coordinates"])
+        geojson = self.get_geojson(journey)
+        return np.array(geojson["features"][0]["geometry"]["coordinates"])
 
     def get_geojson(self, journey: str) -> dict:
         with open(
@@ -140,23 +138,66 @@ class TrainStatsData:
         all_coordinates = np.empty((0, 2))
 
         for journey in trips["journey"].tolist():
-            with open(
-                self._JOURNEYS_PATH + journey + ".geojson",
-                "r",
-                encoding="utf8",
-            ) as f:
-                geojson = json.load(f)
-                coordinates = np.array(
-                    geojson["features"][0]["geometry"]["coordinates"]
-                )
-                # remove duplicates within a single journey
-                unique_coordinates = np.unique(coordinates, axis=0)
-                all_coordinates = np.append(all_coordinates, unique_coordinates, axis=0)
+            coordinates = self.get_journey_coordinates(journey)
+            unique_coordinates = np.unique(coordinates, axis=0)
+            all_coordinates = np.append(all_coordinates, unique_coordinates, axis=0)
 
         return pd.DataFrame(
             {
                 "lon": all_coordinates[:, 0],
                 "lat": all_coordinates[:, 1],
+            }
+        )
+
+    def get_travel_coordinate_couples(
+        self, filter_start: datetime = None, filter_end: datetime = None
+    ) -> pd.DataFrame:
+        journeys = self.get_journeys(filter_start=filter_start, filter_end=filter_end)
+        all_coordinate_couples = np.empty((0, 4))
+        journeys_list = []
+        journeys_counts = []
+
+        for journey in tqdm(
+            journeys.index.tolist(), desc="Analyzing journey coordinates...", ncols=150
+        ):
+            coordinates = self.get_journey_coordinates(journey)
+
+            # Find unique rows
+            unique_coordinates_sorted, sort_indices = np.unique(
+                coordinates, axis=0, return_index=True
+            )
+
+            # Reorder to preserve the order of first occurrence
+            unique_coordinates = unique_coordinates_sorted[np.argsort(sort_indices)]
+
+            # Initialize the array
+            unique_coordinate_couples = np.empty((len(unique_coordinates) - 1, 4))
+
+            for i in range(len(unique_coordinate_couples)):
+                unique_coordinate_couples[i][0:2] = unique_coordinates[i]
+                unique_coordinate_couples[i][2:4] = unique_coordinates[i + 1][0:2]
+
+            # Always fill with increasing longitude over the entire journey
+            if unique_coordinate_couples[0][0] > unique_coordinate_couples[-1][0]:
+                # Reverse coordinates
+                unique_coordinate_couples = unique_coordinate_couples[::-1]
+
+            all_coordinate_couples = np.append(
+                all_coordinate_couples, unique_coordinate_couples, axis=0
+            )
+            journeys_list += [journey] * len(unique_coordinate_couples)
+            journeys_counts += [journeys.loc[journey]["count"]] * len(
+                unique_coordinate_couples
+            )
+
+        return pd.DataFrame(
+            {
+                "lon1": all_coordinate_couples[:, 0],
+                "lat1": all_coordinate_couples[:, 1],
+                "lon2": all_coordinate_couples[:, 2],
+                "lat2": all_coordinate_couples[:, 3],
+                "journey": journeys_list,
+                "count": journeys_counts,
             }
         )
 
@@ -350,7 +391,9 @@ class TrainStatsData:
             elif end_date.year - start_date.year > 2:
                 raise ValueError(f"Spending {row['Ticket']} is over more than 3 years")
 
-        return pd.DataFrame({"Year": years, "Operator": operators, "Amount": amounts, "ID": ids})
+        return pd.DataFrame(
+            {"Year": years, "Operator": operators, "Amount": amounts, "ID": ids}
+        )
 
     def _import_plots_config(
         self, datasheet_id: str, plots_config_id: str

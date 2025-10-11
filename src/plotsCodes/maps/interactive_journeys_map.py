@@ -4,7 +4,6 @@ from utils import MapboxStyle, TrainStatsData, MapParams
 import geopandas
 import matplotlib
 from matplotlib.colors import rgb2hex
-# import branca.colormap as cm
 
 
 def plot_interactive_journeys_map(
@@ -35,7 +34,7 @@ def plot_interactive_journeys_map(
     ).add_to(m)
 
     # For all journeys in the dataset
-    values = journeys["count"].values
+    max_count = journeys["count"].max()
     color_map = matplotlib.colormaps["rainbow"]
 
     journeys_list = journeys.index.to_list()
@@ -48,12 +47,14 @@ def plot_interactive_journeys_map(
 
         geojson = data.get_geojson(journey)
 
+        distance = journeys.loc[journey, "distance"]
+
         tmp = geopandas.GeoDataFrame.from_features(geojson, crs="epsg:4326")
         tmp["name"] = f"<b>{journey}</b>"
         tmp["count"] = count
         if journeys.loc[journey, "firstdate"] < data.NOW:
             tmp["label"] = (
-                f"<center>Traveled {count} time{'s' if count > 1 else ''}</center>"
+                f"<center>Traveled {count} time{'s' if count > 1 else ''} ({round(distance)} km)</center>"
             )
             tmp["dashArray"] = "0, 0"
         else:
@@ -72,7 +73,7 @@ def plot_interactive_journeys_map(
             popup=popup,
             style_function=lambda x: {
                 "color": rgb2hex(
-                    color_map((x["properties"]["count"] - 1) / (values.max() - 1))
+                    color_map((x["properties"]["count"] - 1) / (max_count - 1))
                 ),
                 "dashArray": x["properties"]["dashArray"],
             },

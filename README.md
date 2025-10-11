@@ -17,7 +17,7 @@ I started tracking all my journeys by train in a spreadsheet in 2022, and manage
 
 ## 🖥Interactive maps
 
-🔗 [Interactive journeys map](https://htmlpreview.github.io/?https://github.com/Nosudrum/train-stats/blob/main/plots/interactive_journeys_map.html)
+🔗 [Interactive journeys map](https://pages.train-stats.com/)
 
 ## Full map
 

@@ -20,7 +20,7 @@ class TrainStatsData:
     _TRIPS_PATH = "../data/trips.csv"
     _ADDITIONAL_SPENDING_PATH = "../data/additional_spending.csv"
     _STATIONS_PATH = "../data/stations.csv"
-    _CUSTOM_STATIONS_PATH = "../data/custom_stations_tz.csv"
+    _CUSTOM_STATIONS_PATH = "../data/custom_stations.csv"
     _JOURNEYS_PATH = "../data/journeys_coords/"
     _PLOTS_CONFIG_PATH = "../data/plots_config.csv"
 
@@ -233,6 +233,28 @@ class TrainStatsData:
         ].head(1)
         if not stations_tz.empty:
             return timezone(stations_tz.item())
+        else:
+            raise ValueError(
+                f"Could not find station name [{station}] in either standard or custom station CSVs."
+            )
+    
+    def _get_station_coordinates(self, station: str) -> timezone:
+        custom_lat = self._custom_stations.loc[
+            self._custom_stations["name"] == station, ["latitude"]
+        ].head(1)
+        custom_lon = self._custom_stations.loc[
+            self._custom_stations["name"] == station, ["longitude"]
+        ].head(1)
+        if not custom_lat.empty and not custom_lon.empty:
+            return custom_lat.item(), custom_lon.item()
+        station_lat = self._stations.loc[
+            self._stations["name"] == station, "latitude"
+        ].head(1)
+        station_lon = self._stations.loc[
+            self._stations["name"] == station, "longitude"
+        ].head(1)
+        if not station_lat.empty and not station_lon.empty:
+            return station_lat.item(), station_lon.item()
         else:
             raise ValueError(
                 f"Could not find station name [{station}] in either standard or custom station CSVs."

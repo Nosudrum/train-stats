@@ -1,15 +1,13 @@
 name,time_zone,latitude,longitude
-Pudong Airport,Asia/Shanghai,,
-Longyang Road,Asia/Shanghai,,
-Shanghai Hongqiao,Asia/Shanghai,,
-Hangzhou East,Asia/Shanghai,,
-Shanghai West,Asia/Shanghai,,
-Suzhou,Asia/Shanghai,,
-Shanghai,Asia/Shanghai,,
-Beijing,Asia/Shanghai,,
-Beijing South,Asia/Shanghai,,
-Shanhaiguan,Asia/Shanghai,,
-Saint-Martin-Lys,Europe/Paris,,
-Axat,Europe/Paris,,
-Arth-Goldau,Europe/Zurich,,
-Delft Campus,Europe/Brussels,,
+Pudong Airport,Asia/Shanghai,31.149596,121.806436
+Longyang Road,Asia/Shanghai,31.203147,121.556862
+Shanghai Hongqiao,Asia/Shanghai,31.196306,121.316139
+Hangzhou East,Asia/Shanghai,30.2935,120.208361
+Shanghai West,Asia/Shanghai,31.264722,121.398056
+Suzhou,Asia/Shanghai,31.330556,120.606389
+Shanghai,Asia/Shanghai,31.251552,121.450446
+Beijing,Asia/Shanghai,39.9023,116.421
+Beijing South,Asia/Shanghai,39.865833,116.376389
+Shanhaiguan,Asia/Shanghai,39.998886,119.761825
+Saint-Martin-Lys,Europe/Paris,42.818056,2.229444
+Axat,Europe/Paris,42.803333,2.228333

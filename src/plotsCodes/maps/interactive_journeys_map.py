@@ -37,11 +37,10 @@ def plot_interactive_journeys_map(
     max_count = journeys["count"].max()
     color_map = matplotlib.colormaps["rainbow"]
 
-    journeys_list = journeys.index.to_list()
     for journey in tqdm(
-        journeys_list,
+        journeys.index.to_list(),
         ncols=150,
-        desc=f"{params.title} (Portrait)" if params.is_portrait else params.title,
+        desc=f"{params.title} (Journeys)",
     ):
         count = journeys.loc[journey, "count"]
 
@@ -77,6 +76,34 @@ def plot_interactive_journeys_map(
                 ),
                 "dashArray": x["properties"]["dashArray"],
             },
+        ).add_to(m)
+
+    # Get all stations
+    stations = data.get_past_stations()
+
+    # For all stations in the dataset
+    for station in tqdm(
+        stations.index.to_list(),
+        ncols=150,
+        desc=f"{params.title} (Stations)",
+    ):
+        # Get the data
+        row = stations.loc[station]
+
+        # Add a dot (CircleMarker) to the map
+        tooltip = folium.Tooltip(
+            f"<b>{station}</b> (visited {int(row['Visit_Count'])} time{'s' if row['Visit_Count'] > 1 else ''})",
+        )
+
+        folium.CircleMarker(
+            name=row.index,
+            tooltip=tooltip,
+            location=[row["latitude"], row["longitude"]],
+            radius=4,
+            color=rgb2hex(color_map((row["Visit_Count"] - 1) / (max_count - 1))),
+            fill=True,
+            fill_color=rgb2hex(color_map((row["Visit_Count"] - 1) / (max_count - 1))),
+            fill_opacity=1.0,
         ).add_to(m)
 
     folium.LayerControl().add_to(m)

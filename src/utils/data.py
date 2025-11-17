@@ -31,7 +31,9 @@ class TrainStatsData:
         self._custom_stations: pd.DataFrame = pd.read_csv(
             self._CUSTOM_STATIONS_PATH, sep=","
         )
-        self._trips: pd.DataFrame = self._import_trips(os.environ["DATASHEET_ID"])
+        self._trips, self._stations_slash_dict = self._import_trips(
+            os.environ["DATASHEET_ID"]
+        )
         self._additional_spending: pd.DataFrame = self._import_additional_spending(
             os.environ["DATASHEET_ID"], os.environ["ADDITIONAL_SPENDING_ID"]
         )
@@ -201,6 +203,82 @@ class TrainStatsData:
             }
         )
 
+    def get_stations(
+        self, filter_start: datetime = None, filter_end: datetime = None
+    ) -> pd.DataFrame:
+        # Assemble list of visited stations
+        origins = self.get_trips(filter_start, filter_end)["Origin"].value_counts()
+        destinations = self.get_trips(filter_start, filter_end)[
+            "Destination"
+        ].value_counts()
+
+        # Get all unique stations
+        all_stations = set(origins.index).union(set(destinations.index))
+
+        # Reindex both Series to include all stations, fill missing with 0
+        origins = origins.reindex(all_stations, fill_value=0)
+        destinations = destinations.reindex(all_stations, fill_value=0)
+
+        # Combine into a DataFrame
+        result = pd.DataFrame(
+            {
+                "Origin_Count": origins,
+                "Destination_Count": destinations,
+            }
+        )
+
+        result["Visit_Count"] = 0
+
+        # Accurate visit counting :
+        trips = self.get_trips(filter_start, filter_end)
+
+        for index, row in trips.iterrows():
+            origin = row["Origin"]
+            destination = row["Destination"]
+            departure = row["Departure (Local)"]
+
+            if index == 0:
+                # First line: origin gets +1, destination gets +1
+                result.loc[origin, "Visit_Count"] += 1
+                result.loc[destination, "Visit_Count"] += 1
+            else:
+                # Then for all following lines
+                # - Change detection (single visit) : on the same day, station is visited with non-equal consecutive trips
+                # - If origin is a change, origin does **not** get a +1, destination gets a +1
+                if trips.loc[index - 1]["Destination"] != origin:
+                    # Current trip starts from a different station -> NOT A CHANGE
+                    result.loc[origin, "Visit_Count"] += 1
+                    result.loc[destination, "Visit_Count"] += 1
+                elif trips.loc[index - 1]["Arrival (Local)"].date() != departure.date():
+                    # Current trip starts on a different day than the previous one -> NOT A CHANGE
+                    result.loc[origin, "Visit_Count"] += 1
+                    result.loc[destination, "Visit_Count"] += 1
+                elif trips.loc[index - 1]["Origin"] == destination:
+                    # Current trip is the same journey as the previous one on the same day -> NOT A CHANGE
+                    result.loc[origin, "Visit_Count"] += 1
+                    result.loc[destination, "Visit_Count"] += 1
+                else:
+                    # Current trip is a different journey, continuing on the same day from the previous one -> CHANGE
+                    result.loc[destination, "Visit_Count"] += 1
+
+        # Restore station names to their original format with slashes
+        for station in self._stations_slash_dict.keys():
+            result.rename(
+                index={station: self._stations_slash_dict[station]}, inplace=True
+            )
+
+        # Add latitude and longitude to the DataFrame
+        for station in result.index:
+            lat, lon = self._get_station_coordinates(station)
+            result.loc[station, "latitude"] = lat
+            result.loc[station, "longitude"] = lon
+
+        # Sort the DataFrame by Visit_Count in descending order
+        return result.sort_values("Visit_Count", ascending=True)
+
+    def get_past_stations(self) -> pd.DataFrame:
+        return self.get_stations(filter_end=self.NOW)
+
     def _km_to_mi(self, km: float) -> float:
         return km * 0.621371
 
@@ -237,13 +315,13 @@ class TrainStatsData:
             raise ValueError(
                 f"Could not find station name [{station}] in either standard or custom station CSVs."
             )
-    
+
     def _get_station_coordinates(self, station: str) -> timezone:
         custom_lat = self._custom_stations.loc[
-            self._custom_stations["name"] == station, ["latitude"]
+            self._custom_stations["name"] == station, "latitude"
         ].head(1)
         custom_lon = self._custom_stations.loc[
-            self._custom_stations["name"] == station, ["longitude"]
+            self._custom_stations["name"] == station, "longitude"
         ].head(1)
         if not custom_lat.empty and not custom_lon.empty:
             return custom_lat.item(), custom_lon.item()
@@ -254,13 +332,14 @@ class TrainStatsData:
             self._stations["name"] == station, "longitude"
         ].head(1)
         if not station_lat.empty and not station_lon.empty:
-            return station_lat.item(), station_lon.item()
-        else:
-            raise ValueError(
-                f"Could not find station name [{station}] in either standard or custom station CSVs."
-            )
+            if not pd.isna(station_lat.item()) and not pd.isna(station_lon.item()):
+                return station_lat.item(), station_lon.item()
 
-    def _import_trips(self, datasheet_id: str) -> pd.DataFrame:
+        raise ValueError(
+            f"Could not find station name [{station}] in either standard or custom station CSVs."
+        )
+
+    def _import_trips(self, datasheet_id: str) -> (pd.DataFrame, dict[str:str]):
         # Get trips dataset and save to file
         r = get(
             f"https://docs.google.com/spreadsheet/ccc?key={datasheet_id}&output=csv"
@@ -307,16 +386,18 @@ class TrainStatsData:
         trips["Price"] = trips["Price"].str.replace("€", "").astype(float)
         trips["Reimb"] = trips["Reimb"].str.replace("€", "").astype(float)
 
-        # Replace special things
-        trips.replace(
-            "\xa0", " ", regex=True, inplace=True
-        )  # Remove non-breaking spaces
-        trips.replace(
-            "Sinsheim Museum/Arena", "Sinsheim MuseumArena", regex=True, inplace=True
+        # Remove non-breaking spaces
+        trips.replace("\xa0", " ", regex=True, inplace=True)
+
+        # Remove / from station names
+        stations_with_slash = set(
+            trips.loc[trips["Origin"].str.contains("/"), "Origin"].tolist()
+            + trips.loc[trips["Destination"].str.contains("/"), "Destination"].tolist()
         )
-        trips.replace(
-            "Biel/Bienne", "BielBienne", regex=True, inplace=True
-        )  # Get rid of slash
+        stations_slash_dict = {}
+        for station in stations_with_slash:
+            stations_slash_dict[station.replace("/", "")] = station
+            trips.replace(station, station.replace("/", ""), regex=True, inplace=True)
 
         trips["Day of year"] = trips["Departure (Local)"].dt.dayofyear
         trips.loc[
@@ -325,7 +406,7 @@ class TrainStatsData:
             "Day of year",
         ] += 1
 
-        return trips
+        return trips, stations_slash_dict
 
     def _import_additional_spending(
         self, datasheet_id: str, additional_spending_id: str

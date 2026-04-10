@@ -46,7 +46,7 @@ def plot_trip_map(
         # Get the departure datetime
         trip_departure = trips.loc[trip_item, "Departure"]
         # Compute the trip day number (1-indexed)
-        trip_day = (trip_departure - trip.start).days + 1
+        trip_day = (trip_departure.date() - trip.start.date()).days + 1
         # Color corresponding to the trip day
         trip_ratio = (trip_day - 1) / (
             trip.get_trip_duration_days() - 1

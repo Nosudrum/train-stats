@@ -11,7 +11,7 @@ class TripParams:
         self.end: datetime = end
 
     def get_trip_duration_days(self) -> int:
-        return (self.end - self.start).days + 1
+        return (self.end.date() - self.start.date()).days + 1
 
 
 class PlotParams:

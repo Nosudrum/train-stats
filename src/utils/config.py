@@ -48,12 +48,14 @@ class PlotConfig:
 
         # Set the trip parameters (start and end) if they exist
         if kwargs["Start"] and kwargs["End"]:
+            start_tz = timezone(kwargs["Start TZ"])
+            end_tz = timezone(kwargs["End TZ"])
             self._trip_params = TripParams(
-                datetime.strptime(kwargs["Start"], GOOGLE_SHEET_DT_FORMAT).replace(
-                    tzinfo=timezone(kwargs["Start TZ"])
+                start_tz.localize(
+                    datetime.strptime(kwargs["Start"], GOOGLE_SHEET_DT_FORMAT)
                 ),
-                datetime.strptime(kwargs["End"], GOOGLE_SHEET_DT_FORMAT).replace(
-                    tzinfo=timezone(kwargs["End TZ"])
+                end_tz.localize(
+                    datetime.strptime(kwargs["End"], GOOGLE_SHEET_DT_FORMAT)
                 ),
             )
         else:

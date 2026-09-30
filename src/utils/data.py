@@ -325,15 +325,13 @@ class TrainStatsData:
         ].head(1)
         if not custom_lat.empty and not custom_lon.empty:
             return custom_lat.item(), custom_lon.item()
-        station_lat = self._stations.loc[
-            self._stations["name"] == station, "latitude"
-        ].head(1)
-        station_lon = self._stations.loc[
-            self._stations["name"] == station, "longitude"
-        ].head(1)
-        if not station_lat.empty and not station_lon.empty:
-            if not pd.isna(station_lat.item()) and not pd.isna(station_lon.item()):
-                return station_lat.item(), station_lon.item()
+
+        # Filter for matching station name and drop rows where latitude or longitude is NaN
+        matching_stations = self._stations[self._stations["name"] == station].dropna(subset=["latitude", "longitude"])
+
+        if not matching_stations.empty:
+            first_valid = matching_stations.iloc[0]
+            return first_valid["latitude"], first_valid["longitude"]
 
         raise ValueError(
             f"Could not find station name [{station}] in either standard or custom station CSVs."

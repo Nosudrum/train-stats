@@ -1,14 +1,15 @@
-import matplotlib.cm as cm
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib import cm
 
 from utils import TrainStatsData
 from utils.plot_utils import (
-    dark_figure,
-    finish_figure,
-    MONTHS_TICKS,
     MAX_DAYS_PER_YEAR,
     MONTHS_LABELS,
+    MONTHS_TICKS,
+    dark_figure,
+    finish_figure,
 )
 from utils.plotting import PlotParams
 
@@ -31,7 +32,7 @@ def plot_distance_timeline(data: TrainStatsData, params: PlotParams):
                 distance_day if distance_day > 0 else np.nan
             )
 
-    color_map = cm.get_cmap("viridis")
+    color_map = mpl.colormaps["viridis"]
     color_map.set_bad("k", alpha=0)
 
     ax[0].matshow(

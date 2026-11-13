@@ -1,14 +1,15 @@
-import matplotlib.cm as cm
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib import cm
 
 from utils import TrainStatsData
 from utils.plot_utils import (
-    dark_figure,
-    finish_figure,
-    MONTHS_TICKS,
     MAX_DAYS_PER_YEAR,
     MONTHS_LABELS,
+    MONTHS_TICKS,
+    dark_figure,
+    finish_figure,
 )
 from utils.plotting import PlotParams
 
@@ -29,7 +30,7 @@ def plot_number_timeline(data: TrainStatsData, params: PlotParams):
             number_day = past_trips.loc[mask_past].shape[0]
             number_matrix[ii + 2, day - 1] = number_day if number_day > 0 else np.nan
 
-    color_map = cm.get_cmap("viridis")
+    color_map = mpl.colormaps["viridis"]
     color_map.set_bad("k", alpha=0)
 
     ax[0].matshow(

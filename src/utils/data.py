@@ -327,7 +327,9 @@ class TrainStatsData:
             return custom_lat.item(), custom_lon.item()
 
         # Filter for matching station name and drop rows where latitude or longitude is NaN
-        matching_stations = self._stations[self._stations["name"] == station].dropna(subset=["latitude", "longitude"])
+        matching_stations = self._stations[self._stations["name"] == station].dropna(
+            subset=["latitude", "longitude"]
+        )
 
         if not matching_stations.empty:
             first_valid = matching_stations.iloc[0]
@@ -360,6 +362,9 @@ class TrainStatsData:
         trips["Departure"] = trips["Departure (Local)"]
 
         # Localize departure and arrival times
+        # cast columns to objects so they can be converted from timezone naive to timezone aware one by one
+        trips["Departure"] = trips["Departure"].astype(object)
+        trips["Arrival"] = trips["Arrival"].astype(object)
         for index, row in trips.iterrows():
             origin = row["Origin"]
             trips.loc[index, "Departure"] = trips.loc[index, "Departure"].tz_localize(
@@ -369,6 +374,7 @@ class TrainStatsData:
             trips.loc[index, "Arrival"] = trips.loc[index, "Arrival"].tz_localize(
                 self._get_station_timezone(destination)
             )
+        # cast columns back
         trips["Departure"] = pd.to_datetime(trips["Departure"], utc=True)
         trips["Arrival"] = pd.to_datetime(trips["Arrival"], utc=True)
 

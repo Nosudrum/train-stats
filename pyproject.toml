@@ -1,0 +1,19 @@
+[project]
+name = "train-stats"
+version = "0.0.1"
+description = "Train statistics plotting automation"
+requires-python = ">=3.15"
+dependencies = [
+    "Pillow",
+    "requests",
+    "matplotlib",
+    "numpy",
+    "tqdm",
+    "pandas",
+    "cartopy",
+    "scipy",
+    "pytz",
+    "python-dotenv",
+    "folium",
+    "geopandas",
+]

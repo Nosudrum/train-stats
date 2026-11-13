@@ -28,7 +28,7 @@ jobs:
           PLOTS_CONFIG_ID: ${{ secrets.PLOTS_CONFIG_ID }}
       run: |
         cd ${GITHUB_WORKSPACE}/src/
-        python automation.py
+        uv run python automation.py
     - name: 🕵️ Check if there are any changes
       id: verify_diff
       run: |
